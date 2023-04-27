@@ -1,17 +1,21 @@
 <template>
   <div class="root-container">
     <div class="main-block">
-      <UserProfile/>
+      <UserProfile username="alice"/>
     </div>
     <div class="side-block">
-
+      <div class="side-block-button">
+        Sign in
+      </div>
+      <div class="side-block-button">
+        Sign up
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-
-import UserProfile from "@/views/UserProfile.vue";
+import UserProfile from "@/views/UserProfile.vue"
 </script>
 
 <style scoped>
@@ -35,5 +39,16 @@ import UserProfile from "@/views/UserProfile.vue";
   background: #f0f0f0;
   padding: 10px;
   border-radius: 5px;
+}
+
+.side-block-button {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 1rem;
+}
+.side-block-button:hover {
+  background: #e0e0e0;
 }
 </style>

@@ -28,23 +28,19 @@
   </div>
 </template>
 
-<script>
-import UserService from "@/service/UserService";
+<script setup>
+import UserService from "../service/UserService"
 
-export default {
-  name: "UserProfile",
-  data() {
-    return {
-      user: {}
-    }
-  },
-  mounted() {
-    // UserService.getUserProfile("")
-    // .then((response) => {
-    //   this.user = response.data
-    // })
-  }
-}
+const props = defineProps({
+  username: String
+})
+
+let user = {}
+
+UserService.getUserProfile(props.username)
+.then((response) => {
+  user = response.data
+})
 </script>
 
 <style scoped>
