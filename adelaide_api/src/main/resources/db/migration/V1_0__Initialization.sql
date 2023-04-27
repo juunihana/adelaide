@@ -28,11 +28,11 @@ create table users_password_history
 
 create table users_images
 (
-  id uuid not null primary key ,
-  user_id uuid not null,
-  caption text,
-  cdn_url varchar(255) unique not null,
-  deleted boolean not null,
+    id      uuid                not null primary key,
+    user_id uuid                not null,
+    caption text,
+    cdn_url varchar(255) unique not null,
+    deleted boolean             not null,
 
-  foreign key (user_id) references users(id)
+    foreign key (user_id) references users (id)
 );

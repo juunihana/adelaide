@@ -10,6 +10,10 @@ class UserService {
   getUserProfile(username) {
     return this.restService.get(`/user/${username}`)
   }
+
+  newUser(newUser) {
+    return this.restService.post("/user/new", newUser)
+  }
 }
 
 export default new UserService()

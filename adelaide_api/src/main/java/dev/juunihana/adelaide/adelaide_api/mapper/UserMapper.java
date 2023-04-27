@@ -4,7 +4,6 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

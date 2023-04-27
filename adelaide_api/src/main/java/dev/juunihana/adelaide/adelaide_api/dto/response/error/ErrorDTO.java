@@ -13,5 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
 public class ErrorDTO {
+
+  private String result;
+
   private String message;
 }

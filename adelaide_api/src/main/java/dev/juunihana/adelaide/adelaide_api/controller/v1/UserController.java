@@ -5,7 +5,6 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +25,7 @@ public class UserController implements UserApi {
 
   @Override
   public SuccessCreateUserDTO createUser(CreateUserProfileDTO createUserProfileDTO) {
+    System.out.println("New user: " + createUserProfileDTO.toString());
     return userService.save(createUserProfileDTO);
   }
 }

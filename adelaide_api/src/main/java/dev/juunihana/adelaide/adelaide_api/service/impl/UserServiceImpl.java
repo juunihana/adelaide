@@ -4,6 +4,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.UserMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
@@ -11,6 +12,7 @@ import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,13 +35,41 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public Boolean userExistsByUsername(String username) {
+    return userRepository.findByUsername(username).isPresent();
+  }
+
+  @Override
+  public Boolean userExistsByEmail(String email) {
+    return userRepository.findByEmail(email).isPresent();
+  }
+
+  @Override
+  public Boolean userExistsByPhone(String phone) {
+    return userRepository.findByPhone(phone).isPresent();
+  }
+
+  @Override
   @Transactional
   public SuccessCreateUserDTO save(CreateUserProfileDTO createUserProfileDTO) {
+    if (userExistsByUsername(createUserProfileDTO.getUsername())) {
+      throw new UserAlreadyExistsException("username " + createUserProfileDTO.getUsername());
+    }
+    if (userExistsByEmail(createUserProfileDTO.getEmail())) {
+      throw new UserAlreadyExistsException("email " + createUserProfileDTO.getEmail());
+    }
+    if (StringUtils.hasLength(createUserProfileDTO.getPhone()) &&
+        userExistsByPhone(createUserProfileDTO.getPhone())) {
+      throw new UserAlreadyExistsException("phone " + createUserProfileDTO.getPhone());
+    }
     UserEntity userEntity = userMapper.createUserToEntity(createUserProfileDTO);
     userEntity.setTimeJoined(LocalDateTime.now());
 
     UserEntity user = userRepository.save(userEntity);
 
-    return SuccessCreateUserDTO.builder().username(user.getUsername()).build();
+    return SuccessCreateUserDTO.builder()
+        .result("userNewSuccess")
+        .username(user.getUsername())
+        .build();
   }
 }

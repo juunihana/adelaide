@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.adelaide_api.dto.request.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -38,14 +39,14 @@ public class CreateUserProfileDTO {
   @Pattern(regexp = "[A-Za-z]+", message = "First name cannot contain other characters than letters")
   private String firstName;
 
-  @Pattern(regexp = "[A-Za-z]+", message = "Middle name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]*", message = "Middle name cannot contain other characters than letters")
   private String middleName;
 
   @NotBlank(message = "Last name cannot be empty")
   @Pattern(regexp = "[A-Za-z]+", message = "Last name cannot contain other characters than letters")
   private String lastName;
 
-  @Pattern(regexp = "[A-Za-z]+", message = "Maiden name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]*", message = "Maiden name cannot contain other characters than letters")
   private String maidenSurname;
 
   private String info;
@@ -57,4 +58,8 @@ public class CreateUserProfileDTO {
   @NotNull(message = "Date of birth cannot be empty")
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate dateOfBirth;
+
+  @NotNull(message = "Agreement cannot be empty")
+  @AssertTrue(message = "You must accept EULA terms")
+  private Boolean agreement;
 }

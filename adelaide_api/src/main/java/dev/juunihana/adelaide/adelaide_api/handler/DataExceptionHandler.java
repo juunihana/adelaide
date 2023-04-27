@@ -1,17 +1,20 @@
 package dev.juunihana.adelaide.adelaide_api.handler;
 
-import dev.juunihana.adelaide.adelaide_api.constant.DataConstraints;
 import dev.juunihana.adelaide.adelaide_api.constant.ErrorMessage;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ErrorDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.error.UserNotFoundDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.error.ValidationErrorDTO;
+import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,42 +27,57 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(UserNotFoundException.class)
-  protected UserNotFoundDTO handleUserNotFound(UserNotFoundException e) {
-    return UserNotFoundDTO.builder()
-        .message(ErrorMessage.USER_NOT_FOUND_USERNAME)
-        .username(e.getMessage())
+  protected ErrorDTO handleUserNotFound(UserNotFoundException e) {
+    System.out.println("ERROR 400: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("userNotFoundError")
+        .message(e.getMessage())
         .build();
   }
 
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(UserAlreadyExistsException.class)
+  protected ErrorDTO handleUserAlreadyExists(UserAlreadyExistsException e) {
+    System.out.println("ERROR 400: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("userAlreadyExistsError")
+        .message(e.getMessage())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(DataIntegrityViolationException.class)
-  protected ResponseEntity<ErrorDTO> handleDataIntegrityData(
-      DataIntegrityViolationException e) {
-    if (e.getMessage().contains(DataConstraints.USER_EMAIL_CONSTRAINT)) {
-      return ResponseEntity.badRequest()
-          .body(ErrorDTO.builder().message(ErrorMessage.USER_EXISTS_EMAIL).build());
-    }
-
-    if (e.getMessage().contains(DataConstraints.USER_USERNAME_CONSTRAINT)) {
-      return ResponseEntity.badRequest()
-          .body(ErrorDTO.builder().message(ErrorMessage.USER_EXISTS_USERNAME).build());
-    }
-
-    if (e.getMessage().contains(DataConstraints.USER_PHONE_CONSTRAINT)) {
-      return ResponseEntity.badRequest()
-          .body(ErrorDTO.builder().message(ErrorMessage.USER_EXISTS_PHONE).build());
-    }
-
-    return ResponseEntity.internalServerError()
-        .body(ErrorDTO.builder().message(ErrorMessage.SERVER_ERROR).build());
+  protected ErrorDTO handleDataIntegrityData(DataIntegrityViolationException e) {
+    System.out.println("ERROR 500: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("internalServerError")
+        .message(ErrorMessage.SERVER_ERROR)
+        .build();
   }
 
   @Override
   public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
       HttpHeaders headers, HttpStatusCode statusCode, WebRequest webRequest) {
-    Map<String, String> fieldErrors = new LinkedHashMap<>();
-    e.getBindingResult().getFieldErrors().forEach(fieldError ->
-        fieldErrors.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage()));
+    Map<String, List<String>> fieldsWithErrors = e.getFieldErrors().stream()
+        .sorted(Comparator.comparing(FieldError::getField))
+        .collect(Collectors.groupingBy(FieldError::getField,
+            Collectors.mapping(FieldError::getDefaultMessage,
+                Collectors.collectingAndThen(Collectors.toList(),
+                    message -> message.stream()
+                        .sorted()
+                        .collect(Collectors.toList())))));
 
-    return ResponseEntity.badRequest().body(fieldErrors);
+    System.out.println("ERROR 400: " + fieldsWithErrors);
+
+    return ResponseEntity.badRequest().body(
+        ValidationErrorDTO.builder()
+            .result("validationError")
+            .errorFields(fieldsWithErrors.values().stream()
+                .map(messageList -> messageList.get(0))
+                .collect(Collectors.toList()))
+//            .errorFields(e.getBindingResult().getFieldErrors().stream()
+//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+//                .toList())
+            .build());
   }
 }

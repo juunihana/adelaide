@@ -6,41 +6,49 @@
       </div>
       <div class="user-info-block">
         <div class="user-name">
-          {{user.firstName}}
-          {{user.middleName? user.middleName : ""}}
-          {{user.lastName}}
-          {{user.maidenSurname? "(" + user.maidenSurname + ")" : ""}}
+          {{ user.firstName }}
+          {{ user.middleName ? user.middleName : "" }}
+          {{ user.lastName }}
+          {{ user.maidenSurname ? "(" + user.maidenSurname + ")" : "" }}
         </div>
         <div class="user-status" v-if="user.status">
-          {{user.status}}
+          {{ user.status }}
         </div>
         <div class="user-age">
-          {{user.age}} years old
+          {{ user.age }} years old
         </div>
         <div class="user-info" v-if="user.info">
-          {{user.info}}
+          {{ user.info }}
         </div>
         <div class="user-place" v-if="user.place">
-          From {{user.place}}
+          From {{ user.place }}
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script>
 import UserService from "../service/UserService"
 
-const props = defineProps({
-  username: String
-})
-
-let user = {}
-
-UserService.getUserProfile(props.username)
-.then((response) => {
-  user = response.data
-})
+export default {
+  name: "UserProfile",
+  props: {
+    username: String
+  },
+  data() {
+    return {
+      user: {}
+    }
+  },
+  mounted() {
+    UserService.getUserProfile(this.$route.params.username)
+    .then((response) => {
+      this.user = response.data
+    })
+  },
+  methods: {}
+}
 </script>
 
 <style scoped>
@@ -67,8 +75,7 @@ UserService.getUserProfile(props.username)
 .user-name {
 }
 
-.user-profile-container
-{
+.user-profile-container {
   font-family: Verdana, Arial, sans-serif;
   font-size: 1rem;
 }
