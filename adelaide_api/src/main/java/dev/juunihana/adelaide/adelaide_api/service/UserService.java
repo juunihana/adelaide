@@ -1,8 +1,12 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
-import dev.juunihana.adelaide.adelaide_api.dto.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 
 public interface UserService {
 
   UserProfileDTO findUserByUsername(String username);
+
+  SuccessCreateUserDTO save(CreateUserProfileDTO createUserProfileDTO);
 }

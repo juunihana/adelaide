@@ -1,4 +1,4 @@
-package dev.juunihana.adelaide.adelaide_api.dto.user;
+package dev.juunihana.adelaide.adelaide_api.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(Include.NON_ABSENT)
+@JsonInclude(Include.NON_EMPTY)
 public class UserProfileDTO {
 
   private String firstName;
