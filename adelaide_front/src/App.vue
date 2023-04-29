@@ -4,7 +4,13 @@
       <RouterView/>
     </div>
     <div class="side-block">
-      <nav>
+      <nav v-if="signedIn">
+        <RouterLink :to="'/user/' + getSignedUsername">
+          <NavButton button-text="My profile"/>
+        </RouterLink>
+        <NavButton button-text="Logout" @click="signOut"/>
+      </nav>
+      <nav v-else>
         <RouterLink to="/sign-in">
           <NavButton button-text="Sign in"/>
         </RouterLink>
@@ -17,6 +23,7 @@
 </template>
 
 <script>
+import {authStore} from "@/stores/authStore";
 import NavButton from "@/components/NavButton.vue";
 
 export default {
@@ -24,12 +31,30 @@ export default {
   components: {NavButton},
   props: {},
   data() {
-    return {}
+    return {
+      auth: authStore(),
+      username: null
+    }
   },
   mounted() {
 
   },
-  methods: {}
+  computed: {
+    signedIn() {
+      return this.auth.signedIn
+    },
+    getSignedUsername() {
+      if (this.signedIn) {
+        return this.auth.username
+      }
+    }
+  },
+  methods: {
+    signOut() {
+      this.auth.signOut()
+      this.$router.push("/")
+    }
+  }
 }
 </script>
 

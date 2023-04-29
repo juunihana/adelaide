@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="sign-up-container">
-      <form method="post" class="sign-up-form" v-on:submit="submitSignUp">
+      <form method="post" class="sign-up-form" v-on:submit="signUp">
         <header>
           Sign up
         </header>
@@ -26,10 +26,10 @@
           <input type="text" id="phone" v-model="user.phone"/>
 
           <label for="passwordFirst">Password</label>
-          <input type="text" id="passwordFirst" v-model="user.passwordFirst"/>
+          <input type="password" id="passwordFirst" v-model="user.passwordFirst"/>
 
           <label for="passwordSecond">Password again</label>
-          <input type="text" id="passwordSecond" v-model="user.passwordSecond"/>
+          <input type="password" id="passwordSecond" v-model="user.passwordSecond"/>
 
           <label for="firstName">First name</label>
           <input type="text" id="firstName" v-model="user.firstName"/>
@@ -100,7 +100,7 @@ export default {
   mounted() {
   },
   methods: {
-    submitSignUp(e) {
+    signUp(e) {
       e.preventDefault()
 
       this.errors = ValidationService.validateSignUp(this.user)

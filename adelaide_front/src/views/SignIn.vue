@@ -1,26 +1,26 @@
 <template>
   <div>
     <div class="sign-up-container">
-      <form method="post" class="sign-up-form" v-on:submit="submitSignUp">
+      <form method="post" class="sign-up-form" v-on:submit="submitSignIn">
         <header>
-          Sign up
+          Sign in
         </header>
         <div class="errors" v-if="hasErrors">
-          Following errors occurred during sign up:
+          Following errors occurred during sign in:
           <ul>
             <li v-for="error in errors">{{ error }}</li>
           </ul>
         </div>
         <main>
           <label for="username">Username</label>
-          <input type="text" id="username" v-model="username"/>
+          <input type="text" id="username" v-model="user.username"/>
 
-          <label for="email">Email</label>
-          <input type="text" id="email" v-model="email"/>
+          <label for="email">Password</label>
+          <input type="password" id="password" v-model="user.password"/>
         </main>
         <footer>
-          <button type="submit" id="btnSignUp" :disabled="loading">
-            Sign up
+          <button type="submit" id="btnSignIn" :disabled="loading">
+            Sign in
           </button>
         </footer>
       </form>
@@ -29,16 +29,32 @@
 </template>
 
 <script>
+import {authStore} from "@/stores/authStore";
+
 export default {
   name: "SignIn",
   props: {},
   data() {
-    return {}
+    return {
+      auth: authStore(),
+      user: {
+        username: null,
+
+      },
+      loading: false,
+      hasErrors: false,
+      errors: []
+    }
   },
   mounted() {
 
   },
-  methods: {}
+  methods: {
+    submitSignIn() {
+      this.auth.signIn("")
+      this.$router.push("/user/" + this.auth.username)
+    }
+  }
 }
 </script>
 
@@ -82,12 +98,6 @@ main {
   color: #730000;
 }
 
-.success {
-  background: #e7ffd1;
-  border: solid 1px #a3d772;
-  color: #527300;
-}
-
 label {
   padding: 10px 10px 10px 0;
   font-family: Ysabeau, Arial, sans-serif;
@@ -109,10 +119,6 @@ input, footer button {
   font-family: Ysabeau, Arial, sans-serif;
   font-size: 1.2rem;
   color: #555555;
-}
-
-#agreement {
-  margin-right: 10px;
 }
 
 footer button {
