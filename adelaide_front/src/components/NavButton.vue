@@ -16,8 +16,9 @@ export default {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 1rem;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.2rem;
+  color: #555555;
 }
 .side-block-button:hover {
   background: #e0e0e0;

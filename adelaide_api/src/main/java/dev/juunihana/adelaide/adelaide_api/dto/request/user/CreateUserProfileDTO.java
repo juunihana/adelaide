@@ -28,6 +28,8 @@ public class CreateUserProfileDTO {
 
   @NotBlank(message = "Username cannot be empty")
   @Size(min = 3, max = 24, message = "Username must be between 3 and 24 characters")
+  @Pattern(regexp = "[A-Za-z0-9]+", message = "Username can only contain letters and numbers")
+  @Pattern(regexp = "^[A-Za-z]+[A-Za-z0-9]+", message = "Username cannot begin with number")
   private String username;
 
   @NotBlank(message = "Password cannot be empty")
@@ -36,20 +38,24 @@ public class CreateUserProfileDTO {
   private String password;
 
   @NotBlank(message = "First name cannot be empty")
-  @Pattern(regexp = "[A-Za-z]+", message = "First name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]+", message =
+      "First name cannot contain other characters than letters")
   private String firstName;
 
-  @Pattern(regexp = "[A-Za-z]*", message = "Middle name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]*", message =
+      "Middle name cannot contain other characters than letters")
   private String middleName;
 
   @NotBlank(message = "Last name cannot be empty")
-  @Pattern(regexp = "[A-Za-z]+", message = "Last name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]+", message =
+      "Last name cannot contain other characters than letters")
   private String lastName;
 
-  @Pattern(regexp = "[A-Za-z]*", message = "Maiden name cannot contain other characters than letters")
+  @Pattern(regexp = "[A-Za-z]*", message =
+      "Maiden surname cannot contain other characters than letters")
   private String maidenSurname;
 
-  private String info;
+  private String bio;
 
   private String phone;
 
@@ -58,8 +64,4 @@ public class CreateUserProfileDTO {
   @NotNull(message = "Date of birth cannot be empty")
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate dateOfBirth;
-
-  @NotNull(message = "Agreement cannot be empty")
-  @AssertTrue(message = "You must accept EULA terms")
-  private Boolean agreement;
 }

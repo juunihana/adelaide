@@ -18,8 +18,7 @@ import org.mapstruct.Named;
 public interface UserMapper {
 
   @Mappings({
-      @Mapping(target = "age", source = "dateOfBirth", qualifiedByName = "mapUserAge"),
-      @Mapping(target = "info", source = "information")
+      @Mapping(target = "age", source = "dateOfBirth", qualifiedByName = "mapUserAge")
   })
   UserProfileDTO userEntityToProfile(UserEntity userEntity);
 
@@ -28,8 +27,5 @@ public interface UserMapper {
     return Period.between(dateOfBirth, LocalDate.now()).getYears();
   }
 
-  @Mappings({
-      @Mapping(target = "information", source = "info")
-  })
   UserEntity createUserToEntity(CreateUserProfileDTO dto);
 }

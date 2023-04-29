@@ -17,43 +17,43 @@
         </div>
         <main>
           <label for="username">Username</label>
-          <input type="text" id="username" v-model="username"/>
+          <input type="text" id="username" v-model="user.username"/>
 
           <label for="email">Email</label>
-          <input type="text" id="email" v-model="email"/>
+          <input type="text" id="email" v-model="user.email"/>
 
           <label for="phone">Phone</label>
-          <input type="text" id="phone" v-model="phone"/>
+          <input type="text" id="phone" v-model="user.phone"/>
 
           <label for="passwordFirst">Password</label>
-          <input type="text" id="passwordFirst" v-model="passwordFirst"/>
+          <input type="text" id="passwordFirst" v-model="user.passwordFirst"/>
 
           <label for="passwordSecond">Password again</label>
-          <input type="text" id="passwordSecond" v-model="passwordSecond"/>
+          <input type="text" id="passwordSecond" v-model="user.passwordSecond"/>
 
           <label for="firstName">First name</label>
-          <input type="text" id="firstName" v-model="firstName"/>
+          <input type="text" id="firstName" v-model="user.firstName"/>
 
           <label for="middleName">Middle name</label>
-          <input type="text" id="middleName" v-model="middleName"/>
+          <input type="text" id="middleName" v-model="user.middleName"/>
 
           <label for="lastName">Last name</label>
-          <input type="text" id="lastName" v-model="lastName"/>
+          <input type="text" id="lastName" v-model="user.lastName"/>
 
           <label for="maidenSurname">Maiden surname</label>
-          <input type="text" id="maidenSurname" v-model="maidenSurname"/>
+          <input type="text" id="maidenSurname" v-model="user.maidenSurname"/>
 
           <label for="bio">Bio</label>
-          <input type="text" id="bio" v-model="bio"/>
+          <input type="text" id="bio" v-model="user.bio"/>
 
           <label for="place">Place</label>
-          <input type="text" id="place" v-model="place"/>
+          <input type="text" id="place" v-model="user.place"/>
 
           <label for="dateOfBirth">Date of birth</label>
-          <input type="text" id="dateOfBirth" v-model="dateOfBirth"/>
+          <input type="text" id="dateOfBirth" v-model="user.dateOfBirth"/>
         </main>
         <footer>
-          <input type="checkbox" id="agreement" v-model="agreement"/>
+          <input type="checkbox" id="agreement" v-model="user.agreement"/>
           <label for="agreement">I agree to EULA terms</label>
           <button type="submit" id="btnSignUp" :disabled="loading">
             Sign up
@@ -67,6 +67,7 @@
 <script>
 import SignFormLineInput from "@/components/SignFormLineInput.vue";
 import UserService from "@/service/UserService";
+import ValidationService from "../service/ValidationService";
 
 export default {
   name: "SignUp",
@@ -74,19 +75,21 @@ export default {
   props: {},
   data() {
     return {
-      username: null,
-      email: null,
-      phone: null,
-      passwordFirst: null,
-      passwordSecond: null,
-      firstName: null,
-      middleName: null,
-      lastName: null,
-      maidenSurname: null,
-      bio: null,
-      place: null,
-      dateOfBirth: null,
-      agreement: false,
+      user: {
+        username: null,
+        email: null,
+        phone: null,
+        passwordFirst: null,
+        passwordSecond: null,
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        maidenSurname: null,
+        bio: null,
+        place: null,
+        dateOfBirth: null,
+        agreement: false
+      },
 
       success: false,
       hasErrors: false,
@@ -100,56 +103,27 @@ export default {
     submitSignUp(e) {
       e.preventDefault()
 
-      this.errors = []
-
-      if (!this.username) {
-        this.errors.push("Username cannot be empty")
-      }
-
-      if (!this.email) {
-        this.errors.push("Email cannot be empty")
-      }
-
-      if (!this.firstName) {
-        this.errors.push("First name cannot be empty")
-      }
-
-      if (!this.lastName) {
-        this.errors.push("Last name cannot be empty")
-      }
-
-      if (!this.dateOfBirth) {
-        this.errors.push("Please, specify your age")
-      }
-
-      if (!this.agreement) {
-        this.errors.push("You must accept EULA terms")
-      }
-
-      if (this.passwordFirst !== this.passwordSecond) {
-        this.errors.push("Passwords are not matching")
-      }
+      this.errors = ValidationService.validateSignUp(this.user)
 
       if (this.errors.length > 0) {
         this.success = false;
         this.hasErrors = true;
       } else {
         this.loading = true;
-        UserService.newUser({
-              username: this.username,
-              email: this.email,
-              phone: this.phone,
-              password: this.passwordFirst,
-              firstName: this.firstName,
-              middleName: this.middleName,
-              lastName: this.lastName,
-              maidenSurname: this.maidenSurname,
-              bio: this.bio,
-              place: this.place,
-              dateOfBirth: this.dateOfBirth,
-              agreement: this.agreement
-            }
-        )
+        const newUser = {
+          username: this.user.username,
+          email: this.user.email,
+          phone: this.user.phone,
+          password: this.user.passwordFirst,
+          firstName: this.user.firstName,
+          middleName: this.user.middleName,
+          lastName: this.user.lastName,
+          maidenSurname: this.user.maidenSurname,
+          bio: this.user.bio,
+          place: this.user.place,
+          dateOfBirth: this.user.dateOfBirth
+        };
+        UserService.newUser(newUser)
         .then(
             (data) => {
               this.success = true
@@ -189,7 +163,7 @@ export default {
 
 header {
   padding: 10px;
-  font-family: Verdana, Arial, sans-serif;
+  font-family: Ysabeau, "Courier New", monospace;
   font-size: 1.5rem;
   color: #555555;
   text-align: center;
@@ -208,8 +182,8 @@ main {
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.95rem;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.1rem;
 }
 
 .errors {
@@ -226,8 +200,8 @@ main {
 
 label {
   padding: 10px 10px 10px 0;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 0.95rem;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.1rem;
   color: #555555;
 }
 
@@ -242,8 +216,8 @@ input, footer button {
   border-radius: 5px;
   background: #fafafa;
   border: solid 1px #999999;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 1rem;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.2rem;
   color: #555555;
 }
 

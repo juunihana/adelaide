@@ -26,7 +26,7 @@ public class UserProfileDTO {
 
   private String status;
 
-  private String info;
+  private String bio;
 
   private String phone;
 

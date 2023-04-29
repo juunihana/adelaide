@@ -9,7 +9,7 @@ create table users
     middle_name    varchar(100),
     last_name      varchar(100)        not null,
     maiden_surname varchar(100),
-    information    text,
+    bio            text,
     status         varchar(255),
     date_of_birth  timestamp           not null,
     place          varchar(255),

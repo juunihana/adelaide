@@ -17,8 +17,8 @@
         <div class="user-age">
           {{ user.age }} years old
         </div>
-        <div class="user-info" v-if="user.info">
-          {{ user.info }}
+        <div class="user-info" v-if="user.bio">
+          {{ user.bio }}
         </div>
         <div class="user-place" v-if="user.place">
           From {{ user.place }}
@@ -73,10 +73,13 @@ export default {
 }
 
 .user-name {
+  font-size: 1.5rem;
+  color: #333333;
 }
 
 .user-profile-container {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 1rem;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.2rem;
+  color: #555555;
 }
 </style>

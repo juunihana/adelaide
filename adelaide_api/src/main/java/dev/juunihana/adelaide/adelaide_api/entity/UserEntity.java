@@ -45,7 +45,7 @@ public class UserEntity {
 
   private String maidenSurname;
 
-  private String information;
+  private String bio;
 
   private String status;
 
