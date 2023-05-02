@@ -37,7 +37,6 @@ export default {
     }
   },
   mounted() {
-
   },
   computed: {
     signedIn() {
@@ -86,5 +85,6 @@ nav a {
   background: #f0f0f0;
   padding: 10px;
   border-radius: 5px;
+  box-shadow: 1px 1px 3px #c0c0c0;
 }
 </style>

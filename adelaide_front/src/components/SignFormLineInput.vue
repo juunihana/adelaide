@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <input type="text"/>
+  <div class="input-container">
+    <label :for="id">{{ title }}</label>
+    <input :type="password ? 'password' : 'text'" :id="id" :value="modelProp"
+           @input="$emit('update:modelProp', $event.target.value)"/>
   </div>
 </template>
 
@@ -8,22 +10,37 @@
 export default {
   name: "SignFormLineInput",
   props: {
-    title: ""
+    title: null,
+    modelProp: null,
+    id: null,
+    password: false
   }
 }
 </script>
 
 <style scoped>
-div {
+.input-container {
+  display: flex;
+  flex-direction: column;
 }
-input {
-  padding: 10px;
+.input-container label {
+  padding: 1px 1px 1px 3px;
+  border-radius: 5px 5px 0 0;
+  background: #eaeaea;
+  border: solid 1px #bababa;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #222222;
+}
+.input-container input {
+  padding: 7px;
   outline: none;
-  border-radius: 5px;
+  border-radius: 0 0 5px 5px;
   background: #fafafa;
-  border: solid 1px #999999;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 1rem;
-  color: #111111;
+  border: solid 1px #bababa;
+  border-top: none;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1em;
+  color: #222222;
 }
 </style>

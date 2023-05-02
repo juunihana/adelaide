@@ -13,14 +13,18 @@ export default {
 
 <style scoped>
 .side-block-button {
+  margin-bottom: 5px;
   padding: 10px;
   border-radius: 5px;
+  border: solid 1px #bababa;
   cursor: pointer;
   font-family: Ysabeau, Arial, sans-serif;
   font-size: 1.2rem;
-  color: #555555;
+  color: #222222;
+  background: #fafafa;
 }
 .side-block-button:hover {
-  background: #e0e0e0;
+  background: #eaeaea;
+  text-shadow: 0 0 2px #666666;
 }
 </style>

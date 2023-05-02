@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
@@ -33,6 +34,17 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
         .result("userNotFoundError")
         .message(e.getMessage())
         .build();
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e,
+      HttpHeaders headers, HttpStatusCode statusCode, WebRequest webRequest) {
+    System.out.println("ERROR 404: " + e.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        .body(ErrorDTO.builder()
+            .result("notFound")
+            .message(e.getMessage())
+            .build());
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -75,9 +87,6 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
             .errorFields(fieldsWithErrors.values().stream()
                 .map(messageList -> messageList.get(0))
                 .collect(Collectors.toList()))
-//            .errorFields(e.getBindingResult().getFieldErrors().stream()
-//                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-//                .toList())
             .build());
   }
 }

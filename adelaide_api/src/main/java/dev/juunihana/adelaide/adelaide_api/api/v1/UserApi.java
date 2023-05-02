@@ -1,6 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import jakarta.validation.Valid;
@@ -19,4 +20,7 @@ public interface UserApi {
   @PostMapping("/user/new")
   @ResponseStatus(HttpStatus.CREATED)
   SuccessCreateUserDTO createUser(@RequestBody @Valid CreateUserProfileDTO createUserProfileDTO);
+
+  @PostMapping("/user/sign-in")
+  SuccessCreateUserDTO signIn(@RequestBody @Valid SignInUserDTO signInUserDTO);
 }

@@ -15,7 +15,7 @@
           <label for="username">Username</label>
           <input type="text" id="username" v-model="user.username"/>
 
-          <label for="email">Password</label>
+          <label for="password">Password</label>
           <input type="password" id="password" v-model="user.password"/>
         </main>
         <footer>
@@ -50,8 +50,9 @@ export default {
 
   },
   methods: {
-    submitSignIn() {
-      this.auth.signIn("")
+    submitSignIn(e) {
+      e.preventDefault()
+      this.auth.signIn("alice")
       this.$router.push("/user/" + this.auth.username)
     }
   }

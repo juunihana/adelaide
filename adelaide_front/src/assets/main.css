@@ -1,7 +1,8 @@
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: #c0c0c0;
+  background: #fafafa;
 }

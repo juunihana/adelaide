@@ -14,6 +14,10 @@ class UserService {
   newUser(newUser) {
     return this.restService.post("/user/new", newUser)
   }
+
+  signIn(userCredentials) {
+    return this.restService.post("/user/sign-in", userCredentials)
+  }
 }
 
 export default new UserService()

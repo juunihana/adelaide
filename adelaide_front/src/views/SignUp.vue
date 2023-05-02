@@ -16,41 +16,18 @@
           </ul>
         </div>
         <main>
-          <label for="username">Username</label>
-          <input type="text" id="username" v-model="user.username"/>
-
-          <label for="email">Email</label>
-          <input type="text" id="email" v-model="user.email"/>
-
-          <label for="phone">Phone</label>
-          <input type="text" id="phone" v-model="user.phone"/>
-
-          <label for="passwordFirst">Password</label>
-          <input type="password" id="passwordFirst" v-model="user.passwordFirst"/>
-
-          <label for="passwordSecond">Password again</label>
-          <input type="password" id="passwordSecond" v-model="user.passwordSecond"/>
-
-          <label for="firstName">First name</label>
-          <input type="text" id="firstName" v-model="user.firstName"/>
-
-          <label for="middleName">Middle name</label>
-          <input type="text" id="middleName" v-model="user.middleName"/>
-
-          <label for="lastName">Last name</label>
-          <input type="text" id="lastName" v-model="user.lastName"/>
-
-          <label for="maidenSurname">Maiden surname</label>
-          <input type="text" id="maidenSurname" v-model="user.maidenSurname"/>
-
-          <label for="bio">Bio</label>
-          <input type="text" id="bio" v-model="user.bio"/>
-
-          <label for="place">Place</label>
-          <input type="text" id="place" v-model="user.place"/>
-
-          <label for="dateOfBirth">Date of birth</label>
-          <input type="text" id="dateOfBirth" v-model="user.dateOfBirth"/>
+          <SignFormLineInput v-model="user.username" :id="'username'" :title="'Username'"/>
+          <SignFormLineInput v-model="user.email" :id="'email'" :title="'Email'"/>
+          <SignFormLineInput v-model="user.passwordFirst" :id="'passwordFirst'" :title="'Password'" :password="true"/>
+          <SignFormLineInput v-model="user.passwordSecond" :id="'passwordSecond'" :title="'Password again'" :password="true"/>
+          <SignFormLineInput v-model="user.firstName" :id="'firstName'" :title="'First name'"/>
+          <SignFormLineInput v-model="user.lastName" :id="'lastName'" :title="'Last name'"/>
+          <SignFormLineInput v-model="user.middleName" :id="'middleName'" :title="'Middle name'"/>
+          <SignFormLineInput v-model="user.maidenSurname" :id="'maidenSurname'" :title="'Maiden surname'"/>
+          <SignFormLineInput v-model="user.phone" :id="'phone'" :title="'Phone'"/>
+          <SignFormLineInput v-model="user.place" :id="'place'" :title="'Place'"/>
+          <SignFormLineInput v-model="user.dateOfBirth" :id="'dateOfBirth'" :title="'Date of birth'"/>
+          <SignFormLineInput class="user-bio" v-model="user.bio" :id="'bio'" :title="'Bio'"/>
         </main>
         <footer>
           <input type="checkbox" id="agreement" v-model="user.agreement"/>
@@ -165,7 +142,7 @@ header {
   padding: 10px;
   font-family: Ysabeau, "Courier New", monospace;
   font-size: 1.5rem;
-  color: #555555;
+  color: #222222;
   text-align: center;
   margin-bottom: 10px;
   background: #fafafa;
@@ -174,8 +151,9 @@ header {
 
 main {
   display: grid;
-  grid-template-columns: 2fr 8fr;
+  grid-template-columns: 1fr 1fr;
   row-gap: 10px;
+  column-gap: 10px;
 }
 
 .errors, .success {
@@ -202,7 +180,7 @@ label {
   padding: 10px 10px 10px 0;
   font-family: Ysabeau, Arial, sans-serif;
   font-size: 1.1rem;
-  color: #555555;
+  color: #222222;
 }
 
 footer {
@@ -210,28 +188,36 @@ footer {
   margin-top: 10px;
 }
 
-input, footer button {
-  padding: 10px;
-  outline: none;
-  border-radius: 5px;
-  background: #fafafa;
-  border: solid 1px #999999;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.2rem;
-  color: #555555;
+footer button {
+  padding: 5px;
+
 }
 
 #agreement {
   margin-right: 10px;
+  cursor: pointer;
 }
 
 footer button {
   margin-left: auto;
-  padding: 10px 20px 10px 20px;
+  padding: 5px 15px 5px 15px;
+  outline: none;
+  border-radius: 5px;
+  background: #fafafa;
+  border: solid 1px #bababa;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.2rem;
+  color: #222222;
 }
 
 footer button:hover {
   cursor: pointer;
-  background: #e0e0e0;
+  background: #eaeaea;
+  text-shadow: 0 0 2px #666666;
+}
+
+.user-bio {
+  grid-column-start: 1;
+  grid-column-end: 3;
 }
 </style>
