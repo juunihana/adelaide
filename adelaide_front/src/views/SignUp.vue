@@ -5,36 +5,34 @@
         <header>
           Sign up
         </header>
-        <div class="success" v-if="success">
+        <InfoFrameStatic type="success" v-if="success">
           You have successfully signed up!<br/>
-          Welcome, {{ username }}! You can use your credentials to sign in now
-        </div>
-        <div class="errors" v-if="hasErrors">
+          Welcome, {{ this.user.username }}! You can use your credentials to sign in now
+        </InfoFrameStatic>
+        <InfoFrameStatic type="error" v-if="hasErrors">
           Following errors occurred during sign up:
           <ul>
             <li v-for="error in errors">{{ error }}</li>
           </ul>
-        </div>
+        </InfoFrameStatic>
         <main>
-          <SignFormLineInput v-model="user.username" :id="'username'" :title="'Username'"/>
-          <SignFormLineInput v-model="user.email" :id="'email'" :title="'Email'"/>
-          <SignFormLineInput v-model="user.passwordFirst" :id="'passwordFirst'" :title="'Password'" :password="true"/>
-          <SignFormLineInput v-model="user.passwordSecond" :id="'passwordSecond'" :title="'Password again'" :password="true"/>
-          <SignFormLineInput v-model="user.firstName" :id="'firstName'" :title="'First name'"/>
-          <SignFormLineInput v-model="user.lastName" :id="'lastName'" :title="'Last name'"/>
+          <SignFormLineInput v-model="user.username" :id="'username'" :title="'Username*'"/>
+          <SignFormLineInput v-model="user.email" :id="'email'" :title="'Email*'"/>
+          <SignFormLineInput v-model="user.passwordFirst" :id="'passwordFirst'" :title="'Password*'" :password="true"/>
+          <SignFormLineInput v-model="user.passwordSecond" :id="'passwordSecond'" :title="'Password again*'" :password="true"/>
+          <SignFormLineInput v-model="user.firstName" :id="'firstName'" :title="'First name*'"/>
+          <SignFormLineInput v-model="user.lastName" :id="'lastName'" :title="'Last name*'"/>
           <SignFormLineInput v-model="user.middleName" :id="'middleName'" :title="'Middle name'"/>
           <SignFormLineInput v-model="user.maidenSurname" :id="'maidenSurname'" :title="'Maiden surname'"/>
-          <SignFormLineInput v-model="user.phone" :id="'phone'" :title="'Phone'"/>
+<!--          <SignFormLineInput v-model="user.phone" :id="'phone'" :title="'Phone'"/>-->
           <SignFormLineInput v-model="user.place" :id="'place'" :title="'Place'"/>
-          <SignFormLineInput v-model="user.dateOfBirth" :id="'dateOfBirth'" :title="'Date of birth'"/>
-          <SignFormLineInput class="user-bio" v-model="user.bio" :id="'bio'" :title="'Bio'"/>
+          <SignFormLineInput v-model="user.dateOfBirth" :id="'dateOfBirth'" :title="'Date of birth*'"/>
+          <SignFormTextInput class="user-bio" v-model="user.bio" :id="'bio'" :title="'Bio'"/>
         </main>
         <footer>
           <input type="checkbox" id="agreement" v-model="user.agreement"/>
-          <label for="agreement">I agree to EULA terms</label>
-          <button type="submit" id="btnSignUp" :disabled="loading">
-            Sign up
-          </button>
+          <label for="agreement">I agree to EULA terms*</label>
+          <SignFormButton id="btnSignUp" :loading="loading" title="Sign up"/>
         </footer>
       </form>
     </div>
@@ -45,10 +43,13 @@
 import SignFormLineInput from "@/components/SignFormLineInput.vue";
 import UserService from "@/service/UserService";
 import ValidationService from "../service/ValidationService";
+import InfoFrameStatic from "@/components/InfoFrameStatic.vue";
+import SignFormButton from "@/components/SignFormButton.vue";
+import SignFormTextInput from "@/components/SignFormTextInput.vue";
 
 export default {
   name: "SignUp",
-  components: {SignFormLineInput},
+  components: {SignFormTextInput, SignFormButton, InfoFrameStatic, SignFormLineInput},
   props: {},
   data() {
     return {
@@ -139,14 +140,12 @@ export default {
 }
 
 header {
-  padding: 10px;
-  font-family: Ysabeau, "Courier New", monospace;
-  font-size: 1.5rem;
-  color: #222222;
-  text-align: center;
   margin-bottom: 10px;
-  background: #fafafa;
-  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  font-family: var(--text-font-general);
+  font-size: 1.5rem;
+  color: var(--text-color-general);
 }
 
 main {
@@ -156,31 +155,11 @@ main {
   column-gap: 10px;
 }
 
-.errors, .success {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.1rem;
-}
-
-.errors {
-  background: #ffd1d1;
-  border: solid 1px #ff9898;
-  color: #730000;
-}
-
-.success {
-  background: #e7ffd1;
-  border: solid 1px #a3d772;
-  color: #527300;
-}
-
 label {
   padding: 10px 10px 10px 0;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.1rem;
-  color: #222222;
+  font-family: var(--text-font-general);
+  font-size: var(--text-size-form-label);
+  color: var(--text-color-general);
 }
 
 footer {
@@ -188,32 +167,9 @@ footer {
   margin-top: 10px;
 }
 
-footer button {
-  padding: 5px;
-
-}
-
 #agreement {
   margin-right: 10px;
   cursor: pointer;
-}
-
-footer button {
-  margin-left: auto;
-  padding: 5px 15px 5px 15px;
-  outline: none;
-  border-radius: 5px;
-  background: #fafafa;
-  border: solid 1px #bababa;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.2rem;
-  color: #222222;
-}
-
-footer button:hover {
-  cursor: pointer;
-  background: #eaeaea;
-  text-shadow: 0 0 2px #666666;
 }
 
 .user-bio {

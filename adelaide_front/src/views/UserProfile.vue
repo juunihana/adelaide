@@ -62,7 +62,7 @@ export default {
 }
 
 .user-avatar img {
-  border-radius: 5px;
+  border-radius: var(--border-radius-general);
 }
 
 .user-info-block {
@@ -74,12 +74,12 @@ export default {
 
 .user-name {
   font-size: 1.5rem;
-  color: #333333;
+  color: var(--text-color-general);
 }
 
 .user-profile-container {
-  font-family: Ysabeau, Arial, sans-serif;
+  font-family: var(--text-font-general);
   font-size: 1.2rem;
-  color: #555555;
+  color: var(--text-color-general);
 }
 </style>

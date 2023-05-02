@@ -14,17 +14,17 @@ export default {
 <style scoped>
 .side-block-button {
   margin-bottom: 5px;
-  padding: 10px;
-  border-radius: 5px;
-  border: solid 1px #bababa;
+  padding: var(--padding-button-general);
+  border-radius: var(--border-radius-general);
+  border: var(--border-general);
   cursor: pointer;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.2rem;
-  color: #222222;
-  background: #fafafa;
+  font-family: var(--text-font-general);
+  font-size: 1.15em;
+  color: var(--text-color-general);
+  background: var(--background-button);
 }
 .side-block-button:hover {
-  background: #eaeaea;
+  background: var(--background-button-hover);
   text-shadow: 0 0 2px #666666;
 }
 </style>

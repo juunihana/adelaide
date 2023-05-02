@@ -82,9 +82,9 @@ nav a {
 }
 
 .main-block, .side-block {
-  background: #f0f0f0;
+  background: var(--background-block);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: var(--border-radius-general);
   box-shadow: 1px 1px 3px #c0c0c0;
 }
 </style>
