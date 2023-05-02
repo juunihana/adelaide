@@ -8,6 +8,8 @@ public interface UserService {
 
   UserProfileDTO findUserByUsername(String username);
 
+  UserProfileDTO findUserByEmail(String email);
+
   Boolean userExistsByUsername(String username);
 
   Boolean userExistsByEmail(String email);

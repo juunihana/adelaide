@@ -67,6 +67,12 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
         .build();
   }
 
+  /**
+   * Collect all field errors into map (keys are fields that failed validation and values are lists
+   * of errors), and then retrieve only the first message from each list to response
+   * On the front end we don't need to show every message (e.g. if user has not specified username,
+   * there will be four errors at once) and we can only show one
+   */
   @Override
   public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
       HttpHeaders headers, HttpStatusCode statusCode, WebRequest webRequest) {

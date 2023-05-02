@@ -11,27 +11,27 @@ import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
 
-  public UserServiceImpl(
-      UserRepository userRepository,
-      UserMapper userMapper
-  ) {
-    this.userRepository = userRepository;
-    this.userMapper = userMapper;
-  }
-
   @Override
   public UserProfileDTO findUserByUsername(String username) {
     return userMapper.userEntityToProfile(userRepository.findByUsername(username)
-        .orElseThrow(() -> new UserNotFoundException(username)));
+        .orElseThrow(() -> new UserNotFoundException("username " + username)));
+  }
+
+  @Override
+  public UserProfileDTO findUserByEmail(String email) {
+    return userMapper.userEntityToProfile(userRepository.findByEmail(email)
+        .orElseThrow(() -> new UserNotFoundException("email " + email)));
   }
 
   @Override
