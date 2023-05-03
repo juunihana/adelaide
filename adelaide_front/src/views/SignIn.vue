@@ -39,7 +39,7 @@ export default {
       auth: authStore(),
       user: {
         username: null,
-
+        password: null
       },
       loading: false,
       hasErrors: false,
@@ -52,7 +52,7 @@ export default {
   methods: {
     submitSignIn(e) {
       e.preventDefault()
-      this.auth.signIn("alice")
+      this.auth.signIn(this.user.username, this.user.password)
       this.$router.push("/user/" + this.auth.username)
     }
   }

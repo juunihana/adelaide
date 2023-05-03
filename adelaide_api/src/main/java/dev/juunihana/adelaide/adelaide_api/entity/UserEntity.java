@@ -1,10 +1,10 @@
 package dev.juunihana.adelaide.adelaide_api.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users_info")
 @Getter
 @Setter
 @Builder
@@ -25,15 +25,11 @@ import lombok.Setter;
 public class UserEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+//  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  private String username;
-
-  private String email;
-
-  @Column(name = "password_hash")
-  private String password;
+  @OneToOne//(mappedBy = "id")
+  private UserAuthEntity userAuth;
 
   private String phone;
 

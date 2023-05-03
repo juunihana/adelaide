@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="user-profile-container">
+    <div class="user-profile-container" v-if="authorized">
       <div class="user-avatar">
 
       </div>
@@ -25,28 +25,39 @@
         </div>
       </div>
     </div>
+    <InfoFrameStatic type="error" v-else>
+      Access denied
+    </InfoFrameStatic>
   </div>
 </template>
 
 <script>
-import UserService from "../service/UserService"
+import UserService from "@/service/UserService.js"
+import InfoFrameStatic from "@/components/InfoFrameStatic.vue";
 
 export default {
   name: "UserProfile",
+  components: {InfoFrameStatic},
   props: {
     username: String
   },
   data() {
     return {
-      user: {}
+      user: {},
+      authorized: false
     }
   },
   mounted() {
     UserService.getUserProfile(this.$route.params.username)
-    .then((response) => {
-      this.user = response.data
-    })
+    .then((data) => {
+          this.user = data.data
+          this.authorized = true
+        },
+        (error) => {
+          this.authorized = false
+        })
   },
+  computed: {},
   methods: {}
 }
 </script>

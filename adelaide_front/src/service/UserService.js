@@ -1,4 +1,5 @@
 import axios from "axios";
+import {authStore} from "../stores/authStore";
 
 class UserService {
   constructor() {
@@ -8,7 +9,7 @@ class UserService {
   }
 
   getUserProfile(username) {
-    return this.restService.get(`/user/${username}`)
+    return this.restService.get(`/user/${username}`, {withCredentials: true})
   }
 
   newUser(newUser) {

@@ -1,14 +1,22 @@
 package dev.juunihana.adelaide.adelaide_api.configuration;
 
+import dev.juunihana.adelaide.adelaide_api.entity.UserAuthEntity;
+import dev.juunihana.adelaide.adelaide_api.service.UserAuthService;
+import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -16,15 +24,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private final UserAuthService userAuthService;
+
+  @Bean
+  public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(new AntPathRequestMatcher("/api/v1/**"))
+            .permitAll().anyRequest().anonymous())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .userDetailsService(userAuthService)
+        .httpBasic();
+    return httpSecurity.build();
+  }
+
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration)
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
       throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
+    return configuration.getAuthenticationManager();
   }
 }

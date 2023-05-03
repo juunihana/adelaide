@@ -1,19 +1,27 @@
-create table users
+create table users_auth
 (
-    id             uuid                not null primary key,
-    username       varchar(100) unique not null,
-    email          varchar(100) unique not null,
-    password_hash  varchar(255)        not null,
+    id            uuid                not null primary key,
+    username      varchar(100) unique not null,
+    email         varchar(100) unique not null,
+    password_hash varchar(255)        not null
+);
+
+create table users_info
+(
+    id             uuid         not null primary key,
+    user_auth_id   uuid         not null,
     phone          varchar(15) unique,
-    first_name     varchar(100)        not null,
+    first_name     varchar(100) not null,
     middle_name    varchar(100),
-    last_name      varchar(100)        not null,
+    last_name      varchar(100) not null,
     maiden_surname varchar(100),
     bio            text,
     status         varchar(255),
-    date_of_birth  timestamp           not null,
+    date_of_birth  timestamp    not null,
     place          varchar(255),
-    time_joined    timestamp           not null
+    time_joined    timestamp    not null,
+
+    foreign key (user_auth_id) references users_auth (id)
 );
 
 create table users_password_history
@@ -23,7 +31,7 @@ create table users_password_history
     password_hash varchar(255) not null,
     time_added    timestamp    not null,
 
-    foreign key (user_id) references users (id)
+    foreign key (user_id) references users_info (id)
 );
 
 create table users_images
@@ -34,5 +42,5 @@ create table users_images
     cdn_url varchar(255) unique not null,
     deleted boolean             not null,
 
-    foreign key (user_id) references users (id)
+    foreign key (user_id) references users_info (id)
 );

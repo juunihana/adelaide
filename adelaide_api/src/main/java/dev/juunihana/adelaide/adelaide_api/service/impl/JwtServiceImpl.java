@@ -1,0 +1,52 @@
+package dev.juunihana.adelaide.adelaide_api.service.impl;
+
+import dev.juunihana.adelaide.adelaide_api.service.JwtService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class JwtServiceImpl implements JwtService {
+
+  private String SECRET_KEY = "secret";
+
+  @Override
+  public String getUsername(String token) {
+    Function<Claims, String> claimsResolver = Claims::getSubject;
+    return claimsResolver.apply(
+        Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody());
+  }
+
+  @Override
+  public Boolean isExpired(String token) {
+    Function<Claims, Date> claimsResolver = Claims::getExpiration;
+    return claimsResolver.apply(
+        Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody()).before(new Date());
+  }
+
+  @Override
+  public String createToken(UserDetails userDetails) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("authorities", userDetails.getUsername());
+    return Jwts.builder()
+        .setClaims(claims)
+        .setSubject(userDetails.getUsername())
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+        .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+        .compact();
+  }
+
+  @Override
+  public Boolean isValid(String token, UserDetails userDetails) {
+    return (userDetails.getUsername().equals(getUsername(token))) && !isExpired(token);
+  }
+}

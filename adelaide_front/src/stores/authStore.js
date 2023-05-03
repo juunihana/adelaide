@@ -5,29 +5,26 @@ import UserService from "../service/UserService";
 export const authStore = defineStore('authStore', {
   state: () =>
       ({
-        signedIn: !!(VueCookies.get("username") &&
-            VueCookies.get("username") !== ""),
-        username: VueCookies.get("username"),
-        token: VueCookies.get("auth-token") || null
+        signedIn: !!(VueCookies.get("auth") &&
+            VueCookies.get("auth") !== ""),
+        token: VueCookies.get("auth") || null
       }),
   actions: {
+    isSignedIn() {
+      return this.signedIn
+    },
     signIn(username, password) {
-      // for test only
-      this.username = username
-      VueCookies.set("username", "alice", "1h")
-
-      this.signedIn = true
-      this.username = username
       UserService.signIn({username: username, password: password})
       .then((data) => {
             this.token = data.data.token
-            VueCookies.set("auth-token", this.token, "1h")
+            VueCookies.set("auth", this.token, "24h")
+        this.signedIn = true;
           },
           (error) => {
           })
     },
     signOut() {
-      VueCookies.remove("username")
+      VueCookies.remove("auth")
       this.signedIn = false
       this.username = null
     }

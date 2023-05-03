@@ -3,6 +3,7 @@ package dev.juunihana.adelaide.adelaide_api.handler;
 import dev.juunihana.adelaide.adelaide_api.constant.ErrorMessage;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ValidationErrorDTO;
+import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import java.util.Comparator;
@@ -45,6 +46,16 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
             .result("notFound")
             .message(e.getMessage())
             .build());
+  }
+
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ExceptionHandler(AccessDeniedException.class)
+  protected ErrorDTO handleUnauthorized(AccessDeniedException e) {
+    System.out.println("ERROR 401: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("accessDeniedError")
+        .message("Access denied")
+        .build();
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
