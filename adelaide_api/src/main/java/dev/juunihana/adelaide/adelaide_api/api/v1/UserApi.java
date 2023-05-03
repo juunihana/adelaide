@@ -1,7 +1,9 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
@@ -30,4 +32,7 @@ public interface UserApi {
 
   @PostMapping("/user/sign-out")
   ResponseEntity<?> signOut();
+
+  @PostMapping("/user/post/new")
+  SuccessPostDTO createPost(CreatePostDTO createPostDTO);
 }

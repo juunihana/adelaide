@@ -25,7 +25,7 @@ public class PostEntity {
   private UUID id;
 
   @ManyToOne
-  private UserEntity user;
+  private UserAuthEntity user;
 
   private String title;
 
