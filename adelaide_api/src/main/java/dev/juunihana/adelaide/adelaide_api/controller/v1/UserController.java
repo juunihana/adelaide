@@ -6,6 +6,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
@@ -40,7 +41,11 @@ public class UserController implements UserApi {
   private final AuthenticationManager authenticationManager;
 
   @Override
-  @PreAuthorize("hasRole('ROLE_USER')")
+  public SignedUserDTO getSignedUser() {
+    return userService.getSignedUser();
+  }
+
+  @Override
   public UserProfileDTO getUserProfile(String username) {
     return userService.findUserByUsername(username);
   }
@@ -56,6 +61,8 @@ public class UserController implements UserApi {
     return userService.save(createUserProfileDTO);
   }
 
+  @Override
+  @PreAuthorize("hasRole('ROLE_USER')")
   public SuccessPostDTO createPost(CreatePostDTO createPostDTO) {
     return postService.create(createPostDTO);
   }
@@ -85,6 +92,7 @@ public class UserController implements UserApi {
   }
 
   @Override
+  @PreAuthorize("hasRole('ROLE_USER')")
   public ResponseEntity<?> signOut() {
     System.out.println("Signing out user");
     return null;

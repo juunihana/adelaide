@@ -5,7 +5,7 @@
     </div>
     <div class="side-block">
       <nav v-if="signedIn">
-        <RouterLink :to="'/user/' + getSignedUsername">
+        <RouterLink :to="'/user/' + username">
           <NavButton button-text="My profile"/>
         </RouterLink>
         <NavButton button-text="Logout" @click="signOut"/>
@@ -32,8 +32,7 @@ export default {
   props: {},
   data() {
     return {
-      auth: authStore(),
-      username: null
+      auth: authStore()
     }
   },
   mounted() {
@@ -42,10 +41,8 @@ export default {
     signedIn() {
       return this.auth.signedIn
     },
-    getSignedUsername() {
-      if (this.signedIn) {
-        return this.auth.username
-      }
+    username() {
+      return this.auth.username
     }
   },
   methods: {

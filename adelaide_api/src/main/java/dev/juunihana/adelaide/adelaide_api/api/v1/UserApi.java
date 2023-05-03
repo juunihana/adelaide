@@ -4,6 +4,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface UserApi {
+
+  @GetMapping("/user-signed")
+  SignedUserDTO getSignedUser();
 
   @GetMapping("/user/{username}")
   UserProfileDTO getUserProfile(@PathVariable String username);

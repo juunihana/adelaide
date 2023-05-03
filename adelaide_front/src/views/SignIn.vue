@@ -53,7 +53,6 @@ export default {
     submitSignIn(e) {
       e.preventDefault()
       this.auth.signIn(this.user.username, this.user.password)
-      this.$router.push("/user/" + this.auth.username)
     }
   }
 }

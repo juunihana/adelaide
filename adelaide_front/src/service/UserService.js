@@ -8,6 +8,9 @@ class UserService {
     })
   }
 
+  getSignedUser() {
+    return this.restService.get("/user-signed", {withCredentials: true})
+  }
   getUserProfile(username) {
     return this.restService.get(`/user/${username}`, {withCredentials: true})
   }

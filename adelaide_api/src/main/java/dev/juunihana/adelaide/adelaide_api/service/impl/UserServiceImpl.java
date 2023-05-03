@@ -1,6 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.service.impl;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserAuthEntity;
@@ -16,6 +17,7 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,6 +31,14 @@ public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
   private final PasswordEncoder passwordEncoder;
   private final UserAuthService userAuthService;
+
+  @Override
+  public SignedUserDTO getSignedUser() {
+    return SignedUserDTO.builder()
+        .username(((UserAuthEntity) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal()).getUsername())
+        .build();
+  }
 
   @Override
   public UserProfileDTO findUserByUsername(String username) {
