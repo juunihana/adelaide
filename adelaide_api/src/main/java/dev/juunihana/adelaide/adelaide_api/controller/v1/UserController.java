@@ -40,7 +40,7 @@ public class UserController implements UserApi {
   private final AuthenticationManager authenticationManager;
 
   @Override
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("hasRole('ROLE_USER')")
   public UserProfileDTO getUserProfile(String username) {
     return userService.findUserByUsername(username);
   }

@@ -1,5 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,14 +39,12 @@ public class UserAuthEntity implements UserDetails {
 
   private String email;
 
+  @Column(name = "password_hash")
   private String password;
-
-  @OneToOne
-  private UserEntity userEntity;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
   }
 
   @Override

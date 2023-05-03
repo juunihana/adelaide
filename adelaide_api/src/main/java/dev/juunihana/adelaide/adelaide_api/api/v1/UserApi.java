@@ -34,5 +34,5 @@ public interface UserApi {
   ResponseEntity<?> signOut();
 
   @PostMapping("/user/post/new")
-  SuccessPostDTO createPost(CreatePostDTO createPostDTO);
+  SuccessPostDTO createPost(@RequestBody CreatePostDTO createPostDTO);
 }

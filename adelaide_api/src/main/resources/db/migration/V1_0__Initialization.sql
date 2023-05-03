@@ -55,7 +55,7 @@ create table posts
     time_edited  timestamp,
     deleted      boolean,
 
-    foreign key (user_id) references users_auth (id)
+    foreign key (user_id) references users_info (id)
 );
 
 

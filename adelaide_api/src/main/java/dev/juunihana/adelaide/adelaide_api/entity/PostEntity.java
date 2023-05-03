@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.adelaide_api.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -25,7 +26,8 @@ public class PostEntity {
   private UUID id;
 
   @ManyToOne
-  private UserAuthEntity user;
+  @JoinColumn(name = "user_id")
+  private UserEntity user;
 
   private String title;
 

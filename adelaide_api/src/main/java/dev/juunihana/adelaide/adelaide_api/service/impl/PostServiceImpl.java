@@ -9,6 +9,7 @@ import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.PostMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.PostRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserAuthRepository;
+import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
 import dev.juunihana.adelaide.adelaide_api.service.UserAuthService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class PostServiceImpl implements PostService {
 
   private final PostRepository postRepository;
+  private final UserRepository userRepository;
   private final UserAuthRepository userAuthRepository;
   private final PostMapper postMapper;
 
@@ -32,10 +34,13 @@ public class PostServiceImpl implements PostService {
     UUID postId = UUID.randomUUID();
     String username = ((UserAuthEntity)SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal()).getUsername();
+    UUID userId = userAuthRepository.findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException(username))
+        .getId();
 
     postRepository.save(PostEntity.builder()
         .id(postId)
-        .user(userAuthRepository.findByUsername(username)
+        .user(userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(username)))
         .title(createPostDTO.getTitle())
         .content(createPostDTO.getContent())

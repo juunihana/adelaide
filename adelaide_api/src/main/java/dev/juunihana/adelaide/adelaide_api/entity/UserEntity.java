@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -30,7 +31,8 @@ public class UserEntity {
 //  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  @OneToOne//(mappedBy = "id")
+  @OneToOne
+  @JoinColumn(name = "user_auth_id")
   private UserAuthEntity userAuth;
 
   private String phone;
@@ -53,6 +55,6 @@ public class UserEntity {
 
   private LocalDateTime timeJoined;
 
-  @OneToMany
+  @OneToMany(mappedBy = "user")
   private List<PostEntity> posts;
 }
