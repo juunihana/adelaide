@@ -1,28 +1,34 @@
 <template>
   <div>
-    <div class="user-profile-container" v-if="authorized">
-      <div class="user-avatar">
+    <div v-if="authorized">
+      <div class="user-profile-container">
+        <div class="user-avatar">
 
+        </div>
+        <div class="user-info-block">
+          <div class="user-name">
+            {{ user.firstName }}
+            {{ user.middleName ? user.middleName : "" }}
+            {{ user.lastName }}
+            {{ user.maidenSurname ? "(" + user.maidenSurname + ")" : "" }}
+          </div>
+          <div class="user-status" v-if="user.status">
+            {{ user.status }}
+          </div>
+          <div class="user-age">
+            {{ user.age }} years old
+          </div>
+          <div class="user-info" v-if="user.bio">
+            {{ user.bio }}
+          </div>
+          <div class="user-place" v-if="user.place">
+            From {{ user.place }}
+          </div>
+        </div>
       </div>
-      <div class="user-info-block">
-        <div class="user-name">
-          {{ user.firstName }}
-          {{ user.middleName ? user.middleName : "" }}
-          {{ user.lastName }}
-          {{ user.maidenSurname ? "(" + user.maidenSurname + ")" : "" }}
-        </div>
-        <div class="user-status" v-if="user.status">
-          {{ user.status }}
-        </div>
-        <div class="user-age">
-          {{ user.age }} years old
-        </div>
-        <div class="user-info" v-if="user.bio">
-          {{ user.bio }}
-        </div>
-        <div class="user-place" v-if="user.place">
-          From {{ user.place }}
-        </div>
+      <div class="user-profile-container" v-for="post in user.posts">
+        {{ post.title }}
+        {{ post.content }}
       </div>
     </div>
     <InfoFrameStatic type="error" v-else>
