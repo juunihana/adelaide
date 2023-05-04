@@ -5,7 +5,14 @@
 }
 
 body {
-  /*background: var(--background-main);*/
+  background: #fdfdfd;
+  font-size: 1.05em;
+  font-family: Ysabeau, Arial, sans-serif;
+  color: #222;
+}
+
+img {
+  border-radius: 3px;
 }
 
 :root {

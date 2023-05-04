@@ -31,5 +31,13 @@ export default {
 </script>
 
 <style scoped>
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
+.main-menu-element {
+  margin-right: 1.5em;
+}
 </style>

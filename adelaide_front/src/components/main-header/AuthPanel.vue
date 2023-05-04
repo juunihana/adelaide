@@ -16,5 +16,14 @@ export default {
 </script>
 
 <style scoped>
+.auth-panel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+}
 
+.auth-panel-element {
+  margin-right: 1.5em;
+}
 </style>

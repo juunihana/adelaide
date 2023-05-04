@@ -17,5 +17,15 @@ export default {
 </script>
 
 <style scoped>
-
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 2.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #eaeaea;
+  padding: 1em;
+}
 </style>
