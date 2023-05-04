@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router"
-import UserProfile from "@/views/UserProfile.vue";
+import UserProfile from "@/views/UserPage.vue";
 import PostFeed from "@/views/PostFeed.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
