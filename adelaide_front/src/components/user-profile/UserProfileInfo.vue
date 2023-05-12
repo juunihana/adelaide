@@ -22,5 +22,21 @@ export default {
 </script>
 
 <style scoped>
+.user-profile-info-block {
+  display: flex;
+  flex-direction: column;
+}
 
+.user-profile-avatar {
+  text-align: center;
+}
+
+.user-profile-name {
+}
+
+.user-profile-age {
+}
+
+.user-profile-place {
+}
 </style>

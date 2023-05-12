@@ -8,17 +8,21 @@
 </template>
 
 <script>
+import UserProfileInfo from "@/components/user-profile/UserProfileInfo.vue";
+import UserProfileFriends from "@/components/user-profile/UserProfileFriends.vue";
+import UserProfileGroups from "@/components/user-profile/UserProfileGroups.vue";
+import UserProfilePhotos from "@/components/user-profile/UserProfilePhotos.vue";
 
-import UserProfileInfo from "./user-profile/UserProfileInfo.vue";
-import UserProfileFriends from "./user-profile/UserProfileFriends.vue";
-import UserProfileGroups from "./user-profile/UserProfileGroups.vue";
-import UserProfilePhotos from "./user-profile/UserProfilePhotos.vue";
 export default {
   name: "UserProfile",
-  components: {UserProfilePhotos, UserProfileGroups, UserProfileFriends, UserProfileInfo}
+  components: {UserProfileInfo, UserProfileFriends, UserProfileGroups, UserProfilePhotos}
 }
 </script>
 
 <style scoped>
-
+.user-profile-container {
+  display: flex;
+  flex-direction: column;
+  height: 1vh;
+}
 </style>

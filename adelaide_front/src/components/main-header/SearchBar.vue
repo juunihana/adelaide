@@ -1,12 +1,15 @@
 <template>
   <div class="search-bar">
-    <input type="text" placeholder="Search">
+    <TextInput placeholder="Search"/>
   </div>
 </template>
 
 <script>
+import TextInput from "@/components/common/form/TextInput.vue";
+
 export default {
-  name: "SearchBar"
+  name: "SearchBar",
+  components: {TextInput}
 }
 </script>
 

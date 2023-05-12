@@ -1,18 +1,71 @@
 <template>
   <header class="main-header">
     <SearchBar/>
-    <MainMenu/>
-    <AuthPanel/>
+    <MenuStripe>
+      <MenuLink link="/">
+        My profile
+      </MenuLink>
+      <MenuLink link="/">
+        Messages
+      </MenuLink>
+      <MenuLink link="/">
+        Feed
+      </MenuLink>
+      <MenuLink link="/">
+        Friends
+      </MenuLink>
+      <MenuLink link="/">
+        Groups
+      </MenuLink>
+      <MenuLink link="/">
+        Photos
+      </MenuLink>
+      <MenuLink link="/">
+        Music
+      </MenuLink>
+      <MenuLink link="/">
+        Videos
+      </MenuLink>
+      <MenuLink link="/">
+        Settings
+      </MenuLink>
+    </MenuStripe>
+    <MenuStripe class="auth-panel">
+      <Button @click="showSignIn">
+        Sign in
+      </Button>
+      <Button @click="showSignUp">
+        Sign up
+      </Button>
+    </MenuStripe>
   </header>
 </template>
 
 <script>
-import SearchBar from "./main-header/SearchBar.vue";
-import MainMenu from "./main-header/MainMenu.vue";
-import AuthPanel from "./main-header/AuthPanel.vue";
+import SearchBar from "@/components/main-header/SearchBar.vue";
+import MenuStripe from "@/components/common/MenuStripe.vue";
+import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
+import Button from "@/components/common/form/Button.vue";
+import {generalStore} from "@/stores/generalStore";
+
 export default {
   name: "MainHeader",
-  components: {AuthPanel, MainMenu, SearchBar}
+  components: {Button, MenuStripe, MenuLink, SearchBar},
+  data() {
+    return {
+      generalStore: generalStore()
+    }
+  },
+  methods: {
+    showSignIn(e) {
+      e.preventDefault()
+      this.generalStore.showSignInOverlay = true
+    },
+    showSignUp(e) {
+      e.preventDefault()
+      this.generalStore.showSignUpOverlay = true
+    }
+  }
 }
 </script>
 
@@ -21,11 +74,15 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 2.5em;
+  height: 2.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: #eaeaea;
-  padding: 1em;
+  background: var(--background-color-block);
+  padding: 1rem;
+  box-shadow: 0 0 10px #111111;
+}
+.auth-panel {
+  margin-left: auto;
 }
 </style>

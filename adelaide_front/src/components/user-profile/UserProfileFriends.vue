@@ -1,26 +1,35 @@
 <template>
   <div class="user-profile-friends-block general-block">
-    <header class="block-header"><h3>Friends</h3></header>
+    <BlockHeader link="/">Friends</BlockHeader>
     <main>
-      <div class="user-profile-friend">
-        friend
-      </div>
-      <div class="user-profile-friend">
-        friend
-      </div>
-      <div class="user-profile-friend">
-        friend
-      </div>
+      <UserFriend name="Name" surname="Surname"/>
+      <UserFriend name="Name" surname="Surname"/>
+      <UserFriend name="Name" surname="Surname"/>
+      <UserFriend name="Name" surname="Surname"/>
     </main>
   </div>
 </template>
 
 <script>
+import UserFriend from "@/components/user-profile/user-friends/UserFriend.vue";
+import BlockHeader from "@/components/common/BlockHeader.vue";
+
 export default {
-  name: "UserProfileFriends"
+  name: "UserProfileFriends",
+  components: {BlockHeader, UserFriend}
 }
 </script>
 
 <style scoped>
+.user-profile-friends-block {
+  display: flex;
+  flex-direction: column;
+}
 
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, 6vh);
+  grid-gap: 1rem;
+}
 </style>

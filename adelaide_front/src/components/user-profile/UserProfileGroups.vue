@@ -1,6 +1,6 @@
 <template>
   <div class="user-profile-groups-block general-block">
-    <header class="block-header"><h3>Groups</h3></header>
+    <BlockHeader link="/">Groups</BlockHeader>
     <main>
       <div class="user-profile-group">
         group
@@ -16,11 +16,17 @@
 </template>
 
 <script>
+import BlockHeader from "@/components/common/BlockHeader.vue";
+
 export default {
-  name: "UserProfileGroups"
+  name: "UserProfileGroups",
+  components: {BlockHeader}
 }
 </script>
 
 <style scoped>
-
+.user-profile-groups-block {
+  display: flex;
+  flex-direction: column;
+}
 </style>

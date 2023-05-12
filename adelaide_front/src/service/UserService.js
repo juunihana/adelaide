@@ -1,5 +1,5 @@
 import axios from "axios";
-import {authStore} from "../stores/authStore";
+import {generalStore} from "../stores/generalStore";
 
 class UserService {
   constructor() {
