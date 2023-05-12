@@ -14,7 +14,5 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_EMPTY)
 public class SuccessCreateUserDTO {
 
-  private String result;
-
   private String username;
 }

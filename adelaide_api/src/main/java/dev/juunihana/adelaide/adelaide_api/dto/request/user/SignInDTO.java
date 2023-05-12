@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class SignInUserDTO {
+public class SignInDTO {
 
   @NotBlank(message = "Username cannot be empty")
   private String username;

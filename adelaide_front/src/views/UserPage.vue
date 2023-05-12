@@ -6,15 +6,12 @@
 </template>
 
 <script>
-import UserProfile from "../components/UserProfile";
-import UserPosts from "../components/UserPosts";
 
+import UserProfile from "../components/UserProfile.vue";
+import UserPosts from "../components/UserPosts.vue";
 export default {
   name: "UserPage",
-  components: {
-    UserPosts,
-    UserProfile
-  }
+  components: {UserPosts, UserProfile}
 }
 </script>
 

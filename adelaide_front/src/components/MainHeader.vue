@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import SearchBar from "./main-header/SearchBar";
-import MainMenu from "./main-header/MainMenu";
-import AuthPanel from "./main-header/AuthPanel";
+import SearchBar from "./main-header/SearchBar.vue";
+import MainMenu from "./main-header/MainMenu.vue";
+import AuthPanel from "./main-header/AuthPanel.vue";
 export default {
   name: "MainHeader",
   components: {AuthPanel, MainMenu, SearchBar}

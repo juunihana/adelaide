@@ -4,14 +4,17 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 
 public interface UserService {
 
   SignedUserDTO getSignedUser();
 
-  UserProfileDTO findUserByUsername(String username);
+  UserEntity findByUsername(String username);
+
+  UserProfileDTO findUserProfile(String username);
 
   Boolean userExistsByPhone(String phone);
 
-  SuccessCreateUserDTO save(CreateUserProfileDTO createUserProfileDTO);
+  SuccessCreateUserDTO signUp(CreateUserProfileDTO createUserProfileDTO);
 }

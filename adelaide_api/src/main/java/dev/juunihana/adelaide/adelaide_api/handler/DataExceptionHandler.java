@@ -4,6 +4,7 @@ import dev.juunihana.adelaide.adelaide_api.constant.ErrorMessage;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ValidationErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
+import dev.juunihana.adelaide.adelaide_api.exception.NotAuthorizedException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import java.util.Comparator;
@@ -49,9 +50,19 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  @ExceptionHandler(AccessDeniedException.class)
-  protected ErrorDTO handleUnauthorized(AccessDeniedException e) {
+  @ExceptionHandler(NotAuthorizedException.class)
+  protected ErrorDTO handleUnauthorized(NotAuthorizedException e) {
     System.out.println("ERROR 401: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("accessDeniedError")
+        .message("Access denied")
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  @ExceptionHandler(AccessDeniedException.class)
+  protected ErrorDTO handleAccessDenied(AccessDeniedException e) {
+    System.out.println("ERROR 403: " + e.getMessage());
     return ErrorDTO.builder()
         .result("accessDeniedError")
         .message("Access denied")
@@ -85,6 +96,7 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
    * there will be four errors at once) and we can only show one
    */
   @Override
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
       HttpHeaders headers, HttpStatusCode statusCode, WebRequest webRequest) {
     Map<String, List<String>> fieldsWithErrors = e.getFieldErrors().stream()

@@ -28,7 +28,6 @@ import lombok.Setter;
 public class UserEntity {
 
   @Id
-//  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
   @OneToOne

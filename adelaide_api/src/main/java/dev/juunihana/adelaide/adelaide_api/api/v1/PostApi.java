@@ -1,18 +1,19 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
-
+import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 public interface PostApi {
 
-  @GetMapping("/post/{postId}")
-  PostDTO findById(
-      @PathVariable String postId);
+  PostDTO findById(String postId);
 
-  @GetMapping("/post/user/{username}")
-  List<PostDTO> findAllByUser(
-      @PathVariable String username);
+  List<PostDTO> findAllByUsername(String username);
+
+  SuccessPostDTO create(String username, CreatePostDTO createPostDTO);
+
+  SuccessPostDTO edit(String postId, CreatePostDTO createPostDTO);
+
+  void delete(String postId);
 }

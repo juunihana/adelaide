@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface PostService {
 
-  SuccessPostDTO create(CreatePostDTO createPostDTO);
-
   PostDTO findById(String id);
 
-  List<PostDTO> findAllByUser(String username);
+  List<PostDTO> findAllByUsername(String username);
+
+  SuccessPostDTO create(String username, CreatePostDTO createPostDTO);
+
+  SuccessPostDTO edit(String postId, CreatePostDTO createPostDTO);
+
+  void delete(String postId);
 }

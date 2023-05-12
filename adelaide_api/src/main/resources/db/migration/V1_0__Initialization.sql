@@ -49,13 +49,15 @@ create table posts
 (
     id           uuid      not null primary key,
     user_id      uuid      not null,
+    author_id    uuid      not null,
     title        varchar(255),
     content      text      not null,
     time_created timestamp not null,
     time_edited  timestamp,
     deleted      boolean,
 
-    foreign key (user_id) references users_info (id)
+    foreign key (user_id) references users_info (id),
+    foreign key (author_id) references users_info (id)
 );
 
 

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import UserPost from "./user-posts/UserPost";
+import UserPost from "./user-posts/UserPost.vue";
 export default {
   name: "UserPosts",
   components: {UserPost}

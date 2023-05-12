@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import MainHeader from "@/components/MainHeader";
-import Overlay from "./components/Overlay";
-import UserPage from "./views/UserPage";
+import MainHeader from "./components/MainHeader.vue";
+import Overlay from "./components/Overlay.vue";
+import UserPage from "./views/UserPage.vue";
 export default {
   name: "App",
   components: {UserPage, Overlay, MainHeader},

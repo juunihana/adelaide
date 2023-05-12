@@ -1,5 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -28,6 +29,10 @@ public class PostEntity {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private UserEntity user;
+
+  @ManyToOne
+  @JoinColumn(name = "author_id")
+  private UserEntity author;
 
   private String title;
 

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,8 @@ public class JwtServiceImpl implements JwtService {
   }
 
   @Override
-  public String createToken(UserDetails userDetails) {
+  public String createToken(Authentication authentication) {
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     Map<String, Object> claims = new HashMap<>();
     claims.put("authorities", userDetails.getUsername());
     return Jwts.builder()

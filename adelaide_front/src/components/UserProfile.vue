@@ -8,14 +8,14 @@
 </template>
 
 <script>
-import UserProfileInfo from "./user-profile/UserProfileInfo";
-import UserProfileFriends from "./user-profile/UserProfileFriends";
-import UserProfileGroups from "./user-profile/UserProfileGroups";
-import UserProfilePhotos from "./user-profile/UserProfilePhotos";
 
+import UserProfileInfo from "./user-profile/UserProfileInfo.vue";
+import UserProfileFriends from "./user-profile/UserProfileFriends.vue";
+import UserProfileGroups from "./user-profile/UserProfileGroups.vue";
+import UserProfilePhotos from "./user-profile/UserProfilePhotos.vue";
 export default {
   name: "UserProfile",
-  components: {UserProfileInfo, UserProfileFriends, UserProfileGroups, UserProfilePhotos}
+  components: {UserProfilePhotos, UserProfileGroups, UserProfileFriends, UserProfileInfo}
 }
 </script>
 
