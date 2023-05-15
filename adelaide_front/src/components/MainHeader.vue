@@ -30,13 +30,18 @@
         Settings
       </MenuLink>
     </MenuStripe>
-    <MenuStripe class="auth-panel">
-      <Button @click="showSignIn">
+    <MenuStripe class="auth-panel" v-if="!signedIdUser">
+      <Button @click="signIn">
         Sign in
       </Button>
       <Button @click="showSignUp">
         Sign up
       </Button>
+    </MenuStripe>
+    <MenuStripe class="auth-panel" v-else>
+      <MenuLink link="/">
+        {{ signedIdUser.username }}
+      </MenuLink>
     </MenuStripe>
   </header>
 </template>
@@ -46,24 +51,29 @@ import SearchBar from "@/components/main-header/SearchBar.vue";
 import MenuStripe from "@/components/common/MenuStripe.vue";
 import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
 import Button from "@/components/common/form/Button.vue";
-import {generalStore} from "@/stores/generalStore";
+import {generalStore} from "@/stores/generalStore.js";
 
 export default {
   name: "MainHeader",
   components: {Button, MenuStripe, MenuLink, SearchBar},
   data() {
     return {
-      generalStore: generalStore()
+      generalStore: generalStore(),
+      signedIdUser: null
     }
   },
+  mounted() {
+    this.signedIdUser = this.generalStore.signedIn
+  },
   methods: {
-    showSignIn(e) {
+    signIn(e) {
       e.preventDefault()
-      this.generalStore.showSignInOverlay = true
+      this.generalStore.signIn("alice", "password")
+      // this.generalStore.showSignInOverlay = true
     },
     showSignUp(e) {
       e.preventDefault()
-      this.generalStore.showSignUpOverlay = true
+      // this.generalStore.showSignUpOverlay = true
     }
   }
 }

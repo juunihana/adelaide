@@ -23,7 +23,7 @@ create table users_password_history
     password_hash varchar(255) not null,
     time_added    timestamp    not null,
 
-    foreign key (user_id) references users_info (id)
+    foreign key (user_id) references users (id)
 );
 
 create table users_images
@@ -34,7 +34,7 @@ create table users_images
     cdn_url varchar(255) unique not null,
     deleted boolean             not null,
 
-    foreign key (user_id) references users_info (id)
+    foreign key (user_id) references users (id)
 );
 
 create table posts
@@ -48,8 +48,8 @@ create table posts
     time_edited  timestamp,
     deleted      boolean,
 
-    foreign key (user_id) references users_info (id),
-    foreign key (author_id) references users_info (id)
+    foreign key (user_id) references users (id),
+    foreign key (author_id) references users (id)
 );
 
 

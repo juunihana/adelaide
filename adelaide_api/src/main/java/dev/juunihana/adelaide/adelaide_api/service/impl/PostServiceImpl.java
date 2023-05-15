@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
   public PostDTO findById(String postId) {
     PostEntity post = postRepository.findById(UUID.fromString(postId))
         .orElseThrow(() -> new PostNotFoundException(postId));
-    
+
     if (post.getDeleted()) {
       throw new AccessDeniedException();
     }
@@ -62,6 +62,7 @@ public class PostServiceImpl implements PostService {
         .title(createPostDTO.getTitle())
         .content(createPostDTO.getContent())
         .timeCreated(LocalDateTime.now())
+        .deleted(false)
         .build());
 
     return SuccessPostDTO.builder()

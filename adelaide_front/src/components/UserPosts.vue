@@ -7,10 +7,7 @@
       <Button link="/">Top rated</Button>
       <Button class="new-post-button">New post</Button>
     </MenuStripe>
-    <UserPost/>
-    <UserPost/>
-    <UserPost/>
-    <UserPost/>
+    <UserPost v-for="post in posts" :title="post.title" :content="post.content"/>
     <footer>
       You have reached the end of the page. Congrats!
     </footer>
@@ -24,9 +21,22 @@ import SearchBar from "@/components/main-header/SearchBar.vue";
 import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
 import MenuLabel from "@/components/common/menu-stripe/MenuLabel.vue";
 import Button from "@/components/common/form/Button.vue";
+import UserService from "@/service/UserService.js";
+
 export default {
   name: "UserPosts",
-  components: {Button, MenuLabel, MenuLink, SearchBar, MenuStripe, UserPost}
+  components: {Button, MenuLabel, MenuLink, SearchBar, MenuStripe, UserPost},
+  data() {
+    return {
+      posts: []
+    }
+  },
+  mounted() {
+    UserService.getUserPosts("alice")
+    .then(data => {
+      this.posts = data.data
+    })
+  }
 }
 </script>
 
@@ -37,7 +47,8 @@ export default {
   height: 1vh;
 }
 
-.post-search-bar {}
+.post-search-bar {
+}
 
 .new-post-button {
   margin-left: auto;

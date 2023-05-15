@@ -1,17 +1,14 @@
 <template>
   <div class="user-post-block general-block">
-    <header class="block-header"><h3>Title</h3></header>
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    <header class="block-header"><h3>{{ title }}</h3></header>
+    {{ content }}
   </div>
 </template>
 
 <script>
 export default {
-  name: "UserPost"
+  name: "UserPost",
+  props: ["title", "content"]
 }
 </script>
 
