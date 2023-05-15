@@ -12,11 +12,13 @@ import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
+  private final PasswordEncoder passwordEncoder;
 
   @Override
   public SignedUserDTO getSignedUser() {
@@ -37,9 +40,17 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findByUsername(username)
-        .orElse(userRepository.findByEmail(username)
-            .orElseThrow(() -> new UserNotFoundException(username)));
+    UserDetails userDetails = userRepository.findByUsername(username).orElse(null);
+    if (Objects.nonNull(userDetails)) {
+      return userDetails;
+    } else {
+      userDetails = userRepository.findByEmail(username).orElse(null);
+      if (Objects.nonNull(userDetails)) {
+        return userDetails;
+      }
+    }
+
+    throw new UserNotFoundException(username);
   }
 
   @Override
@@ -82,6 +93,7 @@ public class UserServiceImpl implements UserService {
     UserEntity userEntity = userMapper.createUserToEntity(createUserProfileDTO);
     userEntity.setId(userId);
     userEntity.setTimeJoined(LocalDateTime.now());
+    userEntity.setPassword(passwordEncoder.encode(createUserProfileDTO.getPassword()));
 
     userRepository.save(userEntity);
 

@@ -5,6 +5,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.error.ErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ValidationErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.NotAuthorizedException;
+import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import java.util.Comparator;
@@ -31,7 +32,7 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(UserNotFoundException.class)
   protected ErrorDTO handleUserNotFound(UserNotFoundException e) {
-    System.out.println("ERROR 400: " + e.getMessage());
+    System.out.println("ERROR 404: " + e.getMessage());
     return ErrorDTO.builder()
         .result("userNotFoundError")
         .message(e.getMessage())
@@ -54,8 +55,8 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
   protected ErrorDTO handleUnauthorized(NotAuthorizedException e) {
     System.out.println("ERROR 401: " + e.getMessage());
     return ErrorDTO.builder()
-        .result("accessDeniedError")
-        .message("Access denied")
+        .result("notAuthorizedError")
+        .message("Not authorized")
         .build();
   }
 
@@ -89,11 +90,20 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
         .build();
   }
 
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(PostNotFoundException.class)
+  protected ErrorDTO handlePostNotFound(PostNotFoundException e) {
+    System.out.println("ERROR 404: " + e.getMessage());
+    return ErrorDTO.builder()
+        .message(e.getMessage())
+        .build();
+  }
+
   /**
    * Collect all field errors into map (keys are fields that failed validation and values are lists
-   * of errors), and then retrieve only the first message from each list to response
-   * On the front end we don't need to show every message (e.g. if user has not specified username,
-   * there will be four errors at once) and we can only show one
+   * of errors), and then retrieve only the first message from each list to response On the front
+   * end we don't need to show every message (e.g. if user has not specified username, there will be
+   * four errors at once) and we can only show one
    */
   @Override
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)

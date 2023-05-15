@@ -28,23 +28,22 @@ public class JwtFilter extends OncePerRequestFilter {
       HttpServletRequest request,
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    String token = "";
     String headerAuthorization = request.getHeader("Authorization");
-    if (!StringUtils.hasLength(headerAuthorization) &&
-        headerAuthorization.startsWith("Bearer ")) {
-      token = headerAuthorization.replace("Bearer ", "");
-    }
 
-    String username = jwtService.getUsername(token);
-    if (StringUtils.hasLength(username)
-        && SecurityContextHolder.getContext()
-        .getAuthentication().getPrincipal().equals("anonymousUser")) {
-      UserDetails userDetails = userService.loadUserByUsername(username);
-      if (jwtService.isValid(token, userDetails)) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+    if (StringUtils.hasLength(headerAuthorization) && headerAuthorization.startsWith("Bearer ")) {
+      String token = headerAuthorization.replace("Bearer ", "");
+
+      String username = jwtService.getUsername(token);
+      if (StringUtils.hasLength(username)
+          && SecurityContextHolder.getContext()
+          .getAuthentication().getPrincipal().equals("anonymousUser")) {
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        if (jwtService.isValid(token, userDetails)) {
+          UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+              userDetails, null, userDetails.getAuthorities());
+          authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+          SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
       }
     }
 

@@ -1,10 +1,9 @@
-create table users_info
+create table users
 (
     id             uuid                not null primary key,
     username       varchar(100) unique not null,
     email          varchar(100) unique not null,
-    password_hash  varchar(255)        not null
-        user_auth_id uuid not null,
+    password_hash  varchar(255)        not null,
     phone          varchar(15) unique,
     first_name     varchar(100)        not null,
     middle_name    varchar(100),

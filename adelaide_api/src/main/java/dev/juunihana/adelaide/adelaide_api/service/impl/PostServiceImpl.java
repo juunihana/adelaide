@@ -30,24 +30,30 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public PostDTO findById(String postId) {
-    return postMapper.postEntityToDTO(postRepository.findById(UUID.fromString(postId))
-        .orElseThrow(() -> new PostNotFoundException(postId)));
+    PostEntity post = postRepository.findById(UUID.fromString(postId))
+        .orElseThrow(() -> new PostNotFoundException(postId));
+    
+    if (post.getDeleted()) {
+      throw new AccessDeniedException();
+    }
+
+    return postMapper.postEntityToDTO(post);
   }
 
   @Override
   public List<PostDTO> findAllByUsername(String username) {
     return postRepository.findAllByUserUsername(username).stream()
+        .filter(post -> !post.getDeleted())
         .map(postMapper::postEntityToDTO)
         .collect(Collectors.toList());
   }
 
   @Override
-  public SuccessPostDTO create(String username, CreatePostDTO createPostDTO) {
+  public SuccessPostDTO create(CreatePostDTO createPostDTO) {
     UUID postId = UUID.randomUUID();
 
-    UserEntity user = (UserEntity) userService.loadUserByUsername(username);
-    UserEntity author = (UserEntity) userService.loadUserByUsername(
-        ((UserDetails) SecurityContextHolder.getContext().getAuthentication()).getUsername());
+    UserEntity user = (UserEntity) userService.loadUserByUsername(createPostDTO.getUsername());
+    UserEntity author = (UserEntity) userService.loadUserByUsername(getCurrentUserUsername());
 
     postRepository.save(PostEntity.builder()
         .id(postId)
@@ -86,10 +92,30 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public void delete(String postId) {
+    PostEntity post = postRepository.findById(UUID.fromString(postId))
+        .orElseThrow(() -> new PostNotFoundException(postId));
 
+    String authorUsername = getCurrentUserUsername();
+    if (!post.getUser().getUsername().equals(authorUsername)) {
+      throw new AccessDeniedException("You cannot delete this user posts");
+    }
+
+    post.setTimeEdited(LocalDateTime.now());
+    post.setDeleted(true);
+
+    postRepository.save(post);
   }
 
   private String getCurrentUserUsername() {
-    return ((UserDetails) SecurityContextHolder.getContext().getAuthentication()).getUsername();
+    if (!isUserAuthorized()) {
+      return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+    return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getUsername();
+  }
+
+  private boolean isUserAuthorized() {
+    return !SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal().equals("anonymousUser");
   }
 }

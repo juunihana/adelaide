@@ -8,6 +8,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +38,8 @@ public class UserController {
   }
 
   @PostMapping("/auth/sign-in")
-  public UserAuthTokenDTO signIn(SignInDTO signInDTO) {
+  public UserAuthTokenDTO signIn(
+      @RequestBody @Valid SignInDTO signInDTO) {
     System.out.println("Signing in user: " + signInDTO.toString());
 
     Authentication authentication = authManager.authenticate(
@@ -50,7 +53,7 @@ public class UserController {
   }
 
   @PostMapping("/auth/sign-out")
-  @PreAuthorize("hasRole('ROLE_USER')")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public ResponseEntity<?> signOut() {
     System.out.println("Signing out user");
     return null;
@@ -62,7 +65,9 @@ public class UserController {
     return userService.findUserProfile(username);
   }
 
-  public SuccessCreateUserDTO createUser(CreateUserProfileDTO createUserProfileDTO) {
+  @PostMapping("/new")
+  public SuccessCreateUserDTO createUser(
+      @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO) {
     System.out.println("New user: " + createUserProfileDTO.toString());
     return userService.signUp(createUserProfileDTO);
   }

@@ -20,23 +20,23 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 public interface UserApi {
 
-  @GetMapping("/user-signed")
+//  @GetMapping("/user-signed")
   SignedUserDTO getSignedUser();
 
-  @GetMapping("/user/{username}")
-  UserProfileDTO getUserProfile(@PathVariable String username);
+//  @GetMapping("/user/{username}")
+  UserProfileDTO getUserProfile(String username);
 
-  @PostMapping("/user/new")
-  @ResponseStatus(HttpStatus.CREATED)
-  SuccessCreateUserDTO createUser(@RequestBody @Valid CreateUserProfileDTO createUserProfileDTO);
+//  @PostMapping("/user/new")
+//  @ResponseStatus(HttpStatus.CREATED)
+  SuccessCreateUserDTO createUser(CreateUserProfileDTO createUserProfileDTO);
 
-  @PostMapping("/user/sign-in")
-  UserAuthTokenDTO signIn(@RequestBody @Valid SignInDTO signInDTO,
+//  @PostMapping("/user/sign-in")
+  UserAuthTokenDTO signIn(SignInDTO signInDTO,
       HttpServletResponse response);
 
-  @PostMapping("/user/sign-out")
+//  @PostMapping("/user/sign-out")
   ResponseEntity<?> signOut();
 
-  @PostMapping("/user/post/new")
-  SuccessPostDTO createPost(@RequestBody CreatePostDTO createPostDTO);
+//  @PostMapping("/user/post/new")
+  SuccessPostDTO createPost(CreatePostDTO createPostDTO);
 }

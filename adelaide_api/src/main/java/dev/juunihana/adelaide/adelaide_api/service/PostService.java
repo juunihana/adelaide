@@ -11,7 +11,7 @@ public interface PostService {
 
   List<PostDTO> findAllByUsername(String username);
 
-  SuccessPostDTO create(String username, CreatePostDTO createPostDTO);
+  SuccessPostDTO create(CreatePostDTO createPostDTO);
 
   SuccessPostDTO edit(String postId, CreatePostDTO createPostDTO);
 
