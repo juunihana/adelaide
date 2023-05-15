@@ -7,7 +7,6 @@ import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
-import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.PostMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.PostRepository;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;

@@ -4,7 +4,6 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
