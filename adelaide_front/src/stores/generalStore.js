@@ -17,7 +17,7 @@ export const generalStore = defineStore('generalStore', {
         this.signedIn = username
         this.token = "Bearer " + data.data.token;
         VueCookies.set('auth', this.token, '1d')
-        router.push("/" + username)
+        // router.push("/" + username)
       })
     }
   }

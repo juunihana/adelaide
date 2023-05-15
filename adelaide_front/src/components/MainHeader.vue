@@ -30,7 +30,7 @@
         Settings
       </MenuLink>
     </MenuStripe>
-    <MenuStripe class="auth-panel" v-if="!signedIdUser">
+    <MenuStripe class="auth-panel" v-if="!signedInUser">
       <Button @click="signIn">
         Sign in
       </Button>
@@ -39,8 +39,8 @@
       </Button>
     </MenuStripe>
     <MenuStripe class="auth-panel" v-else>
-      <MenuLink link="/">
-        {{ signedIdUser.username }}
+      <MenuLink :link="'/' + signedInUser">
+        {{ signedInUser }}
       </MenuLink>
     </MenuStripe>
   </header>
@@ -52,6 +52,8 @@ import MenuStripe from "@/components/common/MenuStripe.vue";
 import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
 import Button from "@/components/common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore.js";
+import {storeToRefs} from "pinia";
+import {watch} from "vue";
 
 export default {
   name: "MainHeader",
@@ -59,11 +61,14 @@ export default {
   data() {
     return {
       generalStore: generalStore(),
-      signedIdUser: null
+      signedInUser: null
     }
   },
   mounted() {
-    this.signedIdUser = this.generalStore.signedIn
+    const {signedIn} = storeToRefs(this.generalStore)
+    watch(signedIn, () => {
+      this.signedInUser = this.generalStore.signedIn
+    })
   },
   methods: {
     signIn(e) {
