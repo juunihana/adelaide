@@ -5,15 +5,21 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
 
   SignedUserDTO getSignedUser();
 
-  UserEntity findByUsername(String username);
+  @Override
+  UserDetails loadUserByUsername(String username);
 
   UserProfileDTO findUserProfile(String username);
+
+  Boolean userExistsByUsername(String username);
+
+  Boolean userExistsByEmail(String email);
 
   Boolean userExistsByPhone(String phone);
 

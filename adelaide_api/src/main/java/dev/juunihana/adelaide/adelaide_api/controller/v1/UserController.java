@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private final PostService postService;
   private final JwtService jwtService;
   private final AuthenticationManager authManager;
 

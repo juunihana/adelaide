@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public List<PostDTO> findAllByUsername(String username) {
-    return postRepository.findAllByUserUserAuthUsername(username).stream()
+    return postRepository.findAllByUserUsername(username).stream()
         .map(postMapper::postEntityToDTO)
         .collect(Collectors.toList());
   }
@@ -46,8 +46,8 @@ public class PostServiceImpl implements PostService {
   public SuccessPostDTO create(String username, CreatePostDTO createPostDTO) {
     UUID postId = UUID.randomUUID();
 
-    UserEntity user = userService.findByUsername(username);
-    UserEntity author = userService.findByUsername(
+    UserEntity user = (UserEntity) userService.loadUserByUsername(username);
+    UserEntity author = (UserEntity) userService.loadUserByUsername(
         ((UserDetails) SecurityContextHolder.getContext().getAuthentication()).getUsername());
 
     postRepository.save(PostEntity.builder()
@@ -70,7 +70,7 @@ public class PostServiceImpl implements PostService {
         .orElseThrow(() -> new PostNotFoundException(postId));
 
     String authorUsername = getCurrentUserUsername();
-    if (!post.getUser().getUserAuth().getUsername().equals(authorUsername)) {
+    if (!post.getUser().getUsername().equals(authorUsername)) {
       throw new AccessDeniedException("You cannot edit this user posts");
     }
 

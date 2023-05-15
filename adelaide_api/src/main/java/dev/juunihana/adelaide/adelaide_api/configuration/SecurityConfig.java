@@ -1,7 +1,5 @@
 package dev.juunihana.adelaide.adelaide_api.configuration;
 
-import dev.juunihana.adelaide.adelaide_api.entity.UserAuthEntity;
-import dev.juunihana.adelaide.adelaide_api.service.UserAuthService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +22,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final UserAuthService userAuthService;
+  private final UserService userService;
 
   @Bean
   public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
@@ -36,7 +34,7 @@ public class SecurityConfig {
             .permitAll().anyRequest().anonymous())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .userDetailsService(userAuthService)
+        .userDetailsService(userService)
         .httpBasic();
     return httpSecurity.build();
   }

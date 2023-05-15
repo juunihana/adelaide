@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<PostEntity, UUID> {
 
-  List<PostEntity> findAllByUserUserAuthUsername(String username);
+  List<PostEntity> findAllByUserUsername(String username);
 }

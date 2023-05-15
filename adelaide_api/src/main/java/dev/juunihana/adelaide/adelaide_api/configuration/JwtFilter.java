@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.configuration;
 
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
-import dev.juunihana.adelaide.adelaide_api.service.UserAuthService;
+import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-  private final UserAuthService userAuthService;
+  private final UserService userService;
   private final JwtService jwtService;
 
   @Override
@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
     if (StringUtils.hasLength(username)
         && SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal().equals("anonymousUser")) {
-      UserDetails userDetails = userAuthService.loadUserByUsername(username);
+      UserDetails userDetails = userService.loadUserByUsername(username);
       if (jwtService.isValid(token, userDetails)) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());

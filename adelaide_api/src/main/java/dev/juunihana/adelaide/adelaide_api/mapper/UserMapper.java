@@ -2,7 +2,6 @@ package dev.juunihana.adelaide.adelaide_api.mapper;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.entity.UserAuthEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import java.time.LocalDate;
 import java.time.Period;
@@ -22,8 +21,6 @@ public interface UserMapper {
       @Mapping(target = "age", source = "dateOfBirth", qualifiedByName = "mapUserAge")
   })
   UserProfileDTO userEntityToProfile(UserEntity userEntity);
-
-  UserProfileDTO userAuthToProfile(UserAuthEntity userAuth);
 
   @Named("mapUserAge")
   default Integer mapUserAge(LocalDate dateOfBirth) {
