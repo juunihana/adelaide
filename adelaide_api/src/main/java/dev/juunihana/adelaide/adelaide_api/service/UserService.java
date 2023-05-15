@@ -5,8 +5,9 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
   SignedUserDTO getSignedUser();
 

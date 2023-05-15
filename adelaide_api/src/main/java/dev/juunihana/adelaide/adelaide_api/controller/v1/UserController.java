@@ -72,41 +72,6 @@ public class UserController {
     return userService.findUserProfile(username);
   }
 
-  @GetMapping("/profile/{username}/posts/{postId}")
-  public PostDTO getPostById(
-      @PathVariable String username,
-      @PathVariable String postId) {
-    return postService.findById(postId);
-  }
-
-  @PostMapping("/profile/{username}/posts")
-  @PreAuthorize("hasRole('ROLE_USER')")
-  @ResponseStatus(HttpStatus.CREATED)
-  public SuccessPostDTO createPost(
-      @PathVariable String username,
-      @RequestBody CreatePostDTO createPostDTO) {
-    return userService.createPost(username, createPostDTO);
-  }
-
-  @PutMapping("/profile/{username}/posts/{postId}")
-  @PreAuthorize("hasRole(ROLE_USER)")
-  public SuccessPostDTO editPost(
-      @PathVariable String username,
-      @PathVariable String postId,
-      @RequestBody CreatePostDTO createPostDTO) {
-    return userService.editPost(postId, createPostDTO);
-  }
-
-  @DeleteMapping("/profile/{username}/posts/{postId}")
-  @PreAuthorize("hasRole(ROLE_USER)")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deletePost(
-      @PathVariable String username,
-      @PathVariable String postId,
-      @RequestBody CreatePostDTO createPostDTO) {
-    userService.deletePost(postId, createPostDTO);
-  }
-
   public SuccessCreateUserDTO createUser(CreateUserProfileDTO createUserProfileDTO) {
     System.out.println("New user: " + createUserProfileDTO.toString());
     return userService.signUp(createUserProfileDTO);

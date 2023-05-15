@@ -65,16 +65,6 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public SuccessPostDTO createOnUserProfile(String username, CreatePostDTO createPostDTO) {
-    return null;
-  }
-
-  @Override
-  public SuccessPostDTO createOnUserProfile(CreatePostDTO createPostDTO) {
-    return null;
-  }
-
-  @Override
   public SuccessPostDTO edit(String postId, CreatePostDTO createPostDTO) {
     PostEntity post = postRepository.findById(UUID.fromString(postId))
         .orElseThrow(() -> new PostNotFoundException(postId));
@@ -98,5 +88,9 @@ public class PostServiceImpl implements PostService {
   @Override
   public void delete(String postId) {
 
+  }
+
+  private String getCurrentUserUsername() {
+    return ((UserDetails) SecurityContextHolder.getContext().getAuthentication()).getUsername();
   }
 }
