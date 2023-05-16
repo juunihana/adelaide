@@ -150,8 +150,9 @@ public class UserController implements UserApi {
   }
 
   @Override
-  @PostMapping("/new")
+  @PutMapping("/profile/{username}")
   public void updateUser(
+      @PathVariable String username,
       @RequestBody @Valid ChangeUserProfileDTO changeUserProfileDTO) {
     System.out.println("Update user: " + changeUserProfileDTO.toString());
     userService.changeUserInfo(changeUserProfileDTO);

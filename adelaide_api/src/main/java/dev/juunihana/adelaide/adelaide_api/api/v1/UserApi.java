@@ -9,9 +9,6 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public interface UserApi {
 
@@ -21,7 +18,7 @@ public interface UserApi {
 
   void createUser(CreateUserProfileDTO createUserProfileDTO);
 
-  void updateUser(ChangeUserProfileDTO changeUserProfileDTO);
+  void updateUser(String username,ChangeUserProfileDTO changeUserProfileDTO);
 
   UserAuthTokenDTO signIn(SignInDTO signInDTO);
 

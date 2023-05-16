@@ -41,10 +41,10 @@ public class PostServiceImpl implements PostService {
   @Override
   public List<PostDTO> findAllByUsername(String username, boolean authored) {
     List<PostEntity> posts = authored ?
-        postRepository.findAllByUserUsername(username).stream()
+        postRepository.findAllByUserUsernameAndAuthorUsername(username, username).stream()
             .filter(post -> !post.getDeleted())
             .toList() :
-        postRepository.findAllByUserUsernameAndAuthorUsername(username).stream()
+        postRepository.findAllByUserUsername(username).stream()
             .filter(post -> !post.getDeleted())
             .toList();
 

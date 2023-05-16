@@ -18,7 +18,8 @@ public interface PostMapper {
 
   @Mappings({
       @Mapping(source = "timeCreated", target = "timeCreated", qualifiedByName = "mapTime"),
-      @Mapping(source = "timeEdited", target = "timeEdited", qualifiedByName = "mapTime")
+      @Mapping(source = "timeEdited", target = "timeEdited", qualifiedByName = "mapTime"),
+      @Mapping(source = "author.username", target = "author")
   })
   PostDTO postEntityToDTO(PostEntity post);
 

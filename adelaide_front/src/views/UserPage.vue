@@ -14,6 +14,12 @@ export default {
   components: {
     UserPosts,
     UserProfile
+  },
+  data() {
+    return {
+    }
+  },
+  mounted() {
   }
 }
 </script>

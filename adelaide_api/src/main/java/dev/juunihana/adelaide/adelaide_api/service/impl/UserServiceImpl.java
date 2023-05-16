@@ -103,10 +103,11 @@ public class UserServiceImpl implements UserService {
     userEntity.setId(userId);
     userEntity.setTimeJoined(LocalDateTime.now());
     userEntity.setPassword(password);
-    userRepository.save(userEntity);
+    UserEntity user = userRepository.save(userEntity);
 
     passwordHistoryRepository.save(
         PasswordHistoryEntity.builder()
+            .user(user)
             .passwordHash(password)
             .timeAdded(LocalDateTime.now())
             .build());

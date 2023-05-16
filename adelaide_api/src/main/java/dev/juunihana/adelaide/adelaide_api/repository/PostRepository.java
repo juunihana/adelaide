@@ -10,5 +10,5 @@ public interface PostRepository extends JpaRepository<PostEntity, UUID> {
 
   List<PostEntity> findAllByUserUsername(String username);
 
-  List<PostEntity> findAllByUserUsernameAndAuthorUsername(String username);
+  List<PostEntity> findAllByUserUsernameAndAuthorUsername(String username, String author);
 }

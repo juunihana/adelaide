@@ -13,7 +13,8 @@ create table users
     status         varchar(255),
     date_of_birth  timestamp           not null,
     place          varchar(255),
-    time_joined    timestamp           not null
+    time_joined    timestamp           not null,
+    deleted        boolean
 );
 
 create table users_password_history

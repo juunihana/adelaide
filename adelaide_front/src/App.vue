@@ -8,7 +8,7 @@
 <!--    </MenuStripe>-->
   </Overlay>
   <main class="root-container">
-    <UserPage/>
+    <router-view />
   </main>
 </template>
 

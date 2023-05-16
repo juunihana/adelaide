@@ -19,6 +19,16 @@ export const generalStore = defineStore('generalStore', {
         VueCookies.set('auth', this.token, '1d')
         // router.push("/" + username)
       })
+    },
+    checkSignedUser() {
+      if (VueCookies.get('auth')) {
+        UserService.getCurrentLoggedUser()
+            .then((data) => {
+              this.signedIn = data.response.username
+            })
+      } else {
+        return null;
+      }
     }
   }
 })

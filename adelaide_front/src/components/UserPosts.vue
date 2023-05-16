@@ -9,7 +9,7 @@
     </MenuStripe>
     <div class="loading-block" v-if="loading">Loading</div>
     <div class="error-block" v-else-if="error">Error</div>
-    <UserPost v-else v-for="post in posts" :title="post.title" :content="post.content"/>
+    <UserPost v-else v-for="post in posts" :author="post.author" :title="post.title" :content="post.content"/>
     <footer>
       You have reached the end of the page. Congrats!
     </footer>
@@ -25,12 +25,15 @@ import MenuLabel from "@/components/common/menu-stripe/MenuLabel.vue";
 import Button from "@/components/common/form/Button.vue";
 import UserService from "@/service/UserService.js";
 import {storeToRefs} from "pinia";
-import {generalStore} from "../stores/generalStore.js";
+import {generalStore} from "@/stores/generalStore";
 import {watch} from "vue";
 
 export default {
   name: "UserPosts",
   components: {Button, MenuLabel, MenuLink, SearchBar, MenuStripe, UserPost},
+  props: {
+    username: null
+  },
   data() {
     return {
       posts: [],
@@ -48,7 +51,7 @@ export default {
     })
 
     this.loading = true;
-    UserService.getUserPosts("alice")
+    UserService.getUserPosts(this.$route.params.username)
     .then((data) => {
       this.loading = false
       this.posts = data.data

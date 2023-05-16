@@ -40,7 +40,7 @@ public class PostController implements PostApi {
   @GetMapping("/profile/{username}")
   public List<PostDTO> findAllByUsername(
       @PathVariable String username,
-      @RequestParam boolean authored) {
+      @RequestParam(required = false) boolean authored) {
     return postService.findAllByUsername(username, authored);
   }
 

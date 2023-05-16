@@ -17,6 +17,8 @@ public class PostDTO {
 
   private UUID id;
 
+  private String author;
+
   private String title;
 
   private String content;

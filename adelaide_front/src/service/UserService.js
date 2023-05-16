@@ -9,18 +9,19 @@ class UserService {
   }
 
   signIn(username, password) {
-    return this.restService.post("/users/auth/sign-in",
-        {username: username, password: password})
+    return this.restService.post("/users/auth/sign-in", {username: username, password: password})
+  }
+
+  getCurrentLoggedUser() {
+    return this.restService.get("/users/auth/signed", this.setRequestConfig())
   }
 
   getUserProfile(username) {
-    return this.restService.get("/users/profile/" + username,
-        this.setRequestConfig())
+    return this.restService.get("/users/profile/" + username, this.setRequestConfig())
   }
 
   getUserPosts(username) {
-    return this.restService.get("/posts/profile/" + username,
-        this.setRequestConfig())
+    return this.restService.get("/posts/profile/" + username, this.setRequestConfig())
   }
 
   addNewPost(post) {
