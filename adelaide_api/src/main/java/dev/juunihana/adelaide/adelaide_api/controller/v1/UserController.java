@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,48 @@ public class UserController implements UserApi {
   private final UserService userService;
   private final JwtService jwtService;
   private final AuthenticationManager authManager;
+
+  /**
+   * todo (this week)
+   * PUT /auth/username - change username
+   * PUT /profile - change user profile info
+   * DELETE /profile - delete user profile
+   *
+   * GET /profile/{username}/avatar
+   * POST /profile/avatar
+   * PUT /profile/avatar
+   * DELETE /profile/avatar
+   *
+   * GET /friends/{username} - get user's friends
+   * GET /friends/{username}/in - get incoming friends requests
+   * GET /friends/{username}/out - get outgoing friends requests
+   * POST /friends - send outgoing request
+   * PUT /friends/{request_id} - accept or decline incoming request
+   * DELETE /friends - remove from friends list
+   *
+   * GET /profile/{username}/photos
+   * POST /profile/photos
+   * DELETE /profile/photos
+   *
+   * also groups controller and five tables:
+   * users_avatars
+   * groups
+   * users_in_groups
+   * users_friends
+   * users_friends_requests
+   *
+   * complete UI for these features
+   *
+   * todo (next week)
+   * messages api
+   * post feed
+   * posts search
+   * user page posts filter
+   *
+   * todo (long run)
+   * email verification
+   * user privacy settings
+   */
 
   @Override
   @GetMapping("/auth/signed")
@@ -66,7 +109,7 @@ public class UserController implements UserApi {
   }
 
   @Override
-  @PostMapping("/auth/change-password")
+  @PutMapping("/auth/password")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public void changePassword(
       @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
