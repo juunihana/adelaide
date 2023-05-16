@@ -1,9 +1,11 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +25,15 @@ public interface UserService extends UserDetailsService {
 
   Boolean userExistsByPhone(String phone);
 
-  SuccessCreateUserDTO signUp(CreateUserProfileDTO createUserProfileDTO);
+  void createUser(CreateUserProfileDTO createUserProfileDTO);
+
+  void changeUserInfo(ChangeUserProfileDTO changeUserProfileDTO);
+
+  void deleteUser(String username);
+
+  void changeEmail(ChangeEmailDTO changeEmailDTO);
+
+  void changeUsername(ChangeUsernameDTO changeUsernameDTO);
 
   void changePassword(ChangePasswordDTO changePasswordDTO);
 }

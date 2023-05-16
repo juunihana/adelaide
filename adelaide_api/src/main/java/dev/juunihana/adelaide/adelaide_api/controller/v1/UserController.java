@@ -1,29 +1,33 @@
 package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
 import dev.juunihana.adelaide.adelaide_api.api.v1.UserApi;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,8 +41,6 @@ public class UserController implements UserApi {
 
   /**
    * todo (this week)
-   * PUT /auth/username - change username
-   * PUT /profile - change user profile info
    * DELETE /profile - delete user profile
    *
    * GET /profile/{username}/avatar
@@ -103,9 +105,24 @@ public class UserController implements UserApi {
   @Override
   @PostMapping("/auth/sign-out")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public ResponseEntity<?> signOut() {
+  public void signOut() {
     System.out.println("Signing out user");
-    return null;
+  }
+
+  @Override
+  @PutMapping("/auth/email")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void changeUsername(
+      @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
+    userService.changeEmail(changeEmailDTO);
+  }
+
+  @Override
+  @PutMapping("/auth/username")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void changeUsername(
+      @RequestBody @Valid ChangeUsernameDTO changeUsernameDTO) {
+    userService.changeUsername(changeUsernameDTO);
   }
 
   @Override
@@ -125,9 +142,25 @@ public class UserController implements UserApi {
 
   @Override
   @PostMapping("/new")
-  public SuccessCreateUserDTO createUser(
+  @ResponseStatus(HttpStatus.CREATED)
+  public void createUser(
       @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO) {
     System.out.println("New user: " + createUserProfileDTO.toString());
-    return userService.signUp(createUserProfileDTO);
+    userService.createUser(createUserProfileDTO);
+  }
+
+  @Override
+  @PostMapping("/new")
+  public void updateUser(
+      @RequestBody @Valid ChangeUserProfileDTO changeUserProfileDTO) {
+    System.out.println("Update user: " + changeUserProfileDTO.toString());
+    userService.changeUserInfo(changeUserProfileDTO);
+  }
+
+  @Override
+  @DeleteMapping("/profile/{username}")
+  public void deleteUser(
+      @PathVariable String username) {
+    userService.deleteUser(username);
   }
 }

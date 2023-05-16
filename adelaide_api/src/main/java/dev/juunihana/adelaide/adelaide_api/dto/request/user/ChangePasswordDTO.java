@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChangePasswordDTO {
 
+  @NotBlank(message = "Password cannot be empty")
   private String currentPassword;
 
-  @NotBlank(message = "Password cannot be empty")
+  @NotBlank(message = "New password cannot be empty")
   @Size(min = 8, max = 24, message = "Password length must be between 8 and 24 characters")
   @Pattern(regexp = "[A-Za-z0-9_\\-.,!@#$%^&*(){}\\[\\]`~<>]+")
   private String newPassword;

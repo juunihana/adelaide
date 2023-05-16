@@ -55,6 +55,8 @@ public class UserEntity implements UserDetails {
 
   private LocalDateTime timeJoined;
 
+  private boolean deleted;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority("ROLE_USER_NOT_ANON"));

@@ -1,31 +1,37 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface UserApi {
 
-  //  @GetMapping("/user-signed")
   SignedUserDTO getSignedUser();
 
-  //  @GetMapping("/user/{username}")
   UserProfileDTO getUserProfile(String username);
 
-  //  @PostMapping("/user/new")
-//  @ResponseStatus(HttpStatus.CREATED)
-  SuccessCreateUserDTO createUser(CreateUserProfileDTO createUserProfileDTO);
+  void createUser(CreateUserProfileDTO createUserProfileDTO);
 
-  //  @PostMapping("/user/sign-in")
+  void updateUser(ChangeUserProfileDTO changeUserProfileDTO);
+
   UserAuthTokenDTO signIn(SignInDTO signInDTO);
 
-  //  @PostMapping("/user/sign-out")
-  ResponseEntity<?> signOut();
+  void signOut();
+
+  void changeUsername(ChangeEmailDTO changeEmailDTO);
+
+  void changeUsername(ChangeUsernameDTO changeUsernameDTO);
 
   void changePassword(ChangePasswordDTO changePasswordDTO);
+
+  void deleteUser(String username);
 }

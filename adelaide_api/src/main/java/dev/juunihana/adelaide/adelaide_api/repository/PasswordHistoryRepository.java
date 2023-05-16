@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PasswordHistoryRepository extends JpaRepository<PasswordHistoryEntity, UUID> {
 
-  List<PasswordHistoryEntity> findAllByUser(UserEntity user);
+  List<PasswordHistoryEntity> findAllByUserAndPasswordHash(UserEntity user, String password);
 }

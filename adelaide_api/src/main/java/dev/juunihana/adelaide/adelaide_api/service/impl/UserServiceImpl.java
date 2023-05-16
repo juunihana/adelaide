@@ -1,12 +1,15 @@
 package dev.juunihana.adelaide.adelaide_api.service.impl;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PasswordHistoryEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PasswordPreviouslyUsedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PasswordsDoesNotMatchException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
@@ -81,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public SuccessCreateUserDTO signUp(CreateUserProfileDTO createUserProfileDTO) {
+  public void createUser(CreateUserProfileDTO createUserProfileDTO) {
     if (userExistsByUsername(createUserProfileDTO.getUsername())) {
       throw new UserAlreadyExistsException("username " + createUserProfileDTO.getUsername());
     }
@@ -107,10 +110,95 @@ public class UserServiceImpl implements UserService {
             .passwordHash(password)
             .timeAdded(LocalDateTime.now())
             .build());
+  }
 
-    return SuccessCreateUserDTO.builder()
-        .username(userEntity.getUsername())
-        .build();
+  @Override
+  public void changeUserInfo(ChangeUserProfileDTO changeUserProfileDTO) {
+    if (StringUtils.hasLength(changeUserProfileDTO.getPhone()) &&
+        userExistsByPhone(changeUserProfileDTO.getPhone())) {
+      throw new UserAlreadyExistsException("phone " + changeUserProfileDTO.getPhone());
+    }
+
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (StringUtils.hasLength(changeUserProfileDTO.getFirstName())) {
+      user.setFirstName(changeUserProfileDTO.getFirstName());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getLastName())) {
+      user.setLastName(changeUserProfileDTO.getLastName());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getMiddleName())) {
+      user.setMiddleName(changeUserProfileDTO.getMiddleName());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getMaidenSurname())) {
+      user.setMaidenSurname(changeUserProfileDTO.getMaidenSurname());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getBio())) {
+      user.setBio(changeUserProfileDTO.getBio());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getPlace())) {
+      user.setPlace(changeUserProfileDTO.getPlace());
+    }
+    if (StringUtils.hasLength(changeUserProfileDTO.getPhone())) {
+      user.setPhone(changeUserProfileDTO.getPhone());
+    }
+    if (changeUserProfileDTO.getDateOfBirth() != null) {
+      user.setDateOfBirth(changeUserProfileDTO.getDateOfBirth());
+    }
+
+    userRepository.save(user);
+  }
+
+  @Override
+  public void deleteUser(String username) {
+    if (!username.equals(getCurrentUserUsername())) {
+      throw new AccessDeniedException("You cannot delete this user");
+    }
+
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+    user.setDeleted(true);
+
+    userRepository.save(user);
+  }
+
+  @Override
+  @Transactional
+  public void changeEmail(ChangeEmailDTO changeEmailDTO) {
+    if (userRepository.findByUsername(changeEmailDTO.getNewEmail()).isPresent()) {
+      throw new UserAlreadyExistsException("email " + changeEmailDTO.getNewEmail());
+    }
+
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (passwordEncoder.encode(changeEmailDTO.getPassword())
+        .equals(user.getPassword())) {
+      user.setEmail(changeEmailDTO.getNewEmail());
+      userRepository.save(user);
+    } else {
+      throw new PasswordsDoesNotMatchException();
+    }
+  }
+
+  @Override
+  @Transactional
+  public void changeUsername(ChangeUsernameDTO changeUsernameDTO) {
+    if (userRepository.findByUsername(changeUsernameDTO.getNewUsername()).isPresent()) {
+      throw new UserAlreadyExistsException("username " + changeUsernameDTO.getNewUsername());
+    }
+
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (passwordEncoder.encode(changeUsernameDTO.getPassword())
+        .equals(user.getPassword())) {
+      user.setUsername(changeUsernameDTO.getNewUsername());
+      userRepository.save(user);
+    } else {
+      throw new PasswordsDoesNotMatchException();
+    }
   }
 
   @Override
@@ -119,10 +207,11 @@ public class UserServiceImpl implements UserService {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
-    if (passwordHistoryRepository.findAllByUser(user).isEmpty()) {
-      if (passwordEncoder.encode(changePasswordDTO.getCurrentPassword())
-          .equals(user.getPassword())) {
-        String password = passwordEncoder.encode(changePasswordDTO.getNewPassword());
+    if (passwordEncoder.encode(changePasswordDTO.getCurrentPassword())
+        .equals(user.getPassword())) {
+      String password = passwordEncoder.encode(changePasswordDTO.getNewPassword());
+
+      if (passwordHistoryRepository.findAllByUserAndPasswordHash(user, password).isEmpty()) {
         user.setPassword(password);
         userRepository.save(user);
         passwordHistoryRepository.save(PasswordHistoryEntity.builder()
@@ -131,10 +220,10 @@ public class UserServiceImpl implements UserService {
             .timeAdded(LocalDateTime.now())
             .build());
       } else {
-        throw new PasswordsDoesNotMatchException();
+        throw new PasswordPreviouslyUsedException();
       }
     } else {
-      throw new PasswordPreviouslyUsedException();
+      throw new PasswordsDoesNotMatchException();
     }
   }
 
