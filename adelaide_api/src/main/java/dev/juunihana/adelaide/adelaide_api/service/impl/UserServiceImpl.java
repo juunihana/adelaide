@@ -1,13 +1,18 @@
 package dev.juunihana.adelaide.adelaide_api.service.impl;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.entity.PasswordHistoryEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import dev.juunihana.adelaide.adelaide_api.exception.PasswordPreviouslyUsedException;
+import dev.juunihana.adelaide.adelaide_api.exception.PasswordsDoesNotMatchException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.UserMapper;
+import dev.juunihana.adelaide.adelaide_api.repository.PasswordHistoryRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
@@ -27,15 +32,15 @@ import org.springframework.util.StringUtils;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
+  private final PasswordHistoryRepository passwordHistoryRepository;
   private final UserMapper userMapper;
   private final PasswordEncoder passwordEncoder;
 
   @Override
   public SignedUserDTO getSignedUser() {
-    return SignedUserDTO.builder()
-        .username(((UserEntity) SecurityContextHolder.getContext()
-            .getAuthentication().getPrincipal()).getUsername())
-        .build();
+    return userMapper.userToSigned(
+        userRepository.findByUsername(getCurrentUserUsername())
+            .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername())));
   }
 
   @Override
@@ -89,16 +94,60 @@ public class UserServiceImpl implements UserService {
     }
 
     UUID userId = UUID.randomUUID();
+    String password = passwordEncoder.encode(createUserProfileDTO.getPassword());
 
     UserEntity userEntity = userMapper.createUserToEntity(createUserProfileDTO);
     userEntity.setId(userId);
     userEntity.setTimeJoined(LocalDateTime.now());
-    userEntity.setPassword(passwordEncoder.encode(createUserProfileDTO.getPassword()));
-
+    userEntity.setPassword(password);
     userRepository.save(userEntity);
+
+    passwordHistoryRepository.save(
+        PasswordHistoryEntity.builder()
+            .passwordHash(password)
+            .timeAdded(LocalDateTime.now())
+            .build());
 
     return SuccessCreateUserDTO.builder()
         .username(userEntity.getUsername())
         .build();
+  }
+
+  @Override
+  @Transactional
+  public void changePassword(ChangePasswordDTO changePasswordDTO) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (passwordHistoryRepository.findAllByUser(user).isEmpty()) {
+      if (passwordEncoder.encode(changePasswordDTO.getCurrentPassword())
+          .equals(user.getPassword())) {
+        String password = passwordEncoder.encode(changePasswordDTO.getNewPassword());
+        user.setPassword(password);
+        userRepository.save(user);
+        passwordHistoryRepository.save(PasswordHistoryEntity.builder()
+            .user(user)
+            .passwordHash(password)
+            .timeAdded(LocalDateTime.now())
+            .build());
+      } else {
+        throw new PasswordsDoesNotMatchException();
+      }
+    } else {
+      throw new PasswordPreviouslyUsedException();
+    }
+  }
+
+  private String getCurrentUserUsername() {
+    if (!isUserAuthorized()) {
+      return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+    return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+        .getUsername();
+  }
+
+  private boolean isUserAuthorized() {
+    return !SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal().equals("anonymousUser");
   }
 }

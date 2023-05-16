@@ -5,6 +5,8 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
+import dev.juunihana.adelaide.adelaide_api.service.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,8 +39,9 @@ public class PostController implements PostApi {
   @Override
   @GetMapping("/profile/{username}")
   public List<PostDTO> findAllByUsername(
-      @PathVariable String username) {
-    return postService.findAllByUsername(username);
+      @PathVariable String username,
+      @RequestParam boolean authored) {
+    return postService.findAllByUsername(username, authored);
   }
 
   @Override
@@ -45,7 +49,7 @@ public class PostController implements PostApi {
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   @ResponseStatus(HttpStatus.CREATED)
   public SuccessPostDTO create(
-      @RequestBody CreatePostDTO createPostDTO) {
+      @RequestBody @Valid CreatePostDTO createPostDTO) {
     return postService.create(createPostDTO);
   }
 
@@ -54,7 +58,7 @@ public class PostController implements PostApi {
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public SuccessPostDTO edit(
       @PathVariable String postId,
-      @RequestBody CreatePostDTO createPostDTO) {
+      @RequestBody @Valid CreatePostDTO createPostDTO) {
     return postService.edit(postId, createPostDTO);
   }
 

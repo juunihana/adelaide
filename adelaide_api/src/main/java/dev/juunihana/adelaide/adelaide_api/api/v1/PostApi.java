@@ -9,7 +9,7 @@ public interface PostApi {
 
   PostDTO findById(String postId);
 
-  List<PostDTO> findAllByUsername(String username);
+  List<PostDTO> findAllByUsername(String username, boolean authored);
 
   SuccessPostDTO create(CreatePostDTO createPostDTO);
 

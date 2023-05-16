@@ -1,5 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
+import dev.juunihana.adelaide.adelaide_api.api.v1.UserApi;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
@@ -26,17 +28,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
   private final UserService userService;
   private final JwtService jwtService;
   private final AuthenticationManager authManager;
 
+  @Override
   @GetMapping("/auth/signed")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public SignedUserDTO getSignedUser() {
     return userService.getSignedUser();
   }
 
+  @Override
   @PostMapping("/auth/sign-in")
   public UserAuthTokenDTO signIn(
       @RequestBody @Valid SignInDTO signInDTO) {
@@ -52,6 +57,7 @@ public class UserController {
         .build();
   }
 
+  @Override
   @PostMapping("/auth/sign-out")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public ResponseEntity<?> signOut() {
@@ -59,12 +65,22 @@ public class UserController {
     return null;
   }
 
+  @Override
+  @PostMapping("/auth/change-password")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void changePassword(
+      @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
+    userService.changePassword(changePasswordDTO);
+  }
+
+  @Override
   @GetMapping("/profile/{username}")
   public UserProfileDTO getUserProfile(
       @PathVariable String username) {
     return userService.findUserProfile(username);
   }
 
+  @Override
   @PostMapping("/new")
   public SuccessCreateUserDTO createUser(
       @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO) {

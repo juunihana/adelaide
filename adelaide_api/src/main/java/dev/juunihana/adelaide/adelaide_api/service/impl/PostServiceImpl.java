@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,9 +39,16 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public List<PostDTO> findAllByUsername(String username) {
-    return postRepository.findAllByUserUsername(username).stream()
-        .filter(post -> !post.getDeleted())
+  public List<PostDTO> findAllByUsername(String username, boolean authored) {
+    List<PostEntity> posts = authored ?
+        postRepository.findAllByUserUsername(username).stream()
+            .filter(post -> !post.getDeleted())
+            .toList() :
+        postRepository.findAllByUserUsernameAndAuthorUsername(username).stream()
+            .filter(post -> !post.getDeleted())
+            .toList();
+
+    return posts.stream()
         .map(postMapper::postEntityToDTO)
         .collect(Collectors.toList());
   }
@@ -53,7 +58,8 @@ public class PostServiceImpl implements PostService {
     UUID postId = UUID.randomUUID();
 
     UserEntity user = (UserEntity) userService.loadUserByUsername(createPostDTO.getUsername());
-    UserEntity author = (UserEntity) userService.loadUserByUsername(getCurrentUserUsername());
+    UserEntity author = (UserEntity) userService.loadUserByUsername(
+        userService.getSignedUser().getUsername());
 
     postRepository.save(PostEntity.builder()
         .id(postId)
@@ -75,7 +81,7 @@ public class PostServiceImpl implements PostService {
     PostEntity post = postRepository.findById(UUID.fromString(postId))
         .orElseThrow(() -> new PostNotFoundException(postId));
 
-    String authorUsername = getCurrentUserUsername();
+    String authorUsername = userService.getSignedUser().getUsername();
     if (!post.getUser().getUsername().equals(authorUsername)) {
       throw new AccessDeniedException("You cannot edit this user posts");
     }
@@ -96,7 +102,7 @@ public class PostServiceImpl implements PostService {
     PostEntity post = postRepository.findById(UUID.fromString(postId))
         .orElseThrow(() -> new PostNotFoundException(postId));
 
-    String authorUsername = getCurrentUserUsername();
+    String authorUsername = userService.getSignedUser().getUsername();
     if (!post.getUser().getUsername().equals(authorUsername)) {
       throw new AccessDeniedException("You cannot delete this user posts");
     }
@@ -105,18 +111,5 @@ public class PostServiceImpl implements PostService {
     post.setDeleted(true);
 
     postRepository.save(post);
-  }
-
-  private String getCurrentUserUsername() {
-    if (!isUserAuthorized()) {
-      return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-    return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-        .getUsername();
-  }
-
-  private boolean isUserAuthorized() {
-    return !SecurityContextHolder.getContext().getAuthentication()
-        .getPrincipal().equals("anonymousUser");
   }
 }

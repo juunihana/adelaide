@@ -5,6 +5,8 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.error.ErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.error.ValidationErrorDTO;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.NotAuthorizedException;
+import dev.juunihana.adelaide.adelaide_api.exception.PasswordPreviouslyUsedException;
+import dev.juunihana.adelaide.adelaide_api.exception.PasswordsDoesNotMatchException;
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
@@ -76,6 +78,26 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
     System.out.println("ERROR 400: " + e.getMessage());
     return ErrorDTO.builder()
         .result("userAlreadyExistsError")
+        .message(e.getMessage())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(PasswordsDoesNotMatchException.class)
+  protected ErrorDTO handlePasswordsDoesNotMatchException(PasswordsDoesNotMatchException e) {
+    System.out.println("ERROR 400: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("passwordDoesNotMatch")
+        .message(e.getMessage())
+        .build();
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(PasswordPreviouslyUsedException.class)
+  protected ErrorDTO handlePasswordPreviouslyUsedException(PasswordPreviouslyUsedException e) {
+    System.out.println("ERROR 400: " + e.getMessage());
+    return ErrorDTO.builder()
+        .result("passwordPreviouslyUsed")
         .message(e.getMessage())
         .build();
   }

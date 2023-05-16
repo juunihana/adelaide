@@ -1,5 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.SuccessCreateUserDTO;
@@ -23,4 +24,6 @@ public interface UserService extends UserDetailsService {
   Boolean userExistsByPhone(String phone);
 
   SuccessCreateUserDTO signUp(CreateUserProfileDTO createUserProfileDTO);
+
+  void changePassword(ChangePasswordDTO changePasswordDTO);
 }
