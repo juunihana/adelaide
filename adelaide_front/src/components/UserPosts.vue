@@ -8,7 +8,7 @@
       <Button class="new-post-button" v-if="signedInUser">New post</Button>
     </MenuStripe>
     <div class="loading-block" v-if="loading">Loading</div>
-    <div class="error-block" v-else-if="error">{{ errorStatus }}</div>
+    <div class="error-block" v-else-if="error">Error</div>
     <UserPost v-else v-for="post in posts" :title="post.title" :content="post.content"/>
     <footer>
       You have reached the end of the page. Congrats!
@@ -55,7 +55,6 @@ export default {
     }).catch((error) => {
       this.loading = false
       this.error = true
-      this.errorStatus = error.response.status
     })
   }
 }
