@@ -7,7 +7,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
@@ -82,7 +82,7 @@ public class UserController implements UserApi {
   @Override
   @GetMapping("/auth/signed")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public SignedUserDTO getSignedUser() {
+  public ShortUserProfileDTO getSignedUser() {
     return userService.getSignedUser();
   }
 

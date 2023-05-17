@@ -9,7 +9,7 @@
     </MenuStripe>
     <div class="loading-block" v-if="loading">Loading</div>
     <div class="error-block" v-else-if="error">Error</div>
-    <UserPost v-else v-for="post in posts" :author="post.author" :title="post.title" :content="post.content"/>
+    <UserPost v-else v-for="post in posts" :post="post"/>
     <footer>
       You have reached the end of the page. Congrats!
     </footer>
@@ -24,9 +24,7 @@ import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
 import MenuLabel from "@/components/common/menu-stripe/MenuLabel.vue";
 import Button from "@/components/common/form/Button.vue";
 import UserService from "@/service/UserService.js";
-import {storeToRefs} from "pinia";
 import {generalStore} from "@/stores/generalStore";
-import {watch} from "vue";
 
 export default {
   name: "UserPosts",
@@ -44,21 +42,28 @@ export default {
       errorStatus: null
     }
   },
-  mounted() {
-    const {signedIn} = storeToRefs(this.generalStore)
-    watch(signedIn, () => {
-      this.signedInUser = this.generalStore.signedIn
-    })
-
-    this.loading = true;
-    UserService.getUserPosts(this.$route.params.username)
-    .then((data) => {
-      this.loading = false
-      this.posts = data.data
-    }).catch((error) => {
-      this.loading = false
-      this.error = true
-    })
+  created() {
+    this.$watch(
+        () => this.$route.params,
+        () => this.getUserPosts(),
+        {immediate: true})
+    this.$watch(
+        () => this.generalStore.signedIn,
+        () => this.signedInUser = this.generalStore.signedIn,
+        {immediate: true})
+  },
+  methods: {
+    getUserPosts() {
+      this.loading = true;
+      UserService.getUserPosts(this.$route.params.username)
+      .then((data) => {
+        this.loading = false
+        this.posts = data.data
+      }).catch((error) => {
+        this.loading = false
+        this.error = true
+      })
+    }
   }
 }
 </script>

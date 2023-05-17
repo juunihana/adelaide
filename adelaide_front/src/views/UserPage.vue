@@ -1,5 +1,5 @@
 <template>
-  <main class="root-container">
+  <main class="user-page-container">
     <UserProfile/>
     <UserPosts/>
   </main>
@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style scoped>
-.root-container {
+.user-page-container {
   display: grid;
   grid-column-gap: 2em;
   grid-template-columns: 1fr 3fr;

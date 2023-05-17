@@ -1,37 +1,41 @@
 <template>
   <div class="overlay" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
-    <div class="overlay-container" :style="dialogSize" @click="clickOnModal">
-      <slot></slot>
+    <div class="overlay-container" @click="clickOnModal">
+      <form method="post">
+        <TextInput placeholder="Username" v-model="username"/>
+        <TextInput placeholder="Password" v-model="password"/>
+        <Button @click="signIn">
+          Sign in
+        </Button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import {generalStore} from "@/stores/generalStore";
+import TextInput from "./common/form/TextInput.vue";
+import Button from "./common/form/Button.vue";
 
 export default {
-  name: "Overlay",
+  name: "SignInOverlay",
+  components: {Button, TextInput},
   props: {
-    type: null
   },
   computed: {
-    dialogSize() {
-      switch (this.type) {
-        case "signIn":
-          return "width: 25vw; height: 30vh;"
-        case "signUp":
-          return "width: 25vw; height: 90vh;"
-        case "media":
-          return "width: 90vw; height: 90vh;"
-      }
-    }
   },
   data() {
     return {
-      generalStore: generalStore()
+      generalStore: generalStore(),
+      username: null,
+      password: null
     }
   },
   methods: {
+    signIn(e) {
+      e.preventDefault()
+      this.generalStore.signIn(this.username, this.password)
+    },
     close() {
       this.generalStore.showSignInOverlay = false;
       this.generalStore.showSignUpOverlay = false;
@@ -61,5 +65,10 @@ export default {
   vertical-align: middle;
   background: #333333;
   border-radius: 3px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
 }
 </style>

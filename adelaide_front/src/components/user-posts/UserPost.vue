@@ -1,18 +1,20 @@
 <template>
   <div class="user-post-block general-block">
     <header class="block-header">
-      <h3>{{ title }} by
-        <router-link :to="'/'+author">{{ author }}</router-link>
-      </h3>
+      <h3>{{ post.title }}</h3>
+      by
+      <router-link :to="'/'+post.author.username">{{ post.author.firstName }}
+        {{ post.author.lastName }}
+      </router-link>
     </header>
-    {{ content }}
+    {{ post.content }}
   </div>
 </template>
 
 <script>
 export default {
   name: "UserPost",
-  props: ["title", "content", "author"]
+  props: ["post"]
 }
 </script>
 

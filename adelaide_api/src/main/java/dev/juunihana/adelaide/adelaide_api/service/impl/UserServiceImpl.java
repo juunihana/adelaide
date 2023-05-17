@@ -5,7 +5,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PasswordHistoryEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public SignedUserDTO getSignedUser() {
+  public ShortUserProfileDTO getSignedUser() {
     return userMapper.userToSigned(
         userRepository.findByUsername(getCurrentUserUsername())
             .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername())));

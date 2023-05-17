@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.mapper;
 
-import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,7 @@ public interface PostMapper {
   @Mappings({
       @Mapping(source = "timeCreated", target = "timeCreated", qualifiedByName = "mapTime"),
       @Mapping(source = "timeEdited", target = "timeEdited", qualifiedByName = "mapTime"),
-      @Mapping(source = "author.username", target = "author")
+      @Mapping(source = "author", target = "author")
   })
   PostDTO postEntityToDTO(PostEntity post);
 

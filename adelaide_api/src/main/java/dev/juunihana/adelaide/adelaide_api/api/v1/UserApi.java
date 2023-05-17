@@ -6,13 +6,13 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 
 public interface UserApi {
 
-  SignedUserDTO getSignedUser();
+  ShortUserProfileDTO getSignedUser();
 
   UserProfileDTO getUserProfile(String username);
 

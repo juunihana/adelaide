@@ -2,8 +2,6 @@ package dev.juunihana.adelaide.adelaide_api.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,5 +32,5 @@ public class UserProfileDTO {
 
   private String place;
 
-  private List<PostDTO> posts;
+  private String avatarLink;
 }

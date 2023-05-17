@@ -1,47 +1,55 @@
 <template>
-  <div class="user-profile-info-block general-block">
+  <div v-if="loading">Loading</div>
+  <div v-if="error">Error</div>
+  <div v-if="userProfile" class="user-profile-info-block general-block">
     <div class="user-profile-avatar">
-      <img src="@/assets/avatar_200.png" alt="user avatar"/>
+      <img :src="userProfile.avatarLink" alt="user avatar"/>
     </div>
     <div class="user-profile-name">
-      <h1>{{ firstName}} {{ lastName}}</h1>
+      <h1>{{ userProfile.firstName }} {{ userProfile.lastName }}</h1>
     </div>
     <div class="user-profile-age">
-      <h2>25 years</h2>
+      <h2>{{ userProfile.age }} years</h2>
     </div>
     <div class="user-profile-place">
-      <h3>Moscow</h3>
+      <h3>{{ userProfile.place }}</h3>
     </div>
   </div>
 </template>
 
 <script>
+import {generalStore} from "../../stores/generalStore.js";
 import UserService from "@/service/UserService";
 
 export default {
   name: "UserProfileInfo",
   data() {
     return {
-      firstName: null,
-      lastName: null
+      generalStore: generalStore(),
+      userProfile: null,
+      loading: false,
+      error: false
     }
   },
-  mounted() {
-    UserService.getUserProfile(this.$route.params.username)
-    .then((data) => {
-      console.log(data)
-      this.firstName = data.data.firstName
-      this.lastName = data.data.lastName
-    })
+  created() {
+    this.$watch(
+        () => this.$route.params,
+        () => this.getUserProfile(),
+        {immediate: true})
   },
-  beforeRouteUpdate(to, from, next) {
-    UserService.getUserProfile(this.$route.params.username)
-    .then((data) => {
-      console.log(data)
-      this.firstName = data.data.firstName
-      this.lastName = data.data.lastName
-    })
-    next()
+  methods: {
+    getUserProfile() {
+      this.loading = true
+      UserService.getUserProfile(this.$route.params.username)
+      .then((data) => {
+        this.loading = false
+        this.userProfile = data.data
+      })
+      .catch((error) => {
+        this.loading = false;
+        this.error = true;
+      })
+    }
   }
 }
 </script>

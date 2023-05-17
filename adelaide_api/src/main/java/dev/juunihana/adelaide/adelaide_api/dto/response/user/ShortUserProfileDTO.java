@@ -1,8 +1,7 @@
-package dev.juunihana.adelaide.adelaide_api.dto.request.post;
+package dev.juunihana.adelaide.adelaide_api.dto.response.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,17 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class PostDTO {
+public class ShortUserProfileDTO {
 
-  private UUID id;
+  private String username;
 
-  private String author;
+  private String firstName;
 
-  private String title;
+  private String lastName;
 
-  private String content;
-
-  private String timeCreated;
-
-  private String timeEdited;
+  private String avatarLink;
 }

@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.post.PostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import java.util.List;
 

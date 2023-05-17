@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.mapper;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.SignedUserDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import java.time.LocalDate;
@@ -30,5 +30,5 @@ public interface UserMapper {
 
   UserEntity createUserToEntity(CreateUserProfileDTO dto);
 
-  SignedUserDTO userToSigned(UserEntity userEntity);
+  ShortUserProfileDTO userToSigned(UserEntity userEntity);
 }
