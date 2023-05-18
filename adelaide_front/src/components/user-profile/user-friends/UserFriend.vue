@@ -25,7 +25,7 @@ export default {
   flex-direction: row;
   background: #444444;
   border-radius: 3px;
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 
 .user-friend-avatar {

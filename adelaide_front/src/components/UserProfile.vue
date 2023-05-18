@@ -10,7 +10,7 @@
         <h1>{{ state.user.firstName }} {{ state.user.lastName }}</h1>
       </div>
       <div class="user-profile-age">
-        <h2>{{ state.user.age }} years</h2>
+        <h3>{{ state.user.age }} years</h3>
       </div>
       <div class="user-profile-place">
         <h3>{{ state.user.place }}</h3>

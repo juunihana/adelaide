@@ -14,9 +14,9 @@ export const generalStore = defineStore('generalStore', {
     signIn(username, password) {
       UserService.signIn(username, password)
       .then(data => {
-        this.signedIn = username
         this.token = "Bearer " + data.data.token
         VueCookies.set('auth', this.token, '1d')
+        this.checkSignIn()
         router.push("/" + username)
       })
     },
@@ -29,7 +29,11 @@ export const generalStore = defineStore('generalStore', {
       if (VueCookies.get('auth')) {
         UserService.getCurrentLoggedUser()
             .then((data) => {
-              this.signedIn = data.data.username
+              this.signedIn = {
+                username: data.data.username,
+                firstName: data.data.firstName,
+                lastName: data.data.lastName
+              }
             })
       }
     },

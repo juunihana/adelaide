@@ -4,8 +4,8 @@
       Adelaide Social Network
     </MenuLink>
     <SearchBar/>
-    <MenuStripe v-if="state.signedInUser">
-      <MenuLink :link="'/' + state.signedInUser">
+    <MenuStripe v-if="localState.signedInUser">
+      <MenuLink :link="'/' + localState.signedInUser.username">
         My profile
       </MenuLink>
       <MenuLink link="/messages">
@@ -30,60 +30,62 @@
         Videos
       </MenuLink>
     </MenuStripe>
-    <MenuStripe class="auth-panel" v-if="!state.signedInUser">
-      <Button @click.prevent="signIn">
+    <MenuStripe class="auth-panel" v-if="!localState.signedInUser">
+      <Button @click.prevent="showSignIn">
         Sign in
       </Button>
       <Button @click.prevent="showSignUp">
         Sign up
       </Button>
     </MenuStripe>
-    <MenuStripe class="auth-panel" v-else @mouseover="state.menuColumnShown = true"
-                @mouseleave="state.menuColumnShown = false">
+    <MenuStripe class="auth-panel" v-else
+                @click.prevent="localState.menuColumnShown = !localState.menuColumnShown">
       <MenuLink link="/settings"
-                :class="{'user-menu-element-active': state.menuColumnShown, 'user-menu-element': !state.menuColumnShown}">
+                :class="{'user-menu-element-active': localState.menuColumnShown,
+                'user-menu-element': !localState.menuColumnShown}">
         Settings
       </MenuLink>
       <Button @click.prevent="signOut"
-              :class="{'user-menu-element-active': state.menuColumnShown, 'user-menu-element': !state.menuColumnShown}">
+              :class="{'user-menu-element-active': localState.menuColumnShown,
+              'user-menu-element': !localState.menuColumnShown}">
         Sign out
       </Button>
       <Button>
-        {{ signedInUser }}
+        {{ localState.signedInUser.firstName }}
+        {{ localState.signedInUser.lastName }}
       </Button>
     </MenuStripe>
   </header>
 </template>
 
 <script setup>
-import SearchBar from "@/components/main-header/SearchBar.vue";
-import MenuStripe from "@/components/common/MenuStripe.vue";
-import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
-import Button from "@/components/common/form/Button.vue";
-import {reactive, watch} from "vue";
-import {generalStore} from "../stores/generalStore.js";
-import {storeToRefs} from "pinia"
+import SearchBar from "@/components/main-header/SearchBar.vue"
+import MenuStripe from "@/components/common/MenuStripe.vue"
+import MenuLink from "@/components/common/menu-stripe/MenuLink.vue"
+import Button from "@/components/common/form/Button.vue"
+import {reactive} from "vue"
+import {generalStore} from "@/stores/generalStore"
 
 const generalStorage = generalStore()
-const {signedIn} = storeToRefs(generalStore())
 
-let state = reactive({
+let localState = reactive({
   menuColumnShown: false,
   signedInUser: null
 })
 
-watch(() => signedIn,
-    () => {
-      state.signedInUser = generalStorage.signedIn
-      console.log("here")
-    })
+generalStorage.$subscribe((mutation, state) => {
+  localState.signedInUser = state.signedIn
+})
 
-function signIn() {
+function showSignIn() {
   generalStorage.signIn("username", "password")
 }
 
 function signOut() {
   generalStorage.signOut()
+}
+
+function showSignUp() {
 }
 </script>
 

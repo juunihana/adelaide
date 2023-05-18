@@ -17,9 +17,9 @@ export default defineComponent({
 input {
   outline: none;
   border: none;
-  border-radius: 3px;
+  border-radius: var(--border-radius);
   padding: 0.1rem 0.3rem 0.1rem 0.3rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-family: var(--font-family);
   vertical-align: center;
   cursor: text;
