@@ -4,8 +4,8 @@
       Adelaide Social Network
     </MenuLink>
     <SearchBar/>
-    <MenuStripe v-if="signedInUser">
-      <MenuLink :link="'/' + signedInUser">
+    <MenuStripe v-if="state.signedInUser">
+      <MenuLink :link="'/' + state.signedInUser">
         My profile
       </MenuLink>
       <MenuLink link="/messages">
@@ -30,22 +30,22 @@
         Videos
       </MenuLink>
     </MenuStripe>
-    <MenuStripe class="auth-panel" v-if="!signedInUser">
-      <Button @click="signIn">
+    <MenuStripe class="auth-panel" v-if="!state.signedInUser">
+      <Button @click.prevent="signIn">
         Sign in
       </Button>
-      <Button @click="showSignUp">
+      <Button @click.prevent="showSignUp">
         Sign up
       </Button>
     </MenuStripe>
-    <MenuStripe class="auth-panel" v-else @mouseover="menuColumnShown = true"
-                @mouseleave="menuColumnShown = false">
+    <MenuStripe class="auth-panel" v-else @mouseover="state.menuColumnShown = true"
+                @mouseleave="state.menuColumnShown = false">
       <MenuLink link="/settings"
-                :class="{'user-menu-element-active': menuColumnShown, 'user-menu-element': !menuColumnShown}">
+                :class="{'user-menu-element-active': state.menuColumnShown, 'user-menu-element': !state.menuColumnShown}">
         Settings
       </MenuLink>
-      <Button @click="signOut"
-          :class="{'user-menu-element-active': menuColumnShown, 'user-menu-element': !menuColumnShown}">
+      <Button @click.prevent="signOut"
+              :class="{'user-menu-element-active': state.menuColumnShown, 'user-menu-element': !state.menuColumnShown}">
         Sign out
       </Button>
       <Button>
@@ -55,49 +55,35 @@
   </header>
 </template>
 
-<script>
+<script setup>
 import SearchBar from "@/components/main-header/SearchBar.vue";
 import MenuStripe from "@/components/common/MenuStripe.vue";
 import MenuLink from "@/components/common/menu-stripe/MenuLink.vue";
 import Button from "@/components/common/form/Button.vue";
-import {generalStore} from "@/stores/generalStore.js";
-import {storeToRefs} from "pinia";
-import {watch} from "vue";
-import MenuColumn from "./common/MenuColumn.vue";
-import MenuLabel from "./common/menu-stripe/MenuLabel.vue";
+import {reactive, watch} from "vue";
+import {generalStore} from "../stores/generalStore.js";
+import {storeToRefs} from "pinia"
 
-export default {
-  name: "MainHeader",
-  components: {MenuLabel, MenuColumn, Button, MenuStripe, MenuLink, SearchBar},
-  data() {
-    return {
-      generalStore: generalStore(),
-      signedInUser: null,
-      menuColumnShown: false
-    }
-  },
-  mounted() {
-    const {signedIn} = storeToRefs(this.generalStore)
-    watch(signedIn, () => {
-      console.log(this.signedInUser)
-      this.signedInUser = this.generalStore.signedIn
+const generalStorage = generalStore()
+const {signedIn} = storeToRefs(generalStore())
+
+let state = reactive({
+  menuColumnShown: false,
+  signedInUser: null
+})
+
+watch(() => signedIn,
+    () => {
+      state.signedInUser = generalStorage.signedIn
+      console.log("here")
     })
-  },
-  methods: {
-    signIn(e) {
-      e.preventDefault()
-      this.generalStore.signIn("username", "password")
-      // this.generalStore.showSignInOverlay = true
-    },
-    signOut(e) {
-      e.preventDefault()
-      this.generalStore.signOut()
-    },
-    showSignUp(e) {
-      e.preventDefault()
-      // this.generalStore.showSignUpOverlay = true
-    }
-  }
+
+function signIn() {
+  generalStorage.signIn("username", "password")
+}
+
+function signOut() {
+  generalStorage.signOut()
 }
 </script>
 

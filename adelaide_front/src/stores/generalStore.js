@@ -25,7 +25,7 @@ export const generalStore = defineStore('generalStore', {
       this.signedIn = null
       VueCookies.remove('auth')
     },
-    checkSignedUser() {
+    checkSignIn() {
       if (VueCookies.get('auth')) {
         UserService.getCurrentLoggedUser()
             .then((data) => {

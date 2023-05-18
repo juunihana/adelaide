@@ -33,15 +33,13 @@ const state = reactive({
   user: {}
 })
 
-watch(
-    () => route.params,
+watch(() => route.params,
     () => {
       state.loading = true
       UserService.getUserProfile(route.params.username)
       .then((data) => {
         state.loading = false
         state.user = data.data
-        console.log(state.user)
       })
       .catch((error) => {
         state.loading = false;
