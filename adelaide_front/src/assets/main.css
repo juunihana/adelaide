@@ -6,27 +6,28 @@
 }
 
 body {
-  background: var(--background-color-root);
+  background: var(--background-root);
   font-size: 1.2rem;
-  font-family: Ysabeau, Arial, sans-serif;
-  color: var(--text-color-general);
+  font-family: var(--font-family);
+  color: var(--color);
   height: 100vh;
+  overflow: auto;
 }
 
 a {
   text-decoration: none;
-  color: var(--text-color-general);
-  font-family: Ysabeau, Arial, sans-serif;
+  color: var(--color);
+  font-family: var(--font-family);
 }
 
 a:hover {
-  color: var(--hover-color);
-  text-shadow: 0 0 2px var(--hover-color);
+  color: var(--color-hover);
+  text-shadow: var(--text-shadow);
   cursor: pointer;
 }
 
 img {
-  border-radius: 3px;
+  border-radius: var(--border-radius);
 }
 
 h1, h2, h3 {
@@ -47,73 +48,32 @@ h3 {
 }
 
 .general-block {
-  background: var(--background-color-block);
-  border-radius: 3px;
+  background: var(--background-block);
+  border-radius: var(--border-radius);
   padding: 1rem;
   margin-bottom: 1rem;
 }
 
-/*DARK THEME*/
 :root {
-  --background-color-root: #222222;
-  --background-color-block: #333333;
+  /* BACKGROUND COLOR */
+  --background-root: #eee;
+  --background-block: #111;
 
-  --text-color-general: #dddddd;
-  --border-color-general: #dddddd;
-  --hover-color: #ff5630;
-  /*--hover-color: #ff8653;*/
+  /* TEXT */
+  /*--font-family: Ysabeau, Arial, sans-serif;*/
+  --font-family: Arial, sans-serif;
+  --color: #eee;
+  --color-hover: #ff0000;
+  /*--text-shadow: 0 0 2px var(--color-hover);*/
+  --text-shadow: none;
+
+  /* BORDERS */
+  --border-radius: 0;
+  --border: solid 1px #eee;
+
+  /* FORMS */
+  --button-color: #111;
+  --button-background: #eee;
+  --input-color: #111;
+  --input-background: #eee;
 }
-
-/*LIGHT THEME*/
-/*:root {*/
-/*  --background-color-root: #fdfdfd;*/
-/*  --background-color-block: #eaeaea;*/
-
-/*  --text-color-general: #222222;*/
-
-/*}*/
-
-/*:root {*/
-/*  --padding-button-general: 2px 10px 2px 10px;*/
-
-/*  --background-main: #fafafa;*/
-/*  --background-block: #f0f0f0;*/
-
-/*  --background-button: #f0f0f0;*/
-/*  --background-button-hover: #eaeaea;*/
-
-/*  --background-frame-close-button-general: #6194ff;*/
-/*  --background-frame-close-button-general-hover: #3a77ff;*/
-/*  --background-frame-close-button-success: #a3d772;*/
-/*  --background-frame-close-button-success-hover: #9bd945;*/
-/*  --background-frame-close-button-error: #ff9898;*/
-/*  --background-frame-close-button-error-hover: #ff6c6c;*/
-
-/*  --background-form-input: #fafafa;*/
-/*  --background-form-label: #eaeaea;*/
-
-/*  --background-info-frame-general: #b3d2ff;*/
-/*  --background-info-frame-success: #e7ffd1;*/
-/*  --background-info-frame-error: #ffd1d1;*/
-
-/*  --border-general: solid 1px #bababa;*/
-/*  --border-radius-general: 10px;*/
-
-/*  --border-info-frame-general: solid 1px #6194ff;*/
-/*  --border-info-frame-success: solid 1px #a3d772;*/
-/*  --border-info-frame-error: solid 1px #ff9898;*/
-
-/*  --text-color-general: #222222;*/
-
-/*  --text-color-info-frame-general: #00004f;*/
-/*  --text-color-info-frame-success: #527300;*/
-/*  --text-color-info-frame-error: #730000;*/
-
-/*  --text-font-general: Ysabeau, Arial, sans-serif;*/
-
-/*  --text-size-general: 1em;*/
-/*  --text-size-form-input: 1em;*/
-/*  --text-size-form-label: 0.9em;*/
-
-/*  --text-size-info-panel: 1.1em;*/
-/*}*/

@@ -20,6 +20,6 @@ export default {
 <style scoped>
 .block-header {
   margin-bottom: 1rem;
-  border-bottom: solid 1px var(--border-color-general);
+  border-bottom: var(--border);
 }
 </style>

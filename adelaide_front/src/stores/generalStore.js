@@ -29,12 +29,9 @@ export const generalStore = defineStore('generalStore', {
       if (VueCookies.get('auth')) {
         UserService.getCurrentLoggedUser()
             .then((data) => {
-              this.signedIn = data.response.username
+              this.signedIn = data.data.username
             })
-      } else {
-        return null;
       }
     },
-
   }
 })

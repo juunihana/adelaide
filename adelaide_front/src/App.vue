@@ -61,7 +61,7 @@ export default {
 .user-page-container {
   width: 95%;
   max-width: 95%;
-  margin: 4em auto;
+  margin: 2rem auto;
   overflow: hidden;
 }
 

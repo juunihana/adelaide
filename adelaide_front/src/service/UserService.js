@@ -31,6 +31,7 @@ class UserService {
   setRequestConfig() {
     let config = {};
     const authCookie = VueCookies.get("auth");
+    console.log(authCookie)
     if (authCookie && authCookie !== "") {
       config.headers = {
         Authorization: authCookie

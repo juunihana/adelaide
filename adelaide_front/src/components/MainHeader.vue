@@ -79,14 +79,15 @@ export default {
   mounted() {
     const {signedIn} = storeToRefs(this.generalStore)
     watch(signedIn, () => {
+      console.log(this.signedInUser)
       this.signedInUser = this.generalStore.signedIn
     })
   },
   methods: {
     signIn(e) {
       e.preventDefault()
-      // this.generalStore.signIn("alice", "password")
-      this.generalStore.showSignInOverlay = true
+      this.generalStore.signIn("username", "password")
+      // this.generalStore.showSignInOverlay = true
     },
     signOut(e) {
       e.preventDefault()
@@ -95,9 +96,6 @@ export default {
     showSignUp(e) {
       e.preventDefault()
       // this.generalStore.showSignUpOverlay = true
-    },
-    showUserMenu() {
-      this.menuColumnShown = true
     }
   }
 }
@@ -112,7 +110,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: var(--background-color-block);
+  background: var(--background-block);
   padding: 1rem;
   box-shadow: 0 0 10px #111111;
 }

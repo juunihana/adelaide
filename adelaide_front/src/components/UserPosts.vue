@@ -72,7 +72,7 @@ export default {
 .user-posts-container {
   display: flex;
   flex-direction: column;
-  height: 1vh;
+  /*height: 1vh;*/
 }
 
 .post-search-bar {

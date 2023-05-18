@@ -1,7 +1,7 @@
 <template>
   <main class="user-page-container">
     <UserProfile/>
-    <UserPosts/>
+<!--    <UserPosts/>-->
   </main>
 </template>
 
@@ -27,7 +27,7 @@ export default {
 <style scoped>
 .user-page-container {
   display: grid;
-  grid-column-gap: 2em;
+  grid-column-gap: 2rem;
   grid-template-columns: 1fr 3fr;
 }
 </style>

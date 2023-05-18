@@ -15,17 +15,17 @@ export default defineComponent({
 <style scoped>
 button {
   margin-right: 1.2rem;
-  background: #444444;
-  border-radius: 3px;
+  background: var(--button-background);
+  border-radius: var(--border-radius);
   border: none;
   font-size: 1.2rem;
-  font-family: Ysabeau, Arial, sans-serif;
-  color: var(--text-color-general);
+  font-family: var(--font-family);
+  color: var(--button-color);
   padding: 0.1rem 0.5rem 0.1rem 0.5rem;
 }
 button:hover {
-  color: var(--hover-color);
-  text-shadow: 0 0 2px var(--hover-color);
+  color: var(--color-hover);
+  text-shadow: var(--text-shadow);
   cursor: pointer;
 }
 </style>

@@ -20,10 +20,10 @@ input {
   border-radius: 3px;
   padding: 0.1rem 0.3rem 0.1rem 0.3rem;
   font-size: 1.1rem;
-  font-family: Ysabeau, Arial, sans-serif;
+  font-family: var(--font-family);
   vertical-align: center;
   cursor: text;
-  color: var(--text-color-general);
-  background: var(--background-color-root);
+  color: var(--input-color);
+  background: var(--input-background);
 }
 </style>

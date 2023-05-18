@@ -1,10 +1,10 @@
 <template>
   <div class="overlay" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
-    <div class="overlay-container" @click="clickOnModal">
+    <div class="overlay-container" @click.stop>
       <form method="post">
         <TextInput placeholder="Username" v-model="username"/>
         <TextInput placeholder="Password" v-model="password"/>
-        <Button @click="signIn">
+        <Button @click.prevent="signIn">
           Sign in
         </Button>
       </form>
@@ -32,16 +32,12 @@ export default {
     }
   },
   methods: {
-    signIn(e) {
-      e.preventDefault()
+    signIn() {
       this.generalStore.signIn(this.username, this.password)
     },
     close() {
       this.generalStore.showSignInOverlay = false;
       this.generalStore.showSignUpOverlay = false;
-    },
-    clickOnModal(e) {
-      e.stopPropagation()
     }
   }
 }
