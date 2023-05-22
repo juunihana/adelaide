@@ -3,16 +3,18 @@ package dev.juunihana.adelaide.adelaide_api.controller.v1;
 import dev.juunihana.adelaide.adelaide_api.api.v1.UserApi;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.validation.Valid;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,38 +44,38 @@ public class UserController implements UserApi {
   /**
    * todo (this week)
    * DELETE /profile - delete user profile
-   *
+   * <p>
    * GET /profile/{username}/avatar
    * POST /profile/avatar
    * PUT /profile/avatar
    * DELETE /profile/avatar
-   *
+   * <p>
    * GET /friends/{username} - get user's friends
    * GET /friends/{username}/in - get incoming friends requests
    * GET /friends/{username}/out - get outgoing friends requests
    * POST /friends - send outgoing request
    * PUT /friends/{request_id} - accept or decline incoming request
    * DELETE /friends - remove from friends list
-   *
+   * <p>
    * GET /profile/{username}/photos
    * POST /profile/photos
    * DELETE /profile/photos
-   *
+   * <p>
    * also groups controller and five tables:
    * users_avatars
    * groups
    * users_in_groups
    * users_friends
    * users_friends_requests
-   *
+   * <p>
    * complete UI for these features
-   *
+   * <p>
    * todo (next week)
    * messages api
    * post feed
    * posts search
    * user page posts filter
-   *
+   * <p>
    * todo (long run)
    * email verification
    * user privacy settings
@@ -163,5 +165,30 @@ public class UserController implements UserApi {
   public void deleteUser(
       @PathVariable String username) {
     userService.deleteUser(username);
+  }
+
+  @GetMapping("/friends/{username}")
+  public List<UserProfileDTO> getUserFriends(
+      @PathVariable String username) {
+    return null;
+  }
+
+  @GetMapping("/friends/{username}/in")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public List<UserProfileDTO> getUserFriendsIncoming(
+      @PathVariable String username) {
+    return Collections.emptyList();
+  }
+
+  @GetMapping("/friends/{username}/out")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public List<UserProfileDTO> getUserFriendsOutgoing(
+      @PathVariable String username) {
+    return Collections.emptyList();
+  }
+
+  @PostMapping("/friends")
+  public void addFriend() {
+
   }
 }
