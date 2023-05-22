@@ -3,11 +3,12 @@
   padding: 0;
   box-sizing: border-box;
   cursor: default;
+  line-height: 1.3rem;
 }
 
 body {
   background: var(--background-root);
-  font-size: 1rem;
+  /*font-size: 1rem;*/
   font-family: var(--font-family);
   color: var(--color);
   height: 100vh;
@@ -50,14 +51,31 @@ h3 {
 .general-block {
   background: var(--background-block);
   border-radius: var(--border-radius);
-  padding: 1rem;
-  margin-bottom: 1rem;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background-overlay);
+  display: flex;
+}
+
+.overlay-container {
+  margin: auto;
+  background: var(--background-block);
+  border-radius: var(--border-radius);
+  display: flex;
 }
 
 :root {
   /* BACKGROUND COLOR */
   --background-root: #eee;
   --background-block: #111;
+  --background-hover: #ccc;
+  --background-overlay: rgba(17, 17, 17, 0.7);
 
   /* TEXT */
   /*--font-family: Ysabeau, Arial, sans-serif;*/
@@ -68,8 +86,8 @@ h3 {
   --text-shadow: none;
 
   /* BORDERS */
-  --border-radius: 0;
-  --border: solid 1px #eee;
+  --border-radius: 5px;
+  --border: solid 1px #111;
 
   /* FORMS */
   --button-color: #111;

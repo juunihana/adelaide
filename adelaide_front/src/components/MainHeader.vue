@@ -97,6 +97,7 @@ function showSignUp() {
   height: 2.5rem;
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
   align-items: center;
   background: var(--background-block);
   padding: 1rem;
@@ -105,11 +106,12 @@ function showSignUp() {
 
 .user-menu-element {
   display: none;
+  transition: 2s;
 }
 
 .user-menu-element-active {
   display: block;
-  transition: width 2s;
+  transition: 2s;
 }
 
 .auth-panel {

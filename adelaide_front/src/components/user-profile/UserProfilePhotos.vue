@@ -1,5 +1,5 @@
 <template>
-  <div class="user-profile-photos-block general-block">
+  <div>
     <BlockHeader link="/">Photos</BlockHeader>
     <main>
       <div class="user-profile-photo">
@@ -34,12 +34,7 @@ export default {
 </script>
 
 <style scoped>
-.user-profile-photos-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-profile-photos-block main {
+main {
   display: grid;
   grid-row-gap: 1em;
   grid-template-columns: repeat(3, 1fr);

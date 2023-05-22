@@ -14,6 +14,6 @@ export default defineComponent({
 
 <style scoped>
 .main-menu-element {
-  margin-right: 1.2rem;
+  /*margin-right: 1.2rem;*/
 }
 </style>

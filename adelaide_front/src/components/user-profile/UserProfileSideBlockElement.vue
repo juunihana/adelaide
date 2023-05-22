@@ -1,44 +1,40 @@
 <template>
   <div class="side-block-element">
     <div class="side-block-image">
-      <img src="@/assets/photo_96.png" alt="avatar"/>
+      <slot name="image"></slot>
     </div>
     <div class="side-block-text">
-      {{ name }} {{ surname }}
+      <slot name="text"></slot>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "UserFriend",
-  props: {
-    name: null,
-    surname: null
-  }
-}
+<script setup>
 </script>
 
 <style scoped>
 .side-block-element {
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
   background: var(--background-root);
   border-radius: var(--border-radius);
-  font-size: 1rem;
-  color: var(--input-color);
   align-items: center;
+  /*height: 5vh;*/
 }
 
 .side-block-image {
+  flex: 1
 }
 
-img {
+.side-block-image img {
   object-fit: cover;
   max-height: 100%;
 }
 
 .side-block-text {
-  margin: 0 0.5rem;
+  flex: 6;
+  font-size: 1rem;
+  color: var(--input-color);
 }
 </style>

@@ -19,7 +19,6 @@ export default {
 
 <style scoped>
 .block-header {
-  margin-bottom: 1rem;
-  border-bottom: var(--border);
+  /*border-bottom: var(--border);*/
 }
 </style>

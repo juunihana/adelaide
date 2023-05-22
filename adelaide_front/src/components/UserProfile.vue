@@ -66,13 +66,4 @@ watch(() => route.params,
   display: flex;
   flex-direction: column;
 }
-
-.user-profile-info-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.user-profile-avatar {
-  text-align: center;
-}
 </style>
