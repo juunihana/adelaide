@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -16,20 +17,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users_password_history")
+@Table(name = "comments")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordHistoryEntity {
-
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private UserEntity user;
+public class CommentEntity {
 
   @Id
-  private String passwordHash;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
-  private LocalDateTime timeAdded;
+  @ManyToOne
+  @JoinColumn(name = "author_id")
+  private UserEntity author;
+
+  private String content;
+
+  private LocalDateTime timeCreated;
+
+  @ManyToOne
+  @JoinTable(name = "posts_comments",
+      joinColumns = @JoinColumn(name = "comment_id"),
+      inverseJoinColumns = @JoinColumn(name = "post_id"))
+  private PostEntity post;
 }

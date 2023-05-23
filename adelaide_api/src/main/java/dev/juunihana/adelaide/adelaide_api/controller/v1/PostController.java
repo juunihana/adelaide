@@ -1,6 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
 import dev.juunihana.adelaide.adelaide_api.api.v1.PostApi;
+import dev.juunihana.adelaide.adelaide_api.dto.request.post.AddVoteDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
@@ -69,4 +70,22 @@ public class PostController implements PostApi {
       @PathVariable String postId) {
     postService.delete(postId);
   }
+
+  @PostMapping("/{postId}/vote")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void addVote(
+      @PathVariable String postId,
+      @RequestParam Boolean upVote
+  ) {
+    postService.addVote(postId, upVote);
+  }
+
+  @DeleteMapping("/{postId}/vote")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void removeVote(
+      @PathVariable String postId
+  ) {
+    postService.removeVote(postId);
+  }
+
 }

@@ -5,10 +5,12 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
+import dev.juunihana.adelaide.adelaide_api.entity.VoteEntity;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.PostMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.PostRepository;
+import dev.juunihana.adelaide.adelaide_api.repository.VoteRepository;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ public class PostServiceImpl implements PostService {
   private final PostRepository postRepository;
   private final PostMapper postMapper;
   private final UserService userService;
+  private final VoteRepository voteRepository;
 
   @Override
   public PostDTO findById(String postId) {
@@ -74,6 +77,36 @@ public class PostServiceImpl implements PostService {
     return SuccessPostDTO.builder()
         .postId(postId.toString())
         .build();
+  }
+
+  public void addVote(String postId, boolean upVote) {
+    PostEntity post = postRepository.findById(UUID.fromString(postId))
+        .orElseThrow(() -> new PostNotFoundException(postId));
+
+    UserEntity user = (UserEntity) userService.loadUserByUsername(
+        userService.getSignedUser().getUsername());
+
+    if (!voteRepository.existsByUser(user)) {
+      voteRepository.save(VoteEntity.builder()
+          .upvote(upVote)
+          .timeVoted(LocalDateTime.now())
+          .user(user)
+          .post(post)
+          .build());
+    }
+  }
+
+  public void removeVote(String postId) {
+    PostEntity post = postRepository.findById(UUID.fromString(postId))
+        .orElseThrow(() -> new PostNotFoundException(postId));
+
+    UserEntity user = (UserEntity) userService.loadUserByUsername(
+        userService.getSignedUser().getUsername());
+
+    VoteEntity vote = voteRepository.findByUser(user)
+        .orElseThrow(() -> new RuntimeException());
+
+    voteRepository.delete(vote);
   }
 
   @Override

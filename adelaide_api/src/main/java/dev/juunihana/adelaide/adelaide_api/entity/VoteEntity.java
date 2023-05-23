@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -16,20 +17,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users_password_history")
+@Table(name = "votes")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordHistoryEntity {
+public class VoteEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID id;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   private UserEntity user;
 
-  @Id
-  private String passwordHash;
+  private boolean upvote;
 
-  private LocalDateTime timeAdded;
+  private LocalDateTime timeVoted;
+
+  @ManyToOne
+  @JoinTable(name = "posts_votes",
+      joinColumns = @JoinColumn(name = "vote_id"),
+      inverseJoinColumns = @JoinColumn(name = "post_id"))
+  private PostEntity post;
 }

@@ -27,4 +27,8 @@ public class PostDTO {
   private String timeCreated;
 
   private String timeEdited;
+
+  private Integer upVotes;
+
+  private Integer downVotes;
 }

@@ -1,7 +1,12 @@
 package dev.juunihana.adelaide.adelaide_api.entity;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -55,7 +60,19 @@ public class UserEntity implements UserDetails {
 
   private LocalDateTime timeJoined;
 
-  private boolean deleted;
+  private Boolean deleted;
+
+  @ManyToMany
+  @JoinTable(name = "users_groups",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private List<GroupEntity> groups;
+
+  @ManyToMany
+  @JoinTable(name = "users_posts",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "post_id"))
+  private List<PostEntity> posts;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
