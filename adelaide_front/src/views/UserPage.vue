@@ -3,7 +3,7 @@
     <div class="user-profile-container">
       <div class="user-profile-side-container general-block">
         <div class="user-profile-avatar">
-          <img src="@/assets/photo_96.png" alt="avatar"/>
+          <img src="@/assets/avatar_200.png" alt="avatar"/>
         </div>
         <div class="user-profile-name">
           Name Surname
@@ -23,15 +23,15 @@
           <div class="side-block-header">Friends</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Name Surname</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Name Surname</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Name Surname</div>
         </router-link>
       </div>
@@ -40,15 +40,15 @@
           <div class="side-block-header">Groups</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Group</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Group</div>
         </router-link>
         <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_96.png" alt="avatar"/></div>
+          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
           <div class="side-block-text">Group</div>
         </router-link>
       </div>

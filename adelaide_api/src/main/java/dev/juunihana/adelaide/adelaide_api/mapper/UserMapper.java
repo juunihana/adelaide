@@ -30,5 +30,5 @@ public interface UserMapper {
 
   UserEntity createUserToEntity(CreateUserProfileDTO dto);
 
-  ShortUserProfileDTO userToSigned(UserEntity userEntity);
+  ShortUserProfileDTO userToShortProfile(UserEntity userEntity);
 }

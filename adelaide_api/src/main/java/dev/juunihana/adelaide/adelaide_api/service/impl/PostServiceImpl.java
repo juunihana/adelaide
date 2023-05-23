@@ -93,6 +93,12 @@ public class PostServiceImpl implements PostService {
           .user(user)
           .post(post)
           .build());
+    } else {
+      VoteEntity vote = voteRepository.findByUser(user)
+          .orElseThrow(() -> new RuntimeException());
+      vote.setUpvote(upVote);
+      vote.setTimeVoted(LocalDateTime.now());
+      voteRepository.save(vote);
     }
   }
 

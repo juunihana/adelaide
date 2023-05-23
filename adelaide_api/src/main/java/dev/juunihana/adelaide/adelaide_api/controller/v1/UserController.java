@@ -168,9 +168,9 @@ public class UserController implements UserApi {
   }
 
   @GetMapping("/friends/{username}")
-  public List<UserProfileDTO> getUserFriends(
+  public List<ShortUserProfileDTO> getUserFriends(
       @PathVariable String username) {
-    return null;
+    return userService.findUserFriends(username);
   }
 
   @GetMapping("/friends/{username}/in")
@@ -187,8 +187,15 @@ public class UserController implements UserApi {
     return Collections.emptyList();
   }
 
-  @PostMapping("/friends")
-  public void addFriend() {
+  @PostMapping("/friends/{friendUsername}")
+  public void acceptFriend(
+      @PathVariable String friendUsername) {
+    userService.acceptFriend(friendUsername);
+  }
 
+  @DeleteMapping("/friends/{friendUsername}")
+  public void declineFriend(
+      @PathVariable String friendUsername) {
+    userService.declineFriend(friendUsername);
   }
 }

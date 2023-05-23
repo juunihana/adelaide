@@ -72,14 +72,14 @@ h3 {
 
 :root {
   /* BACKGROUND COLOR */
-  --background-root: #eee;
-  --background-block: #111;
+  --background-root: #111;
+  --background-block: #222;
   --background-hover: #ccc;
   --background-overlay: rgba(17, 17, 17, 0.7);
 
   /* TEXT */
-  /*--font-family: Ysabeau, Arial, sans-serif;*/
-  --font-family: Arial, sans-serif;
+  --font-family: Ysabeau, Arial, sans-serif;
+  /*--font-family: Arial, sans-serif;*/
   --color: #eee;
   --color-hover: #ff0000;
   /*--text-shadow: 0 0 2px var(--color-hover);*/
@@ -91,7 +91,8 @@ h3 {
 
   /* FORMS */
   --button-color: #111;
-  --button-background: #eee;
+  --button-background: #999;
+  /*--button-background: #333; disabled buttons*/
   --input-color: #111;
   --input-background: #eee;
 }

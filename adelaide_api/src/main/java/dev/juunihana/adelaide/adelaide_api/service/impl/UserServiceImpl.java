@@ -20,6 +20,7 @@ import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public ShortUserProfileDTO getSignedUser() {
-    return userMapper.userToSigned(
+    return userMapper.userToShortProfile(
         userRepository.findByUsername(getCurrentUserUsername())
             .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername())));
   }
@@ -203,6 +204,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<ShortUserProfileDTO> findUserFriends(String username) {
+    UserEntity user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException(username));
+
+    return user.getFriends().stream()
+        .map(userMapper::userToShortProfile)
+        .toList();
+  }
+
+  @Override
   @Transactional
   public void changePassword(ChangePasswordDTO changePasswordDTO) {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
@@ -226,6 +237,38 @@ public class UserServiceImpl implements UserService {
     } else {
       throw new PasswordsDoesNotMatchException();
     }
+  }
+
+  @Override
+  @Transactional
+  public void acceptFriend(String friendUsername) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    UserEntity userFriend = userRepository.findByUsername(friendUsername)
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    user.getFriends().add(userFriend);
+    userFriend.getFriends().add(user);
+
+    userRepository.save(user);
+    userRepository.save(userFriend);
+  }
+
+  @Override
+  @Transactional
+  public void declineFriend(String friendUsername) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    UserEntity userFriend = userRepository.findByUsername(friendUsername)
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    user.getFriends().remove(userFriend);
+    userFriend.getFriends().remove(user);
+
+    userRepository.save(user);
+    userRepository.save(userFriend);
   }
 
   private String getCurrentUserUsername() {

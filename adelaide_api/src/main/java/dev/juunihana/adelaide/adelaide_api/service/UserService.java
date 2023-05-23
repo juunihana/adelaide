@@ -7,6 +7,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -36,4 +37,9 @@ public interface UserService extends UserDetailsService {
   void changeUsername(ChangeUsernameDTO changeUsernameDTO);
 
   void changePassword(ChangePasswordDTO changePasswordDTO);
+
+  List<ShortUserProfileDTO> findUserFriends(String username);
+  void acceptFriend(String friendUsername);
+
+  void declineFriend(String friendUsername);
 }

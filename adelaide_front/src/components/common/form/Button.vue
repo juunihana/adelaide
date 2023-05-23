@@ -24,8 +24,9 @@ button {
   padding: 0.25rem 0.75rem 0.25rem 0.75rem;
 }
 button:hover {
-  color: var(--color-hover);
-  text-shadow: var(--text-shadow);
+  //color: var(--color-hover);
+  //text-shadow: var(--text-shadow);
   cursor: pointer;
+  background: var(--background-hover)
 }
 </style>

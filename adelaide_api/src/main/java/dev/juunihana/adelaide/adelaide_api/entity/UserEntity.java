@@ -63,6 +63,12 @@ public class UserEntity implements UserDetails {
   private Boolean deleted;
 
   @ManyToMany
+  @JoinTable(name = "users_friends",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "friend_id"))
+  private List<UserEntity> friends;
+
+  @ManyToMany
   @JoinTable(name = "users_groups",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "group_id"))
