@@ -39,7 +39,16 @@ public interface UserService extends UserDetailsService {
   void changePassword(ChangePasswordDTO changePasswordDTO);
 
   List<ShortUserProfileDTO> findUserFriends(String username);
+
+  List<ShortUserProfileDTO> findIncomingFriendsRequests();
+
+  List<ShortUserProfileDTO> findOutgoingFriendsRequests();
+
+  void sendFriendRequest(String friendUsername);
+
   void acceptFriend(String friendUsername);
 
   void declineFriend(String friendUsername);
+
+  void removeFriend(String friendUsername);
 }

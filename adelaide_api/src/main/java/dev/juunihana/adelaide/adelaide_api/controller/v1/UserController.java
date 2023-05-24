@@ -42,40 +42,23 @@ public class UserController implements UserApi {
   private final AuthenticationManager authManager;
 
   /**
-   * todo (this week)
-   * DELETE /profile - delete user profile
-   * <p>
    * GET /profile/{username}/avatar
    * POST /profile/avatar
    * PUT /profile/avatar
    * DELETE /profile/avatar
-   * <p>
-   * GET /friends/{username} - get user's friends
-   * GET /friends/{username}/in - get incoming friends requests
-   * GET /friends/{username}/out - get outgoing friends requests
-   * POST /friends - send outgoing request
-   * PUT /friends/{request_id} - accept or decline incoming request
-   * DELETE /friends - remove from friends list
-   * <p>
+   *
    * GET /profile/{username}/photos
    * POST /profile/photos
    * DELETE /profile/photos
-   * <p>
-   * also groups controller and five tables:
-   * users_avatars
-   * groups
-   * users_in_groups
-   * users_friends
-   * users_friends_requests
-   * <p>
+   *
    * complete UI for these features
-   * <p>
+   *
    * todo (next week)
    * messages api
    * post feed
    * posts search
    * user page posts filter
-   * <p>
+   *
    * todo (long run)
    * email verification
    * user privacy settings
@@ -114,7 +97,7 @@ public class UserController implements UserApi {
   @Override
   @PutMapping("/auth/email")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void changeUsername(
+  public void changeEmail(
       @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
     userService.changeEmail(changeEmailDTO);
   }
@@ -173,29 +156,43 @@ public class UserController implements UserApi {
     return userService.findUserFriends(username);
   }
 
-  @GetMapping("/friends/{username}/in")
+  @GetMapping("/friends/in")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public List<UserProfileDTO> getUserFriendsIncoming(
-      @PathVariable String username) {
-    return Collections.emptyList();
+  public List<ShortUserProfileDTO> getUserFriendsIncoming() {
+    return userService.findIncomingFriendsRequests();
   }
 
-  @GetMapping("/friends/{username}/out")
+  @GetMapping("/friends/out")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public List<UserProfileDTO> getUserFriendsOutgoing(
-      @PathVariable String username) {
-    return Collections.emptyList();
+  public List<ShortUserProfileDTO> getUserFriendsOutgoing() {
+    return userService.findOutgoingFriendsRequests();
   }
 
   @PostMapping("/friends/{friendUsername}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void sendFriendsRequest(
+      @PathVariable String friendUsername) {
+    userService.sendFriendRequest(friendUsername);
+  }
+
+  @PutMapping("/friends/{friendUsername}/accept")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public void acceptFriend(
       @PathVariable String friendUsername) {
     userService.acceptFriend(friendUsername);
   }
 
-  @DeleteMapping("/friends/{friendUsername}")
+  @PutMapping("/friends/{friendUsername}/decline")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public void declineFriend(
       @PathVariable String friendUsername) {
     userService.declineFriend(friendUsername);
+  }
+
+  @DeleteMapping("/friends/{friendUsername}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  public void removeFriend(
+      @PathVariable String friendUsername) {
+    userService.removeFriend(friendUsername);
   }
 }

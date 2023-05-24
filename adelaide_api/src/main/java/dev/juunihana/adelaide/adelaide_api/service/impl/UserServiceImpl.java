@@ -204,16 +204,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<ShortUserProfileDTO> findUserFriends(String username) {
-    UserEntity user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new UserNotFoundException(username));
-
-    return user.getFriends().stream()
-        .map(userMapper::userToShortProfile)
-        .toList();
-  }
-
-  @Override
   @Transactional
   public void changePassword(ChangePasswordDTO changePasswordDTO) {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
@@ -240,6 +230,52 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<ShortUserProfileDTO> findUserFriends(String username) {
+    UserEntity user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException(username));
+
+    return user.getFriends().stream()
+        .map(userMapper::userToShortProfile)
+        .toList();
+  }
+
+  @Override
+  public List<ShortUserProfileDTO> findIncomingFriendsRequests() {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    return user.getIncomingFriendsRequests().stream()
+        .map(userMapper::userToShortProfile)
+        .toList();
+  }
+
+  @Override
+  public List<ShortUserProfileDTO> findOutgoingFriendsRequests() {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    return user.getOutgoingFriendsRequests().stream()
+        .map(userMapper::userToShortProfile)
+        .toList();
+  }
+
+  @Override
+  public void sendFriendRequest(String friendUsername) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    UserEntity userFriend = userRepository.findByUsername(friendUsername)
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (!user.getOutgoingFriendsRequests().contains(userFriend)) {
+      userFriend.getIncomingFriendsRequests().add(user);
+
+      userRepository.save(user);
+      userRepository.save(userFriend);
+    }
+  }
+
+  @Override
   @Transactional
   public void acceptFriend(String friendUsername) {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
@@ -248,11 +284,15 @@ public class UserServiceImpl implements UserService {
     UserEntity userFriend = userRepository.findByUsername(friendUsername)
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
-    user.getFriends().add(userFriend);
-    userFriend.getFriends().add(user);
+    if (user.getIncomingFriendsRequests().contains(userFriend)) {
+      user.getFriends().add(userFriend);
+      userFriend.getFriends().add(user);
+      user.getIncomingFriendsRequests().remove(userFriend);
+      userFriend.getOutgoingFriendsRequests().remove(user);
 
-    userRepository.save(user);
-    userRepository.save(userFriend);
+      userRepository.save(user);
+      userRepository.save(userFriend);
+    }
   }
 
   @Override
@@ -264,11 +304,29 @@ public class UserServiceImpl implements UserService {
     UserEntity userFriend = userRepository.findByUsername(friendUsername)
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
-    user.getFriends().remove(userFriend);
-    userFriend.getFriends().remove(user);
+    if (user.getIncomingFriendsRequests().contains(userFriend)) {
+      user.getIncomingFriendsRequests().remove(userFriend);
 
-    userRepository.save(user);
-    userRepository.save(userFriend);
+      userRepository.save(user);
+      userRepository.save(userFriend);
+    }
+  }
+
+  @Override
+  public void removeFriend(String friendUsername) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    UserEntity userFriend = userRepository.findByUsername(friendUsername)
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (user.getFriends().contains(userFriend)) {
+      user.getFriends().remove(userFriend);
+      userFriend.getFriends().remove(user);
+
+      userRepository.save(user);
+      userRepository.save(userFriend);
+    }
   }
 
   private String getCurrentUserUsername() {

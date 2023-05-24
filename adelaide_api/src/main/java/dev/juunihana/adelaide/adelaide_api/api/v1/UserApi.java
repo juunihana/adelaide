@@ -24,7 +24,7 @@ public interface UserApi {
 
   void signOut();
 
-  void changeUsername(ChangeEmailDTO changeEmailDTO);
+  void changeEmail(ChangeEmailDTO changeEmailDTO);
 
   void changeUsername(ChangeUsernameDTO changeUsernameDTO);
 

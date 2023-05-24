@@ -88,6 +88,18 @@ create table users_images
     foreign key (user_id) references users (id)
 );
 
+create table users_friends_requests
+(
+    user_id       uuid      not null,
+    friend_id     uuid      not null,
+    accepted      boolean,
+    time_created  timestamp not null,
+    time_resolved timestamp,
+
+    foreign key (user_id) references users (id),
+    foreign key (friend_id) references users (id)
+);
+
 create table users_friends
 (
     user_id   uuid not null,
