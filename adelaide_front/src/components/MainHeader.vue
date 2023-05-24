@@ -83,7 +83,7 @@ generalStorage.$subscribe((mutation, state) => {
 })
 
 function showSignIn() {
-  generalStorage.signIn("username", "password")
+  generalStorage.showSignInOverlay = true
 }
 
 function signOut() {
@@ -91,6 +91,7 @@ function signOut() {
 }
 
 function showSignUp() {
+  generalStorage.showSignUpOverlay = true
 }
 </script>
 

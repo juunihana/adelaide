@@ -1,7 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
 import dev.juunihana.adelaide.adelaide_api.api.v1.PostApi;
-import dev.juunihana.adelaide.adelaide_api.dto.request.post.AddVoteDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;

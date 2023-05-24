@@ -19,19 +19,14 @@ import dev.juunihana.adelaide.adelaide_api.repository.PasswordHistoryRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -108,7 +103,7 @@ public class UserServiceImpl implements UserService {
     HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(map, headers);
 
     String result = new RestTemplate().postForObject(
-        "http://localhost:8081/images/new",entity, String.class);
+        "http://localhost:8081/images/new", entity, String.class);
 
     user.setAvatar("http://localhost:8081/images/" + result);
     userRepository.save(user);

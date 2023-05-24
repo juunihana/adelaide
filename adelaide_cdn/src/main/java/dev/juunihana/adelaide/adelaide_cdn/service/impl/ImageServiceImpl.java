@@ -4,7 +4,6 @@ import dev.juunihana.adelaide.adelaide_cdn.entity.ImageEntity;
 import dev.juunihana.adelaide.adelaide_cdn.repository.ImageRepository;
 import dev.juunihana.adelaide.adelaide_cdn.service.ImageService;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

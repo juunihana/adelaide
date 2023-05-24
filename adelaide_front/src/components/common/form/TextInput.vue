@@ -2,14 +2,9 @@
   <input type="text" :placeholder="placeholder">
 </template>
 
-<script>
-import {defineComponent} from 'vue'
-
-export default defineComponent({
-  name: "TextInput",
-  props: {
-    placeholder: null
-  }
+<script setup>
+defineProps({
+  placeholder: null
 })
 </script>
 
@@ -19,7 +14,7 @@ input {
   border: none;
   border-radius: var(--border-radius);
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-family: var(--font-family);
   /*vertical-align: center;*/
   cursor: text;

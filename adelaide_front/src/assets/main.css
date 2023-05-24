@@ -4,6 +4,7 @@
   box-sizing: border-box;
   cursor: default;
   line-height: 1.3rem;
+  font-size: 1.1rem;
 }
 
 body {
@@ -94,5 +95,5 @@ h3 {
   --button-background: #999;
   /*--button-background: #333; disabled buttons*/
   --input-color: #111;
-  --input-background: #eee;
+  --input-background: #999;
 }

@@ -13,7 +13,6 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,23 +43,18 @@ public class UserController implements UserApi {
   private final AuthenticationManager authManager;
 
   /**
-   * GET /profile/{username}/avatar
-   * POST /profile/avatar
-   * PUT /profile/avatar
-   * DELETE /profile/avatar
-   *
-   * GET /profile/{username}/photos
-   * POST /profile/photos
-   * DELETE /profile/photos
-   *
+   * GET /profile/{username}/avatar POST /profile/avatar PUT /profile/avatar DELETE /profile/avatar
+   * <p>
+   * GET /profile/{username}/photos POST /profile/photos DELETE /profile/photos
+   * <p>
    * complete UI for these features
-   *
+   * <p>
    * todo (next week)
    * messages api
    * post feed
    * posts search
    * user page posts filter
-   *
+   * <p>
    * todo (long run)
    * email verification
    * user privacy settings

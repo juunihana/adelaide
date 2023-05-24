@@ -14,4 +14,8 @@
   display: flex;
   flex-direction: column;
 }
+
+.main-container div {
+  padding: 1rem;
+}
 </style>
