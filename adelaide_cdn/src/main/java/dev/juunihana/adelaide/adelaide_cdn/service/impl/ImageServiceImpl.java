@@ -5,6 +5,8 @@ import dev.juunihana.adelaide.adelaide_cdn.repository.ImageRepository;
 import dev.juunihana.adelaide.adelaide_cdn.service.ImageService;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,12 +25,23 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public Map<String, String> save(MultipartFile file) throws IOException {
+  public String save(MultipartFile file) throws IOException {
+    String originalFileName = file.getOriginalFilename();
+
+    if (Objects.isNull(originalFileName)) {
+      throw new RuntimeException();
+    }
+
+    UUID imageId = UUID.randomUUID();
+    String fileName = imageId + "."
+        + originalFileName.split("\\.")[originalFileName.split("\\.").length - 1];
+
     ImageEntity image = imageRepository.save(ImageEntity.builder()
-        .fileName(file.getName())
+        .id(imageId)
+        .fileName(fileName)
         .fileContent(file.getBytes())
         .build());
 
-    return Map.of("id", image.getId().toString(), "name", image.getFileName());
+    return image.getFileName();
   }
 }

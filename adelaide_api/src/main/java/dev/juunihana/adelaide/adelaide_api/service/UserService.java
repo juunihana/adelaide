@@ -10,6 +10,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService extends UserDetailsService {
 
@@ -25,6 +26,8 @@ public interface UserService extends UserDetailsService {
   Boolean userExistsByEmail(String email);
 
   Boolean userExistsByPhone(String phone);
+
+  void uploadAvatar(MultipartFile avatar);
 
   void createUser(CreateUserProfileDTO createUserProfileDTO);
 

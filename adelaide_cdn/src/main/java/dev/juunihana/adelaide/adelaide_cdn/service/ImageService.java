@@ -8,5 +8,5 @@ public interface ImageService {
 
   byte[] getImage(String fileName);
 
-  Map<String, String> save(MultipartFile file) throws IOException;
+  String save(MultipartFile file) throws IOException;
 }

@@ -2,9 +2,9 @@ package dev.juunihana.adelaide.adelaide_api.service.impl;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PasswordHistoryEntity;
@@ -21,15 +21,24 @@ import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -81,6 +90,14 @@ public class UserServiceImpl implements UserService {
   @Override
   public Boolean userExistsByPhone(String phone) {
     return userRepository.findByPhone(phone).isPresent();
+  }
+
+  public void uploadAvatar(MultipartFile avatar) {
+    UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+//    user.setAvatar(result);
+    userRepository.save(user);
   }
 
   @Override

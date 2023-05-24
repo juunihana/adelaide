@@ -50,6 +50,8 @@ public class UserEntity implements UserDetails {
 
   private String maidenSurname;
 
+  private String avatar;
+
   private String bio;
 
   private String status;

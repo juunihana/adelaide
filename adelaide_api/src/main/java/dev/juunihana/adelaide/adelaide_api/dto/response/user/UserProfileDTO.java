@@ -32,5 +32,5 @@ public class UserProfileDTO {
 
   private String place;
 
-  private String avatarLink;
+  private String avatar;
 }
