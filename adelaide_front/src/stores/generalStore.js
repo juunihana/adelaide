@@ -32,7 +32,8 @@ export const generalStore = defineStore('generalStore', {
               this.signedIn = {
                 username: data.data.username,
                 firstName: data.data.firstName,
-                lastName: data.data.lastName
+                lastName: data.data.lastName,
+                avatar: data.data.avatar
               }
             })
       }

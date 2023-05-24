@@ -7,6 +7,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

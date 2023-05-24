@@ -3,9 +3,9 @@
     <div v-if="state.loading">Loading</div>
     <div v-if="state.error">Error</div>
     <div v-if="state.user" class="user-profile-info-block general-block">
-<!--      <div class="user-profile-avatar">-->
-<!--        <img :src="state.user.avatarLink" alt="user avatar"/>-->
-<!--      </div>-->
+      <div class="user-profile-avatar">
+        <img :src="state.user.avatar" alt="user avatar"/>
+      </div>
       <div class="user-profile-name">
         <h1>{{ state.user.firstName }} {{ state.user.lastName }}</h1>
       </div>

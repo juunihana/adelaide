@@ -3,7 +3,7 @@
     <header class="block-header">
       <router-link class="post-author" :to="'/'+post.author.username">
         <div class="post-avatar">
-          <img src="@/assets/photo_48.png" alt="avatar"/>
+          <img :src="post.author.avatar" alt="avatar"/>
         </div>
         <div class="post-author-name">
           {{ post.author.firstName + " " + post.author.lastName }}

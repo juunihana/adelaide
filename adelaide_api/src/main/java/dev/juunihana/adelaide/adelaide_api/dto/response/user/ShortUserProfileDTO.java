@@ -20,5 +20,5 @@ public class ShortUserProfileDTO {
 
   private String lastName;
 
-  private String avatarLink;
+  private String avatar;
 }

@@ -19,6 +19,9 @@ import dev.juunihana.adelaide.adelaide_api.repository.PasswordHistoryRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +99,18 @@ public class UserServiceImpl implements UserService {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
-//    user.setAvatar(result);
+    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+    map.add("image", avatar.getResource());
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(map, headers);
+
+    String result = new RestTemplate().postForObject(
+        "http://localhost:8081/images/new",entity, String.class);
+
+    user.setAvatar("http://localhost:8081/images/" + result);
     userRepository.save(user);
   }
 

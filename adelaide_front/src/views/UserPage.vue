@@ -3,19 +3,20 @@
     <div class="user-profile-container">
       <div class="user-profile-side-container general-block">
         <div class="user-profile-avatar">
-          <img src="@/assets/avatar_200.png" alt="avatar"/>
+          <img :src="state.user.avatar" alt="avatar"/>
         </div>
         <div class="user-profile-name">
-          Name Surname
+          {{ state.user.firstName }}
+          {{ state.user.lastName }}
         </div>
         <div class="user-profile-age">
-          25 years
+          {{ state.user.age }}
         </div>
         <div class="user-profile-place">
-          Moscow
+          {{ state.user.place }}
         </div>
         <div class="user-profile-bio">
-          Software Engineer
+          {{ state.user.bio }}
         </div>
       </div>
       <div class="user-profile-side-container general-block">
@@ -96,7 +97,34 @@ import SearchBar from "../components/main-header/SearchBar.vue";
 import MenuLabel from "../components/common/menu-stripe/MenuLabel.vue";
 import UserPost from "../components/user-posts/UserPost.vue";
 import Button from "../components/common/form/Button.vue";
-import {ref} from "vue";
+import {reactive, ref, watch} from "vue";
+import {useRoute} from "vue-router";
+import UserService from "../service/UserService.js";
+
+const route = useRoute()
+
+const state = reactive({
+  loading: false,
+  error: false,
+  errorMessage: [],
+  user: {}
+})
+
+watch(() => route.params,
+    () => {
+      state.loading = true
+      UserService.getUserProfile(route.params.username)
+      .then((data) => {
+        state.loading = false
+        state.user = data.data
+      })
+      .catch((error) => {
+        state.loading = false;
+        state.error = true;
+        state.errorMessage = error.data
+      })
+    },
+    {immediate: true})
 
 const posts = ref([
   {
@@ -208,6 +236,11 @@ const posts = ref([
 
 .user-profile-avatar {
   text-align: center;
+}
+
+.user-profile-avatar img {
+  max-width: 200px;
+  max-height: 200px;
 }
 
 .user-profile-name {

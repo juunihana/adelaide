@@ -51,8 +51,13 @@
         Sign out
       </Button>
       <Button>
-        {{ localState.signedInUser.firstName }}
-        {{ localState.signedInUser.lastName }}
+        <div class="user-avatar">
+          <img :src="localState.signedInUser.avatar" alt="avatar"/>
+        </div>
+        <div class="user-name">
+          {{ localState.signedInUser.firstName }}
+          {{ localState.signedInUser.lastName }}
+        </div>
       </Button>
     </MenuStripe>
   </header>
@@ -116,5 +121,10 @@ function showSignUp() {
 
 .auth-panel {
   margin-left: auto;
+}
+
+.user-avatar img {
+  max-width: 24px;
+  max-height: 24px;
 }
 </style>
