@@ -244,6 +244,10 @@ public class UserServiceImpl implements UserService {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
+    if (!user.getUsername().equals(getCurrentUserUsername())) {
+      throw new AccessDeniedException("You can't view this user's incoming friends requests");
+    }
+
     return user.getIncomingFriendsRequests().stream()
         .map(userMapper::userToShortProfile)
         .toList();
@@ -253,6 +257,10 @@ public class UserServiceImpl implements UserService {
   public List<ShortUserProfileDTO> findOutgoingFriendsRequests() {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (!user.getUsername().equals(getCurrentUserUsername())) {
+      throw new AccessDeniedException("You can't view this user's outgoing friends requests");
+    }
 
     return user.getOutgoingFriendsRequests().stream()
         .map(userMapper::userToShortProfile)
@@ -266,6 +274,10 @@ public class UserServiceImpl implements UserService {
 
     UserEntity userFriend = userRepository.findByUsername(friendUsername)
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+
+    if (user.getUsername().equals(friendUsername)) {
+      throw new AccessDeniedException("You can't send friend requests to yourself");
+    }
 
     if (!user.getOutgoingFriendsRequests().contains(userFriend)) {
       userFriend.getIncomingFriendsRequests().add(user);
