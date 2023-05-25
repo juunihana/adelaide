@@ -7,17 +7,22 @@
         </div>
         <div class="user-profile-name">
           {{ localState.user.firstName }}
+          {{ localState.user.middleName }}
           {{ localState.user.lastName }}
+          {{ localState.user.maidenSurname ? '(' + localState.user.maidenSurname + ')' : ''}}
         </div>
         <div class="user-profile-age">
-          {{ localState.user.age }}
+          {{ localState.user.age }} years old
         </div>
         <div class="user-profile-place">
-          {{ localState.user.place }}
+          From {{ localState.user.place }}
         </div>
         <div class="user-profile-bio">
           {{ localState.user.bio }}
         </div>
+        <Button v-if="!localState.currentUser" @click="sendFriendRequest">
+          Send friends request
+        </Button>
       </div>
       <div class="user-profile-side-container general-block" v-if="localState.user.friends">
         <router-link to="/">
@@ -143,6 +148,9 @@ const posts = ref([
   }
 ])
 
+function sendFriendRequest() {
+  UserService.sendFriendRequest(route.params.username)
+}
 </script>
 
 <style scoped>

@@ -13,7 +13,8 @@ class UserService {
   }
 
   signIn(username, password) {
-    return this.restService.post("/users/auth/sign-in", {username: username, password: password})
+    return this.restService.post("/users/auth/sign-in",
+        {username: username, password: password})
   }
 
   getCurrentLoggedUser() {
@@ -21,11 +22,33 @@ class UserService {
   }
 
   getUserProfile(username) {
-    return this.restService.get("/users/profile/" + username, this.setRequestConfig())
+    return this.restService.get("/users/profile/" + username,
+        this.setRequestConfig())
   }
 
   getUserPosts(username) {
-    return this.restService.get("/posts/profile/" + username, this.setRequestConfig())
+    return this.restService.get("/posts/profile/" + username,
+        this.setRequestConfig())
+  }
+
+  sendFriendRequest(username) {
+    return this.restService.post("/users/friends/" + username,
+        this.setRequestConfig())
+  }
+
+  acceptFriendRequest(username) {
+    return this.restService.put("/users/friends/" + username + "/accept",
+        this.setRequestConfig())
+  }
+
+  declineFriendRequest(username) {
+    return this.restService.put("/users/friends/" + username + "/decline",
+        this.setRequestConfig())
+  }
+
+  removeFriend(username) {
+    return this.restService.delete("/users/friends/" + username,
+        this.setRequestConfig())
   }
 
   addNewPost(post) {
@@ -35,11 +58,13 @@ class UserService {
   setRequestConfig() {
     let config = {};
     const authCookie = VueCookies.get("auth");
+    console.log(authCookie)
     if (authCookie && authCookie !== "") {
       config.headers = {
         Authorization: authCookie
       }
     }
+    console.log(config)
     return config;
   }
 }

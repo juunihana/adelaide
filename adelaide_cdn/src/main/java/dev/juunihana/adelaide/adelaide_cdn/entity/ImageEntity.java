@@ -31,6 +31,5 @@ public class ImageEntity {
 
   private String fileName;
 
-  @Lob
   private byte[] fileContent;
 }

@@ -130,5 +130,6 @@ const props = defineProps({
 }
 
 .post-content {
+  white-space: pre;
 }
 </style>
