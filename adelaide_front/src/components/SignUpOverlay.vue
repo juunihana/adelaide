@@ -3,43 +3,43 @@
     <div class="overlay-container" @click.stop>
       <header>Sign up</header>
       <label>Email</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Email" v-model="localState.user.email"/>
 
       <label>Username</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Username" v-model="localState.user.username"/>
 
       <label>Password</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Password" v-model="localState.user.password"/>
 
       <label>Repeat password</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Repeat" v-model="localState.user.repeatPassword"/>
 
       <label>Phone</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Phone" v-model="localState.user.phone"/>
 
       <label>First name</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="First name" v-model="localState.user.firstName"/>
 
       <label>Middle name</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Middle name" v-model="localState.user.middleName"/>
 
       <label>Last name</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Last name" v-model="localState.user.lastName"/>
 
       <label>Maiden surname</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Maiden surname" v-model="localState.user.maidenSurname"/>
 
       <label>Place</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Place" v-model="localState.user.place"/>
 
       <label>Bio</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Bio" v-model="localState.user.bio"/>
 
       <label>Date of birth</label>
-      <TextInput></TextInput>
+      <TextInput placeholder="Date of birth (yyyy-mm-dd)" v-model="localState.user.dateOfBirth"/>
 
       <label></label>
-      <Button>Sign up</Button>
+      <Button @click="signUp">Sign up</Button>
     </div>
   </div>
 </template>
@@ -48,8 +48,30 @@
 import TextInput from "@/components/common/form/TextInput.vue";
 import Button from "@/components/common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
+import {reactive} from "vue";
 
 const generalStorage = generalStore()
+
+const localState = reactive({
+  user: {
+    email: null,
+    username: null,
+    password: null,
+    passwordRepeat: null,
+    phone: null,
+    firstName: null,
+    middleName: null,
+    lastName: null,
+    maidenSurname: null,
+    place: null,
+    bio: null,
+    dateOfBirth: null
+  }
+})
+
+function signUp() {
+  generalStorage.signUp(localState.user)
+}
 
 function close() {
   generalStorage.showSignUpOverlay = false

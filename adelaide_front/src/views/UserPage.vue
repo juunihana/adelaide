@@ -3,28 +3,28 @@
     <div class="user-profile-container">
       <div class="user-profile-side-container general-block">
         <div class="user-profile-avatar">
-          <img :src="state.user.avatar" alt="avatar"/>
+          <img :src="localState.user.avatar" alt="avatar"/>
         </div>
         <div class="user-profile-name">
-          {{ state.user.firstName }}
-          {{ state.user.lastName }}
+          {{ localState.user.firstName }}
+          {{ localState.user.lastName }}
         </div>
         <div class="user-profile-age">
-          {{ state.user.age }}
+          {{ localState.user.age }}
         </div>
         <div class="user-profile-place">
-          {{ state.user.place }}
+          {{ localState.user.place }}
         </div>
         <div class="user-profile-bio">
-          {{ state.user.bio }}
+          {{ localState.user.bio }}
         </div>
       </div>
-      <div class="user-profile-side-container general-block" v-if="state.user.friends">
+      <div class="user-profile-side-container general-block" v-if="localState.user.friends">
         <router-link to="/">
           <div class="side-block-header">Friends</div>
         </router-link>
         <router-link class="side-block-element" :to="'/' + friend.username"
-                     v-for="friend in state.user.friends">
+                     v-for="friend in localState.user.friends">
           <div class="side-block-image"><img :src="friend.avatar" alt="avatar"/></div>
           <div class="side-block-text">{{ friend.firstName }} {{ friend.lastName }}</div>
         </router-link>
@@ -72,11 +72,11 @@
         <MenuLabel>Sort by</MenuLabel>
         <Button>Recent</Button>
         <Button>Top rated</Button>
-        <Button class="new-post-button" v-if="signedInUser">New post</Button>
+        <Button class="new-post-button" v-if="localState.currentUser">New post</Button>
       </MenuStripe>
       <div class="loading-block" v-if="loading">Loading</div>
       <div class="error-block" v-else-if="error">Error</div>
-      <UserPost v-else v-for="post in state.posts" :post="post"/>
+      <UserPost v-else v-for="post in localState.posts" :post="post"/>
       <footer>
         You have reached the end of the page. Congrats!
       </footer>
@@ -93,34 +93,40 @@ import Button from "../components/common/form/Button.vue";
 import {reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import UserService from "../service/UserService.js";
+import {generalStore} from "../stores/generalStore.js";
 
 const route = useRoute()
+const generalStorage = generalStore()
 
-const state = reactive({
+
+const localState = reactive({
   loading: false,
   error: false,
   errorMessage: [],
   user: {},
-  posts: []
+  posts: [],
+  currentUser: false
 })
 
 watch(() => route.params,
     () => {
-      state.loading = true
+      localState.loading = true
       UserService.getUserProfile(route.params.username)
       .then((data) => {
-        state.loading = false
-        state.user = data.data
+        localState.loading = false
+        localState.user = data.data
       })
       .catch((error) => {
-        state.loading = false;
-        state.error = true;
-        state.errorMessage = error.data
+        localState.loading = false;
+        localState.error = true;
+        localState.errorMessage = error.data
       })
 
       UserService.getUserPosts(route.params.username)
       .then((data) => {
-        state.posts = data.data
+
+        localState.currentUser = generalStorage.signedIn.username === route.params.username;
+        localState.posts = data.data
       })
     },
     {immediate: true})
@@ -216,7 +222,7 @@ const posts = ref([
 
 .side-block-image img {
   object-fit: cover;
-  max-height: 100%;
+  max-height: 40px;
   cursor: pointer;
 }
 

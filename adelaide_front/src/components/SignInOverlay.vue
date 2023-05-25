@@ -3,10 +3,10 @@
     <div class="overlay-container" @click.stop>
       <header>Sign in</header>
       <label>Username</label>
-      <TextInput placeholder="Username" v-model="username"/>
+      <TextInput placeholder="Username" v-model="localState.username"/>
 
       <label>Password</label>
-      <TextInput placeholder="Password" v-model="password"/>
+      <TextInput placeholder="Password" :isPassword="true" v-model="localState.password"/>
 
       <label></label>
       <Button @click.prevent="signIn">
@@ -20,8 +20,18 @@
 import TextInput from "./common/form/TextInput.vue";
 import Button from "./common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
+import {reactive} from "vue";
 
 const generalStorage = generalStore()
+
+const localState = reactive({
+  username: null,
+  password: null
+})
+
+function signIn() {
+  generalStorage.signIn(localState.username, localState.password)
+}
 
 function close() {
   generalStorage.showSignInOverlay = false;

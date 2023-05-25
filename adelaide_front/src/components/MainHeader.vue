@@ -50,7 +50,7 @@
               'user-menu-element': !localState.menuColumnShown}">
         Sign out
       </Button>
-      <Button>
+      <Button class="user-auth">
         <div class="user-avatar">
           <img :src="localState.signedInUser.avatar" alt="avatar"/>
         </div>
@@ -124,8 +124,19 @@ function showSignUp() {
   margin-left: auto;
 }
 
+.user-auth {
+  display: flex;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.user-auth > * {
+  cursor: pointer;
+}
+
 .user-avatar img {
   max-width: 24px;
   max-height: 24px;
+  cursor: pointer;
 }
 </style>

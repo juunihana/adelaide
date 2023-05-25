@@ -14,7 +14,10 @@ import org.mapstruct.Named;
 
 @Mapper(
     componentModel = "spring",
-    injectionStrategy = InjectionStrategy.CONSTRUCTOR
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    uses = {
+        UserMapper.class
+    }
 )
 public interface PostMapper {
 

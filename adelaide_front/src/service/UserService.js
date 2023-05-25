@@ -8,6 +8,10 @@ class UserService {
     })
   }
 
+  signUp(user) {
+    return this.restService.post("/users/new", user)
+  }
+
   signIn(username, password) {
     return this.restService.post("/users/auth/sign-in", {username: username, password: password})
   }

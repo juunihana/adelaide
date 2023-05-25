@@ -11,9 +11,19 @@ export const generalStore = defineStore('generalStore', {
     signedIn: null
   }),
   actions: {
+    signUp(user) {
+      UserService.signUp(user)
+      .then(data => {
+        this.showSignUpOverlay = false
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
     signIn(username, password) {
       UserService.signIn(username, password)
       .then(data => {
+        this.showSignInOverlay = false
         this.token = "Bearer " + data.data.token
         VueCookies.set('auth', this.token, '1d')
         this.checkSignIn()
@@ -28,14 +38,14 @@ export const generalStore = defineStore('generalStore', {
     checkSignIn() {
       if (VueCookies.get('auth')) {
         UserService.getCurrentLoggedUser()
-            .then((data) => {
-              this.signedIn = {
-                username: data.data.username,
-                firstName: data.data.firstName,
-                lastName: data.data.lastName,
-                avatar: data.data.avatar
-              }
-            })
+        .then((data) => {
+          this.signedIn = {
+            username: data.data.username,
+            firstName: data.data.firstName,
+            lastName: data.data.lastName,
+            avatar: data.data.avatar
+          }
+        })
       }
     },
   }

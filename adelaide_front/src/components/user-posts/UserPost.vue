@@ -81,11 +81,11 @@ const props = defineProps({
 }
 
 .post-avatar {
-  max-height: 48px;
 }
 
 .post-avatar img {
   border-radius: var(--border-radius);
+  max-height: 48px;
   cursor: pointer;
 }
 
