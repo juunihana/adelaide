@@ -2,7 +2,7 @@ package dev.juunihana.adelaide.adelaide_api.dto.response.post;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class PostDTO {
 
   private UUID id;
 
-  private ShortUserProfileDTO author;
+  private UserCompactDTO author;
 
   private String title;
 

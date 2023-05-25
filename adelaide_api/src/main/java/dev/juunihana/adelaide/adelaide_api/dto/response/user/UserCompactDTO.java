@@ -12,25 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class UserProfileDTO {
+public class UserCompactDTO {
+
+  private String username;
 
   private String firstName;
 
-  private String middleName;
-
   private String lastName;
-
-  private String maidenSurname;
-
-  private Integer age;
-
-  private String status;
-
-  private String bio;
-
-  private String phone;
-
-  private String place;
 
   private String avatar;
 }

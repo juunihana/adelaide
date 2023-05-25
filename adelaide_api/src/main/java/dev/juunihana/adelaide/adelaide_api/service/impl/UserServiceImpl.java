@@ -1,12 +1,13 @@
 package dev.juunihana.adelaide.adelaide_api.service.impl;
 
+import dev.juunihana.adelaide.adelaide_api.configuration.CdnProperties;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PasswordHistoryEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,13 +44,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+  private final CdnProperties cdnProperties;
+
   private final UserRepository userRepository;
   private final PasswordHistoryRepository passwordHistoryRepository;
   private final UserMapper userMapper;
   private final PasswordEncoder passwordEncoder;
 
   @Override
-  public ShortUserProfileDTO getSignedUser() {
+  public UserCompactDTO getSignedUser() {
     return userMapper.userToShortProfile(
         userRepository.findByUsername(getCurrentUserUsername())
             .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername())));
@@ -70,9 +74,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserProfileDTO findUserProfile(String username) {
-    return userMapper.userEntityToProfile(userRepository.findByUsername(username)
-        .orElseThrow(() -> new UserNotFoundException("username " + username)));
+  public UserFullDTO findUserProfile(String username) {
+    UserEntity user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException("username " + username));
+
+    UserFullDTO userFullDTO = userMapper.userEntityToProfile(user);
+
+    userFullDTO.setFriends(user.getFriends().stream()
+        .map(userMapper::userToShortProfile)
+        .collect(Collectors.toList()));
+
+    return userFullDTO;
   }
 
   @Override
@@ -103,9 +115,9 @@ public class UserServiceImpl implements UserService {
     HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(map, headers);
 
     String result = new RestTemplate().postForObject(
-        "http://localhost:8081/images/new", entity, String.class);
+        cdnProperties.getUrl() + "new", entity, String.class);
 
-    user.setAvatar("http://localhost:8081/images/" + result);
+    user.setAvatar(result);
     userRepository.save(user);
   }
 
@@ -256,7 +268,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<ShortUserProfileDTO> findUserFriends(String username) {
+  public List<UserCompactDTO> findUserFriends(String username) {
     UserEntity user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException(username));
 
@@ -266,7 +278,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<ShortUserProfileDTO> findIncomingFriendsRequests() {
+  public List<UserCompactDTO> findIncomingFriendsRequests() {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
@@ -280,7 +292,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<ShortUserProfileDTO> findOutgoingFriendsRequests() {
+  public List<UserCompactDTO> findOutgoingFriendsRequests() {
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 

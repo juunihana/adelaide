@@ -6,15 +6,15 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 
 public interface UserApi {
 
-  ShortUserProfileDTO getSignedUser();
+  UserCompactDTO getSignedUser();
 
-  UserProfileDTO getUserProfile(String username);
+  UserFullDTO getUserProfile(String username);
 
   void createUser(CreateUserProfileDTO createUserProfileDTO);
 

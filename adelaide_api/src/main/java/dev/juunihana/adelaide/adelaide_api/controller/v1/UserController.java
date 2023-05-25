@@ -7,9 +7,9 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.ShortUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.validation.Valid;
@@ -63,7 +63,7 @@ public class UserController implements UserApi {
   @Override
   @GetMapping("/auth/signed")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public ShortUserProfileDTO getSignedUser() {
+  public UserCompactDTO getSignedUser() {
     return userService.getSignedUser();
   }
 
@@ -116,7 +116,7 @@ public class UserController implements UserApi {
 
   @Override
   @GetMapping("/profile/{username}")
-  public UserProfileDTO getUserProfile(
+  public UserFullDTO getUserProfile(
       @PathVariable String username) {
     return userService.findUserProfile(username);
   }
@@ -154,20 +154,20 @@ public class UserController implements UserApi {
   }
 
   @GetMapping("/friends/{username}")
-  public List<ShortUserProfileDTO> getUserFriends(
+  public List<UserCompactDTO> getUserFriends(
       @PathVariable String username) {
     return userService.findUserFriends(username);
   }
 
   @GetMapping("/friends/in")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public List<ShortUserProfileDTO> getUserFriendsIncoming() {
+  public List<UserCompactDTO> getUserFriendsIncoming() {
     return userService.findIncomingFriendsRequests();
   }
 
   @GetMapping("/friends/out")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public List<ShortUserProfileDTO> getUserFriendsOutgoing() {
+  public List<UserCompactDTO> getUserFriendsOutgoing() {
     return userService.findOutgoingFriendsRequests();
   }
 

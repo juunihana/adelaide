@@ -19,21 +19,14 @@
           {{ state.user.bio }}
         </div>
       </div>
-      <div class="user-profile-side-container general-block">
+      <div class="user-profile-side-container general-block" v-if="state.user.friends">
         <router-link to="/">
           <div class="side-block-header">Friends</div>
         </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Name Surname</div>
-        </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Name Surname</div>
-        </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Name Surname</div>
+        <router-link class="side-block-element" :to="'/' + friend.username"
+                     v-for="friend in state.user.friends">
+          <div class="side-block-image"><img :src="friend.avatar" alt="avatar"/></div>
+          <div class="side-block-text">{{ friend.firstName }} {{ friend.lastName }}</div>
         </router-link>
       </div>
       <div class="user-profile-side-container general-block">
@@ -83,7 +76,7 @@
       </MenuStripe>
       <div class="loading-block" v-if="loading">Loading</div>
       <div class="error-block" v-else-if="error">Error</div>
-      <UserPost v-else v-for="post in posts" :post="post"/>
+      <UserPost v-else v-for="post in state.posts" :post="post"/>
       <footer>
         You have reached the end of the page. Congrats!
       </footer>
@@ -107,7 +100,8 @@ const state = reactive({
   loading: false,
   error: false,
   errorMessage: [],
-  user: {}
+  user: {},
+  posts: []
 })
 
 watch(() => route.params,
@@ -122,6 +116,11 @@ watch(() => route.params,
         state.loading = false;
         state.error = true;
         state.errorMessage = error.data
+      })
+
+      UserService.getUserPosts(route.params.username)
+      .then((data) => {
+        state.posts = data.data
       })
     },
     {immediate: true})
@@ -223,8 +222,7 @@ const posts = ref([
 
 .side-block-text {
   flex: 6;
-  font-size: 1rem;
-  color: var(--input-color);
+  color: var(--color);
   cursor: pointer;
 }
 

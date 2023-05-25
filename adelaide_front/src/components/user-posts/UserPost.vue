@@ -55,7 +55,7 @@ const props = defineProps({
 .block-header {
   display: flex;
   flex-direction: column;
-  //gap: 0.5rem;
+  gap: 0.5rem;
 }
 
 .post-author {
@@ -95,15 +95,15 @@ const props = defineProps({
 
 .post-tags {
   display: flex;
-  flex-direction: row;
   gap: 0.25rem;
 }
 
 .post-tag {
   background: var(--button-background);
   color: var(--button-color);
-  padding: 0.1rem 0.25rem 0.1rem 0.25rem;
+  padding: 0.05rem 0.15rem 0.05rem 0.15rem;
   cursor: pointer;
+  font-size: 0.75rem;
   border-radius: var(--border-radius);
   justify-content: center;
 }
@@ -127,5 +127,8 @@ const props = defineProps({
   flex-direction: row;
   gap: 0.25rem;
   margin-left: auto;
+}
+
+.post-content {
 }
 </style>

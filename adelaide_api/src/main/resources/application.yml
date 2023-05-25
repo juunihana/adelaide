@@ -13,3 +13,6 @@ spring:
     user: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5432/adelaide_db
+
+cdn:
+  url: http://localhost:8081/images/
