@@ -1,5 +1,6 @@
 package dev.juunihana.adelaide.adelaide_api.repository;
 
+import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.VoteEntity;
 import java.util.Optional;
@@ -11,4 +12,6 @@ public interface VoteRepository extends JpaRepository<VoteEntity, UUID> {
   boolean existsByUser(UserEntity user);
 
   Optional<VoteEntity> findByUser(UserEntity user);
+
+  Optional<VoteEntity> findByUserAndPost(UserEntity user, PostEntity post);
 }

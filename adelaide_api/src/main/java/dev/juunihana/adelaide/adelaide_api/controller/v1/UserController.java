@@ -1,14 +1,12 @@
 package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
 import dev.juunihana.adelaide.adelaide_api.api.v1.UserApi;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
@@ -34,21 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController implements UserApi {
 
   private final UserService userService;
-  private final JwtService jwtService;
-  private final AuthenticationManager authManager;
 
   /**
-   * GET /profile/{username}/avatar POST /profile/avatar PUT /profile/avatar DELETE /profile/avatar
-   * <p>
-   * GET /profile/{username}/photos POST /profile/photos DELETE /profile/photos
-   * <p>
-   * complete UI for these features
-   * <p>
    * todo (next week)
    * messages api
    * post feed
@@ -61,141 +50,72 @@ public class UserController implements UserApi {
    */
 
   @Override
-  @GetMapping("/auth/signed")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   public UserCompactDTO getSignedUser() {
     return userService.getSignedUser();
   }
 
   @Override
-  @PostMapping("/auth/sign-in")
-  public UserAuthTokenDTO signIn(
-      @RequestBody @Valid SignInDTO signInDTO) {
-    System.out.println("Signing in user: " + signInDTO.toString());
-
-    Authentication authentication = authManager.authenticate(
-        new UsernamePasswordAuthenticationToken(signInDTO.getUsername(), signInDTO.getPassword()));
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    return UserAuthTokenDTO.builder()
-        .token(jwtService.createToken(authentication))
-        .build();
+  public UserAuthTokenDTO signIn(SignInDTO signInDTO) {
+    return userService.signIn(signInDTO);
   }
 
   @Override
-  @PostMapping("/auth/sign-out")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void signOut() {
-    System.out.println("Signing out user");
+  public UserFullDTO getUserProfile(String username) {
+    return userService.findUserProfileFull(username);
   }
 
   @Override
-  @PutMapping("/auth/email")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void changeEmail(
-      @RequestBody @Valid ChangeEmailDTO changeEmailDTO) {
-    userService.changeEmail(changeEmailDTO);
-  }
-
-  @Override
-  @PutMapping("/auth/username")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void changeUsername(
-      @RequestBody @Valid ChangeUsernameDTO changeUsernameDTO) {
-    userService.changeUsername(changeUsernameDTO);
-  }
-
-  @Override
-  @PutMapping("/auth/password")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void changePassword(
-      @RequestBody @Valid ChangePasswordDTO changePasswordDTO) {
-    userService.changePassword(changePasswordDTO);
-  }
-
-  @Override
-  @GetMapping("/profile/{username}")
-  public UserFullDTO getUserProfile(
-      @PathVariable String username) {
-    return userService.findUserProfile(username);
-  }
-
-  @Override
-  @PostMapping("/new")
-  @ResponseStatus(HttpStatus.CREATED)
-  public void createUser(
-      @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO) {
-    System.out.println("New user: " + createUserProfileDTO.toString());
+  public void createUser(CreateUserProfileDTO createUserProfileDTO) {
     userService.createUser(createUserProfileDTO);
   }
 
-  @PostMapping("/avatar")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  @ResponseStatus(HttpStatus.CREATED)
-  public void uploadAvatar(@RequestParam MultipartFile image) {
+  public void uploadAvatar(MultipartFile image) {
     userService.uploadAvatar(image);
   }
 
   @Override
-  @PutMapping("/profile/{username}")
-  public void updateUser(
-      @PathVariable String username,
-      @RequestBody @Valid ChangeUserProfileDTO changeUserProfileDTO) {
-    System.out.println("Update user: " + changeUserProfileDTO.toString());
-    userService.changeUserInfo(changeUserProfileDTO);
+  public void updatePassword(ChangePasswordDTO changePasswordDTO) {
+    userService.changePassword(changePasswordDTO);
   }
 
   @Override
-  @DeleteMapping("/profile/{username}")
-  public void deleteUser(
-      @PathVariable String username) {
+  public void updateUser(String username, UpdateUserProfileDTO updateUserProfileDTO) {
+    userService.changeUserInfo(updateUserProfileDTO);
+  }
+
+
+  @Override
+  public void deleteUser(String username) {
     userService.deleteUser(username);
   }
 
-  @GetMapping("/friends/{username}")
-  public List<UserCompactDTO> getUserFriends(
-      @PathVariable String username) {
+  @Override
+  public List<UserCompactDTO> getUserFriends(String username) {
     return userService.findUserFriends(username);
   }
 
-  @GetMapping("/friends/in")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  @Override
   public List<UserCompactDTO> getUserFriendsIncoming() {
     return userService.findIncomingFriendsRequests();
   }
 
-  @GetMapping("/friends/out")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  @Override
   public List<UserCompactDTO> getUserFriendsOutgoing() {
     return userService.findOutgoingFriendsRequests();
   }
 
-  @PostMapping("/friends/{friendUsername}")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void sendFriendsRequest(
-      @PathVariable String friendUsername) {
+  @Override
+  public void sendFriendsRequest(String friendUsername) {
     userService.sendFriendRequest(friendUsername);
   }
 
-  @PutMapping("/friends/{friendUsername}/accept")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void acceptFriend(
-      @PathVariable String friendUsername) {
-    userService.acceptFriend(friendUsername);
+  @Override
+  public void resolveFriendsRequest(String friendUsername, boolean accept) {
+    userService.resolveFriendsRequest(friendUsername, accept);
   }
 
-  @PutMapping("/friends/{friendUsername}/decline")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void declineFriend(
-      @PathVariable String friendUsername) {
-    userService.declineFriend(friendUsername);
-  }
-
-  @DeleteMapping("/friends/{friendUsername}")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  public void removeFriend(
-      @PathVariable String friendUsername) {
+  @Override
+  public void removeFriend(String friendUsername) {
     userService.removeFriend(friendUsername);
   }
 }

@@ -1,34 +1,95 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
+import jakarta.validation.Valid;
+import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+@Validated
+@RequestMapping("/api/v1/users")
 public interface UserApi {
 
+  @GetMapping("/auth/signed")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   UserCompactDTO getSignedUser();
 
-  UserFullDTO getUserProfile(String username);
+  @PostMapping("/auth/sign-in")
+  UserAuthTokenDTO signIn(
+      @RequestBody @Valid SignInDTO signInDTO);
 
-  void createUser(CreateUserProfileDTO createUserProfileDTO);
+  @GetMapping("/profile/{username}")
+  UserFullDTO getUserProfile(
+      @PathVariable String username);
 
-  void updateUser(String username,ChangeUserProfileDTO changeUserProfileDTO);
+  @PostMapping("/new")
+  @ResponseStatus(HttpStatus.CREATED)
+  void createUser(
+      @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO);
 
-  UserAuthTokenDTO signIn(SignInDTO signInDTO);
+  @PostMapping("/avatar")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  @ResponseStatus(HttpStatus.CREATED)
+  void uploadAvatar(
+      @RequestParam MultipartFile image);
 
-  void signOut();
+  @PutMapping("/auth/password")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void updatePassword(
+      @RequestBody @Valid ChangePasswordDTO changePasswordDTO);
 
-  void changeEmail(ChangeEmailDTO changeEmailDTO);
+  @PutMapping("/profile/{username}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void updateUser(
+      @PathVariable String username,
+      @RequestBody @Valid UpdateUserProfileDTO updateUserProfileDTO);
 
-  void changeUsername(ChangeUsernameDTO changeUsernameDTO);
+  @DeleteMapping("/profile/{username}")
+  void deleteUser(
+      @PathVariable String username);
 
-  void changePassword(ChangePasswordDTO changePasswordDTO);
+  @GetMapping("/friends/{username}")
+  List<UserCompactDTO> getUserFriends(
+      @PathVariable String username);
 
-  void deleteUser(String username);
+  @GetMapping("/friends/in")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  List<UserCompactDTO> getUserFriendsIncoming();
+
+  @GetMapping("/friends/out")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  List<UserCompactDTO> getUserFriendsOutgoing();
+
+  @PostMapping("/friends/{friendUsername}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void sendFriendsRequest(
+      @PathVariable String friendUsername);
+
+  @PutMapping("/friends/{friendUsername}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void resolveFriendsRequest(
+      @PathVariable String friendUsername,
+      @RequestParam boolean accept);
+
+  @DeleteMapping("/friends/{friendUsername}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void removeFriend(
+      @PathVariable String friendUsername);
 }

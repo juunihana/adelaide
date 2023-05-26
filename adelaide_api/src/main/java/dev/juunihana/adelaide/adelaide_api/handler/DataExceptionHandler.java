@@ -10,6 +10,7 @@ import dev.juunihana.adelaide.adelaide_api.exception.PasswordsDoesNotMatchExcept
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserAlreadyExistsException;
 import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
+import dev.juunihana.adelaide.adelaide_api.exception.VoteNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +121,15 @@ public class DataExceptionHandler extends ResponseEntityExceptionHandler {
         .message(e.getMessage())
         .build();
   }
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(VoteNotFoundException.class)
+  protected ErrorDTO handleVoteNotFound(VoteNotFoundException e) {
+    System.out.println("ERROR 404: " + e.getMessage());
+    return ErrorDTO.builder()
+        .message(e.getMessage())
+        .build();
+  }
+
 
   /**
    * Collect all field errors into map (keys are fields that failed validation and values are lists

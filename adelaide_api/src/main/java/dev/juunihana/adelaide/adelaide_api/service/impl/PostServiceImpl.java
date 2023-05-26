@@ -8,6 +8,7 @@ import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.VoteEntity;
 import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
+import dev.juunihana.adelaide.adelaide_api.exception.VoteNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.PostMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.PostRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.VoteRepository;
@@ -95,7 +96,8 @@ public class PostServiceImpl implements PostService {
           .build());
     } else {
       VoteEntity vote = voteRepository.findByUser(user)
-          .orElseThrow(() -> new RuntimeException());
+          .orElseThrow(VoteNotFoundException::new);
+
       vote.setUpvote(upVote);
       vote.setTimeVoted(LocalDateTime.now());
       voteRepository.save(vote);
@@ -109,8 +111,8 @@ public class PostServiceImpl implements PostService {
     UserEntity user = (UserEntity) userService.loadUserByUsername(
         userService.getSignedUser().getUsername());
 
-    VoteEntity vote = voteRepository.findByUser(user)
-        .orElseThrow(() -> new RuntimeException());
+    VoteEntity vote = voteRepository.findByUserAndPost(user, post)
+        .orElseThrow(VoteNotFoundException::new);
 
     voteRepository.delete(vote);
   }

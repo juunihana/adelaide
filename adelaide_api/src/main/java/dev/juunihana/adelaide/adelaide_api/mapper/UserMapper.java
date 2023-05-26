@@ -30,23 +30,23 @@ public abstract class UserMapper {
   })
   public abstract UserFullDTO userEntityToProfile(UserEntity userEntity);
 
-  @Named("mapUserAge")
-  public Integer mapUserAge(LocalDate dateOfBirth) {
-    return Period.between(dateOfBirth, LocalDate.now()).getYears();
-  }
-
-  @Named("mapAvatar")
-  public String mapAvatar(String avatarEntity) {
-    if (StringUtils.hasLength(avatarEntity)) {
-      return cdnProperties.getUrl() + avatarEntity;
-    }
-    return "";
-  }
-
   public abstract UserEntity createUserToEntity(CreateUserProfileDTO dto);
 
   @Mappings({
       @Mapping(target = "avatar", source = "avatar", qualifiedByName = "mapAvatar")
   })
   public abstract UserCompactDTO userToShortProfile(UserEntity userEntity);
+
+  @Named("mapUserAge")
+  protected Integer mapUserAge(LocalDate dateOfBirth) {
+    return Period.between(dateOfBirth, LocalDate.now()).getYears();
+  }
+
+  @Named("mapAvatar")
+  protected String mapAvatar(String avatarEntity) {
+    if (StringUtils.hasLength(avatarEntity)) {
+      return cdnProperties.getUrl() + avatarEntity;
+    }
+    return "";
+  }
 }

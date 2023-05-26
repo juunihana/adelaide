@@ -1,10 +1,10 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUserProfileDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangeUsernameDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 import java.util.List;
@@ -19,7 +19,9 @@ public interface UserService extends UserDetailsService {
   @Override
   UserDetails loadUserByUsername(String username);
 
-  UserFullDTO findUserProfile(String username);
+  UserAuthTokenDTO signIn(SignInDTO signInDTO);
+
+  UserFullDTO findUserProfileFull(String username);
 
   Boolean userExistsByUsername(String username);
 
@@ -31,13 +33,9 @@ public interface UserService extends UserDetailsService {
 
   void createUser(CreateUserProfileDTO createUserProfileDTO);
 
-  void changeUserInfo(ChangeUserProfileDTO changeUserProfileDTO);
+  void changeUserInfo(UpdateUserProfileDTO updateUserProfileDTO);
 
   void deleteUser(String username);
-
-  void changeEmail(ChangeEmailDTO changeEmailDTO);
-
-  void changeUsername(ChangeUsernameDTO changeUsernameDTO);
 
   void changePassword(ChangePasswordDTO changePasswordDTO);
 
@@ -49,9 +47,7 @@ public interface UserService extends UserDetailsService {
 
   void sendFriendRequest(String friendUsername);
 
-  void acceptFriend(String friendUsername);
-
-  void declineFriend(String friendUsername);
+  void resolveFriendsRequest(String friendUsername, boolean accept);
 
   void removeFriend(String friendUsername);
 }

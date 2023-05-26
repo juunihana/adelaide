@@ -19,7 +19,7 @@ import org.mapstruct.Named;
         UserMapper.class
     }
 )
-public interface PostMapper {
+public abstract class PostMapper {
 
   @Mappings({
       @Mapping(source = "timeCreated", target = "timeCreated", qualifiedByName = "mapTime"),
@@ -28,10 +28,10 @@ public interface PostMapper {
       @Mapping(source = "votes", target = "upVotes", qualifiedByName = "mapUpVotes"),
       @Mapping(source = "votes", target = "downVotes", qualifiedByName = "mapDownVotes"),
   })
-  PostDTO postEntityToDTO(PostEntity post);
+  public abstract PostDTO postEntityToDTO(PostEntity post);
 
   @Named("mapTime")
-  default String mapTime(LocalDateTime time) {
+  protected String mapTime(LocalDateTime time) {
     if (time != null) {
       return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy"));
     }
@@ -39,14 +39,14 @@ public interface PostMapper {
   }
 
   @Named("mapUpVotes")
-  default Integer mapUpVotes(Set<VoteEntity> votes) {
+  protected Integer mapUpVotes(Set<VoteEntity> votes) {
     return Math.toIntExact(votes.stream()
         .filter(VoteEntity::isUpvote)
         .count());
   }
 
   @Named("mapDownVotes")
-  default Integer mapDownVotes(Set<VoteEntity> votes) {
+  protected Integer mapDownVotes(Set<VoteEntity> votes) {
     return Math.toIntExact(votes.stream()
         .filter(vote -> !vote.isUpvote())
         .count());
