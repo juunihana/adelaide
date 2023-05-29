@@ -1,10 +1,12 @@
 package dev.juunihana.adelaide.adelaide_api.mapper;
 
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.response.vote.VoteDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.VoteEntity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Set;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -16,7 +18,9 @@ import org.mapstruct.Named;
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
     uses = {
-        UserMapper.class
+        UserMapper.class,
+        CommentMapper.class,
+        VoteEntity.class
     }
 )
 public abstract class PostMapper {
@@ -24,31 +28,30 @@ public abstract class PostMapper {
   @Mappings({
       @Mapping(source = "timeCreated", target = "timeCreated", qualifiedByName = "mapTime"),
       @Mapping(source = "timeEdited", target = "timeEdited", qualifiedByName = "mapTime"),
-      @Mapping(source = "author", target = "author"),
       @Mapping(source = "votes", target = "upVotes", qualifiedByName = "mapUpVotes"),
       @Mapping(source = "votes", target = "downVotes", qualifiedByName = "mapDownVotes"),
   })
   public abstract PostDTO postEntityToDTO(PostEntity post);
 
-  @Named("mapTime")
-  protected String mapTime(LocalDateTime time) {
-    if (time != null) {
-      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy"));
-    }
-    return "";
-  }
+//  @Named("mapTime")
+//  protected String mapTime(LocalDateTime time) {
+//    if (time != null) {
+//      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy", Locale.US));
+//    }
+//    return "";
+//  }
 
   @Named("mapUpVotes")
   protected Integer mapUpVotes(Set<VoteEntity> votes) {
     return Math.toIntExact(votes.stream()
-        .filter(VoteEntity::isUpvote)
+        .filter(VoteEntity::isUpVote)
         .count());
   }
 
   @Named("mapDownVotes")
   protected Integer mapDownVotes(Set<VoteEntity> votes) {
     return Math.toIntExact(votes.stream()
-        .filter(vote -> !vote.isUpvote())
+        .filter(vote -> !vote.isUpVote())
         .count());
   }
 }

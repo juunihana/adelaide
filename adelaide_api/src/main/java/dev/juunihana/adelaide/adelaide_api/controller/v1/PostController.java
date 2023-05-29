@@ -3,7 +3,6 @@ package dev.juunihana.adelaide.adelaide_api.controller.v1;
 import dev.juunihana.adelaide.adelaide_api.api.v1.PostApi;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.post.SuccessPostDTO;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,26 +25,18 @@ public class PostController implements PostApi {
   }
 
   @Override
-  public SuccessPostDTO create(CreatePostDTO createPostDTO) {
-    return postService.create(createPostDTO);
+  public void create(CreatePostDTO createPostDTO) {
+    postService.create(createPostDTO);
   }
 
   @Override
-  public SuccessPostDTO update(String postId, CreatePostDTO createPostDTO) {
-    return postService.edit(postId, createPostDTO);
+  public void update(String postId, CreatePostDTO createPostDTO) {
+    postService.update(postId, createPostDTO);
   }
 
   @Override
   public void delete(String postId) {
     postService.delete(postId);
-  }
-
-  public void addVote(String postId, boolean upVote) {
-    postService.addVote(postId, upVote);
-  }
-
-  public void removeVote(String postId) {
-    postService.removeVote(postId);
   }
 
 }

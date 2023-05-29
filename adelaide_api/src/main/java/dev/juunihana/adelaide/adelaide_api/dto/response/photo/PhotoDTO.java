@@ -1,10 +1,9 @@
-package dev.juunihana.adelaide.adelaide_api.dto.response.post;
+package dev.juunihana.adelaide.adelaide_api.dto.response.photo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import dev.juunihana.adelaide.adelaide_api.dto.response.comment.CommentDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.response.vote.VoteDTO;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -17,25 +16,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class PostDTO {
+public class PhotoDTO {
 
   private UUID id;
 
-  private UserCompactDTO author;
+  private String url;
 
-  private String title;
-
-  private String content;
-
-  private String timeCreated;
-
-  private String timeEdited;
-
-  private VoteDTO vote;
+  private UserCompactDTO user;
 
   private List<CommentDTO> comments;
 
-  private Integer upVotes;
+  private int upVotes;
 
-  private Integer downVotes;
+  private int downVotes;
 }

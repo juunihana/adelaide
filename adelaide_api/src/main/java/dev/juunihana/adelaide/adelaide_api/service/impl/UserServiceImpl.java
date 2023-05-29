@@ -49,8 +49,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
-  private final JwtService jwtService;
-  private final AuthenticationManager authManager;
   private final PasswordHistoryRepository passwordHistoryRepository;
   private final PasswordEncoder passwordEncoder;
   private final UserMapper userMapper;
@@ -73,31 +71,29 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserAuthTokenDTO signIn(SignInDTO signInDTO) {
-    System.out.println("Signing in user: " + signInDTO.getUsername());
+    return null;
+  }
 
-    Authentication authentication = authManager.authenticate(
-        new UsernamePasswordAuthenticationToken(signInDTO.getUsername(), signInDTO.getPassword()));
+  @Override
+  public boolean isUserSigned() {
+    return isUserAuthorized();
+  }
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    System.out.println("Signing in user: " + signInDTO.getUsername() + ". Success!");
-
-    return UserAuthTokenDTO.builder()
-        .token(jwtService.createToken(authentication))
-        .build();
+  @Override
+  public UserEntity getSignedUserEntity() {
+    return userRepository.findByUsername(getCurrentUserUsername())
+        .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
   }
 
   @Override
   public UserCompactDTO getSignedUser() {
-    return userMapper.userToShortProfile(
-        userRepository.findByUsername(getCurrentUserUsername())
-            .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername())));
+    return userMapper.userToShortProfile(getSignedUserEntity());
   }
 
   @Override
   public UserFullDTO findUserProfileFull(String username) {
     System.out.println("Request full profile for user: " + username);
-    
+
     UserEntity user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException("username " + username));
 
@@ -128,7 +124,7 @@ public class UserServiceImpl implements UserService {
   public void uploadAvatar(MultipartFile avatar) {
     System.out.println(
         "Request to upload avatar for user: " + getCurrentUserUsername());
-    
+
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
 
@@ -151,7 +147,7 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public void createUser(CreateUserProfileDTO createUserProfileDTO) {
     System.out.println("New user: " + createUserProfileDTO.toString());
-    
+
     if (userExistsByUsername(createUserProfileDTO.getUsername())) {
       throw new UserAlreadyExistsException("username " + createUserProfileDTO.getUsername());
     }
@@ -182,8 +178,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void changeUserInfo(UpdateUserProfileDTO updateUserProfileDTO) {
-    System.out.println("Update user {" + getCurrentUserUsername() + "}: " + updateUserProfileDTO.toString());
-    
+    System.out.println(
+        "Update user {" + getCurrentUserUsername() + "}: " + updateUserProfileDTO.toString());
+
     if (StringUtils.hasLength(updateUserProfileDTO.getPhone()) &&
         userExistsByPhone(updateUserProfileDTO.getPhone())) {
       throw new UserAlreadyExistsException("phone " + updateUserProfileDTO.getPhone());
@@ -209,7 +206,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteUser(String username) {
     System.out.println("Request to delete profile for user: " + username);
-    
+
     if (!username.equals(getCurrentUserUsername())) {
       throw new AccessDeniedException("You cannot delete this user");
     }
@@ -223,9 +220,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void changePassword(ChangePasswordDTO changePasswordDTO) {System.out.println(
-      "Request to change password for user: " + getCurrentUserUsername());
-    
+  public void changePassword(ChangePasswordDTO changePasswordDTO) {
+    System.out.println(
+        "Request to change password for user: " + getCurrentUserUsername());
+
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
 
@@ -252,7 +250,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<UserCompactDTO> findUserFriends(String username) {
     System.out.println("Request to get list of friends for user: " + username);
-    
+
     UserEntity user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException("username " + username));
 
@@ -266,7 +264,7 @@ public class UserServiceImpl implements UserService {
     System.out.println(
         "Request to get list of incoming friends requests for user: " +
             getCurrentUserUsername());
-    
+
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
 
@@ -282,8 +280,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public List<UserCompactDTO> findOutgoingFriendsRequests() {
     System.out.println(
-      "Request to get list of outgoing friends requests for user: " + 
-          getCurrentUserUsername());
+        "Request to get list of outgoing friends requests for user: " +
+            getCurrentUserUsername());
 
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
@@ -298,10 +296,10 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void sendFriendRequest(String friendUsername) {System.out.println(
-      "Send friends request, sender: {" + getCurrentUserUsername() +
-          "} recipient: {" + friendUsername + "}");
-
+  public void sendFriendRequest(String friendUsername) {
+    System.out.println(
+        "Send friends request, sender: {" + getCurrentUserUsername() +
+            "} recipient: {" + friendUsername + "}");
 
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
@@ -327,7 +325,7 @@ public class UserServiceImpl implements UserService {
     System.out.println(
         "Accept friends request, sender: {" + getCurrentUserUsername() +
             "} recipient: {" + friendUsername + "}");
-    
+
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
 
@@ -354,7 +352,7 @@ public class UserServiceImpl implements UserService {
     System.out.println(
         "Remove friend, sender: {" + getCurrentUserUsername() +
             "} recipient: {" + friendUsername + "}");
-    
+
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
 

@@ -32,42 +32,34 @@ public interface UserApi {
   UserCompactDTO getSignedUser();
 
   @PostMapping("/auth/sign-in")
-  UserAuthTokenDTO signIn(
-      @RequestBody @Valid SignInDTO signInDTO);
+  UserAuthTokenDTO signIn(@RequestBody @Valid SignInDTO dto);
 
   @GetMapping("/profile/{username}")
-  UserFullDTO getUserProfile(
-      @PathVariable String username);
+  UserFullDTO getUserProfile(@PathVariable String username);
 
   @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
-  void createUser(
-      @RequestBody @Valid CreateUserProfileDTO createUserProfileDTO);
+  void create(@RequestBody @Valid CreateUserProfileDTO dto);
+
+  @PutMapping("/profile/{username}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void update(@PathVariable String username, @RequestBody @Valid UpdateUserProfileDTO dto);
+
+  @DeleteMapping("/profile/{username}")
+  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
+  void delete(@PathVariable String username);
 
   @PostMapping("/avatar")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
   @ResponseStatus(HttpStatus.CREATED)
-  void uploadAvatar(
-      @RequestParam MultipartFile image);
+  void uploadAvatar(@RequestParam MultipartFile avatar);
 
   @PutMapping("/auth/password")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  void updatePassword(
-      @RequestBody @Valid ChangePasswordDTO changePasswordDTO);
-
-  @PutMapping("/profile/{username}")
-  @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  void updateUser(
-      @PathVariable String username,
-      @RequestBody @Valid UpdateUserProfileDTO updateUserProfileDTO);
-
-  @DeleteMapping("/profile/{username}")
-  void deleteUser(
-      @PathVariable String username);
+  void updatePassword(@RequestBody @Valid ChangePasswordDTO dto);
 
   @GetMapping("/friends/{username}")
-  List<UserCompactDTO> getUserFriends(
-      @PathVariable String username);
+  List<UserCompactDTO> getUserFriends(@PathVariable String username);
 
   @GetMapping("/friends/in")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
@@ -84,12 +76,9 @@ public interface UserApi {
 
   @PutMapping("/friends/{friendUsername}")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  void resolveFriendsRequest(
-      @PathVariable String friendUsername,
-      @RequestParam boolean accept);
+  void resolveFriendsRequest(@PathVariable String friendUsername, @RequestParam boolean accept);
 
   @DeleteMapping("/friends/{friendUsername}")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")
-  void removeFriend(
-      @PathVariable String friendUsername);
+  void removeFriend(@PathVariable String friendUsername);
 }

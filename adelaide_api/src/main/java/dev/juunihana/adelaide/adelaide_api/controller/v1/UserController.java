@@ -36,6 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController implements UserApi {
 
   private final UserService userService;
+  private final JwtService jwtService;
+  private final AuthenticationManager authManager;
 
   /**
    * todo (next week)
@@ -56,7 +58,18 @@ public class UserController implements UserApi {
 
   @Override
   public UserAuthTokenDTO signIn(SignInDTO signInDTO) {
-    return userService.signIn(signInDTO);
+    System.out.println("Signing in user: " + signInDTO.getUsername());
+
+    Authentication authentication = authManager.authenticate(
+        new UsernamePasswordAuthenticationToken(signInDTO.getUsername(), signInDTO.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    System.out.println("Signing in user: " + signInDTO.getUsername() + ". Success!");
+
+    return UserAuthTokenDTO.builder()
+        .token(jwtService.createToken(authentication))
+        .build();
   }
 
   @Override
@@ -65,7 +78,7 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public void createUser(CreateUserProfileDTO createUserProfileDTO) {
+  public void create(CreateUserProfileDTO createUserProfileDTO) {
     userService.createUser(createUserProfileDTO);
   }
 
@@ -79,13 +92,13 @@ public class UserController implements UserApi {
   }
 
   @Override
-  public void updateUser(String username, UpdateUserProfileDTO updateUserProfileDTO) {
+  public void update(String username, UpdateUserProfileDTO updateUserProfileDTO) {
     userService.changeUserInfo(updateUserProfileDTO);
   }
 
 
   @Override
-  public void deleteUser(String username) {
+  public void delete(String username) {
     userService.deleteUser(username);
   }
 

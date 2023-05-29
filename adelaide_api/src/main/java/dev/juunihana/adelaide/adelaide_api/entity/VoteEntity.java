@@ -33,7 +33,7 @@ public class VoteEntity {
   @JoinColumn(name = "user_id")
   private UserEntity user;
 
-  private boolean upvote;
+  private boolean upVote;
 
   private LocalDateTime timeVoted;
 

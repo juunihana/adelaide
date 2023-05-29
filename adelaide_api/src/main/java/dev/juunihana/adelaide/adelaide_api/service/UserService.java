@@ -7,12 +7,17 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserAuthTokenDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserCompactDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
+import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService extends UserDetailsService {
+
+  boolean isUserSigned();
+
+  UserEntity getSignedUserEntity();
 
   UserCompactDTO getSignedUser();
 
