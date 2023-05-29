@@ -7,6 +7,7 @@ export const generalStore = defineStore('generalStore', {
   state: () => ({
     showSignInOverlay: false,
     showSignUpOverlay: false,
+    showNewPostOverlay: false,
     token: null,
     signedIn: null
   }),

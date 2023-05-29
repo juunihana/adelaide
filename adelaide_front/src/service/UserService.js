@@ -51,20 +51,30 @@ class UserService {
         this.setRequestConfig())
   }
 
-  addNewPost(post) {
-    return this.restService.post("/posts/new", this.setRequestConfig())
+  addPost(post) {
+    return this.restService.post("/posts/new", post, this.setRequestConfig())
+  }
+
+  removePost(postId) {
+    return this.restService.delete("/posts/" + postId, this.setRequestConfig())
+  }
+
+  addVote(vote) {
+    return this.restService.post("/votes/new", vote, this.setRequestConfig())
+  }
+
+  removeVote(voteId) {
+    return this.restService.delete("/votes/" + voteId, this.setRequestConfig())
   }
 
   setRequestConfig() {
     let config = {};
     const authCookie = VueCookies.get("auth");
-    console.log(authCookie)
     if (authCookie && authCookie !== "") {
       config.headers = {
         Authorization: authCookie
       }
     }
-    console.log(config)
     return config;
   }
 }

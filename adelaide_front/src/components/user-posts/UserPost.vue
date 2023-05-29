@@ -13,22 +13,26 @@
         </div>
       </router-link>
       <div class="post-title">{{ post.title }}</div>
-      <div class="post-tags">
-        <router-link to="/" class="post-tag">first-post</router-link>
-        <router-link to="/" class="post-tag">some-test-tag</router-link>
-        <router-link to="/" class="post-tag">some-very-long-testing-purpose-tag</router-link>
-      </div>
+      <!--      <div class="post-tags">-->
+      <!--        <router-link to="/" class="post-tag">first-post</router-link>-->
+      <!--        <router-link to="/" class="post-tag">some-test-tag</router-link>-->
+      <!--        <router-link to="/" class="post-tag">some-very-long-testing-purpose-tag</router-link>-->
+      <!--      </div>-->
     </header>
     <div class="post-content">
       {{ post.content }}
     </div>
     <div class="post-footer">
-      <Button>Like</Button>
-      <Button>Dislike</Button>
+      <Button @click="vote(true)" :class="post.vote && post.vote.upVote ? 'liked' : ''">Like
+        {{ post.upVotes }}
+      </Button>
+      <Button @click="vote(false)" :class="post.vote && !post.vote.upVote ? 'disliked' : ''">Dislike
+        {{ post.downVotes }}
+      </Button>
       <Button>Comments</Button>
-      <div class="post-button-right">
+      <div class="post-button-right" v-if="localState.currentUser">
         <Button>Edit</Button>
-        <Button>Delete</Button>
+        <Button @click="removePost">Delete</Button>
       </div>
     </div>
   </div>
@@ -36,10 +40,36 @@
 
 <script setup>
 import Button from "../common/form/Button.vue";
+import {generalStore} from "../../stores/generalStore.js";
+import {reactive} from "vue";
+import UserService from "../../service/UserService.js";
 
-const props = defineProps({
+const generalStorage = generalStore()
+
+defineProps({
   post: {}
 })
+
+const localState = reactive({
+  currentUser: generalStorage.signedIn.username === this.post.author.username
+})
+
+function vote(upVote) {
+  if (this.post.vote) {
+    UserService.removeVote(this.post.vote.id)
+  } else {
+    UserService.addVote({
+      targetType: "post",
+      targetId: this.post.id,
+      upVote: upVote
+    })
+  }
+}
+
+function removePost() {
+  UserService.removePost(this.post.id)
+}
+
 </script>
 
 <style scoped>
@@ -131,5 +161,13 @@ const props = defineProps({
 
 .post-content {
   white-space: pre;
+}
+
+.liked {
+  background: #c6ffb0;
+}
+
+.disliked {
+  background: #ffb0b0;
 }
 </style>

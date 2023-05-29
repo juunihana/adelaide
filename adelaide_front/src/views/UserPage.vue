@@ -9,7 +9,7 @@
           {{ localState.user.firstName }}
           {{ localState.user.middleName }}
           {{ localState.user.lastName }}
-          {{ localState.user.maidenSurname ? '(' + localState.user.maidenSurname + ')' : ''}}
+          {{ localState.user.maidenSurname ? '(' + localState.user.maidenSurname + ')' : '' }}
         </div>
         <div class="user-profile-age">
           {{ localState.user.age }} years old
@@ -77,7 +77,7 @@
         <MenuLabel>Sort by</MenuLabel>
         <Button>Recent</Button>
         <Button>Top rated</Button>
-        <Button class="new-post-button" v-if="localState.currentUser">New post</Button>
+        <Button class="new-post-button" v-if="localState.currentUser" @click="showNewPost">New post</Button>
       </MenuStripe>
       <div class="loading-block" v-if="loading">Loading</div>
       <div class="error-block" v-else-if="error">Error</div>
@@ -102,7 +102,6 @@ import {generalStore} from "../stores/generalStore.js";
 
 const route = useRoute()
 const generalStorage = generalStore()
-
 
 const localState = reactive({
   loading: false,
@@ -129,12 +128,14 @@ watch(() => route.params,
 
       UserService.getUserPosts(route.params.username)
       .then((data) => {
-
-        localState.currentUser = generalStorage.signedIn.username === route.params.username;
         localState.posts = data.data
       })
     },
     {immediate: true})
+
+generalStorage.$subscribe((mutation, state) => {
+  localState.currentUser = state.signedIn.username === route.params.username
+})
 
 const posts = ref([
   {
@@ -150,6 +151,10 @@ const posts = ref([
 
 function sendFriendRequest() {
   UserService.sendFriendRequest(route.params.username)
+}
+
+function showNewPost() {
+  generalStorage.showNewPostOverlay = true
 }
 </script>
 
