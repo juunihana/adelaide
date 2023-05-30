@@ -33,7 +33,7 @@
       <TextInput placeholder="Place" v-model="localState.user.place"/>
 
       <label>Bio</label>
-      <TextInput placeholder="Bio" v-model="localState.user.bio"/>
+      <MultilineTextInput placeholder="Bio" v-model="localState.user.bio"/>
 
       <label>Date of birth</label>
       <TextInput placeholder="Date of birth (yyyy-mm-dd)" v-model="localState.user.dateOfBirth"/>
@@ -49,6 +49,7 @@ import TextInput from "@/components/common/form/TextInput.vue";
 import Button from "@/components/common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
 import {reactive} from "vue";
+import MultilineTextInput from "./common/form/MultilineTextInput.vue";
 
 const generalStorage = generalStore()
 

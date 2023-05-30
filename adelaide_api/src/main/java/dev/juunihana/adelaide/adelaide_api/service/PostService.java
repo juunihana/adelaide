@@ -10,6 +10,8 @@ public interface PostService {
 
   PostDTO findById(String id);
 
+  PostDTO findByIdVotes(String id);
+
   List<PostDTO> findAllByUsername(String username, boolean authored);
 
   void create(CreatePostDTO dto);

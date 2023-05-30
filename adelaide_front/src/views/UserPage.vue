@@ -2,22 +2,22 @@
   <main class="user-page-container">
     <div class="user-profile-container">
       <div class="user-profile-side-container general-block">
-        <div class="user-profile-avatar">
-          <img :src="localState.user.avatar" alt="avatar"/>
+        <div class="user-profile-avatar" v-if="!localState.loadingProfile">
+          <img :src="localState.user.avatar" alt="avatar" v-if="!localState.loadingProfile"/>
         </div>
-        <div class="user-profile-name">
+        <div class="user-profile-name" v-if="!localState.loadingProfile">
           {{ localState.user.firstName }}
           {{ localState.user.middleName }}
           {{ localState.user.lastName }}
           {{ localState.user.maidenSurname ? '(' + localState.user.maidenSurname + ')' : '' }}
         </div>
-        <div class="user-profile-age">
+        <div class="user-profile-age" v-if="!localState.loadingProfile">
           {{ localState.user.age }} years old
         </div>
-        <div class="user-profile-place">
+        <div class="user-profile-place" v-if="!localState.loadingProfile">
           From {{ localState.user.place }}
         </div>
-        <div class="user-profile-bio">
+        <div class="user-profile-bio" v-if="!localState.loadingProfile">
           {{ localState.user.bio }}
         </div>
         <Button v-if="!localState.currentUser" @click="sendFriendRequest">
@@ -79,8 +79,8 @@
         <Button>Top rated</Button>
         <Button class="new-post-button" v-if="localState.currentUser" @click="showNewPost">New post</Button>
       </MenuStripe>
-      <div class="loading-block" v-if="loading">Loading</div>
-      <div class="error-block" v-else-if="error">Error</div>
+      <div class="loading-block" v-if="localState.loadingPosts">Loading</div>
+      <div class="error-block" v-else-if="localState.errorPosts">Error</div>
       <UserPost v-else v-for="post in localState.posts" :post="post"/>
       <footer>
         You have reached the end of the page. Congrats!
@@ -104,9 +104,12 @@ const route = useRoute()
 const generalStorage = generalStore()
 
 const localState = reactive({
-  loading: false,
-  error: false,
-  errorMessage: [],
+  loadingProfile: false,
+  errorProfile: false,
+  errorMessageProfile: [],
+  loadingPosts: false,
+  errorPosts: false,
+  errorMessagePosts: [],
   user: {},
   posts: [],
   currentUser: false
@@ -114,21 +117,28 @@ const localState = reactive({
 
 watch(() => route.params,
     () => {
-      localState.loading = true
+      localState.loadingProfile = true
       UserService.getUserProfile(route.params.username)
       .then((data) => {
-        localState.loading = false
+        localState.loadingProfile = false
         localState.user = data.data
       })
       .catch((error) => {
-        localState.loading = false;
-        localState.error = true;
-        localState.errorMessage = error.data
+        localState.loadingProfile = false;
+        localState.errorProfile = true;
+        localState.errorMessageProfile = error.data
       })
 
+      localState.loadingPosts = true
       UserService.getUserPosts(route.params.username)
       .then((data) => {
+        localState.loadingPosts = false
         localState.posts = data.data
+      })
+      .catch((error) => {
+        localState.loadingPosts = false;
+        localState.errorPosts = true;
+        localState.errorMessagePosts = error.data
       })
     },
     {immediate: true})
@@ -136,18 +146,6 @@ watch(() => route.params,
 generalStorage.$subscribe((mutation, state) => {
   localState.currentUser = state.signedIn.username === route.params.username
 })
-
-const posts = ref([
-  {
-    title: "Title",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    author: {
-      username: "username",
-      firstName: "Name",
-      lastName: "Surname"
-    }
-  }
-])
 
 function sendFriendRequest() {
   UserService.sendFriendRequest(route.params.username)

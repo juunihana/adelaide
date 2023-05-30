@@ -38,6 +38,12 @@ const localState = reactive({
 function addPost() {
   console.log(localState.newPost)
   UserService.addPost(localState.newPost)
+  .then(() => {
+    generalStorage.showNewPostOverlay = false;
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 }
 
 function close() {

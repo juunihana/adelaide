@@ -49,6 +49,25 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
+  public PostDTO findByIdVotes(String id) {
+    PostEntity post = postRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new PostNotFoundException(id));
+
+    if (post.getDeleted()) {
+      throw new PostNotFoundException(id);
+    }
+
+    return PostDTO.builder()
+        .vote(voteMapper.voteToDto(post.getVotes().stream()
+            .filter(vote -> vote.getUser().getUsername()
+                .equals(userService.getSignedUser().getUsername()))
+            .findFirst().orElse(null)))
+        .upVotes((int) post.getVotes().stream().filter(VoteEntity::isUpVote).count())
+        .downVotes((int) post.getVotes().stream().filter(vote -> !vote.isUpVote()).count())
+        .build();
+  }
+
+  @Override
   public List<PostDTO> findAllByUsername(String username, boolean authored) {
     List<PostEntity> posts = (authored ?
         postRepository.findAllByUserUsernameAndAuthorUsername(username, username) :

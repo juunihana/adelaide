@@ -1,18 +1,18 @@
 <template>
   <div class="user-post-block general-block">
     <header class="block-header">
-      <router-link class="post-author" :to="'/'+post.author.username">
+      <router-link class="post-author" :to="'/'+localState.post.author.username">
         <div class="post-avatar">
-          <img :src="post.author.avatar" alt="avatar"/>
+          <img :src="localState.post.author.avatar" alt="avatar"/>
         </div>
         <div class="post-author-name">
-          {{ post.author.firstName + " " + post.author.lastName }}
+          {{ localState.post.author.firstName + " " + localState.post.author.lastName }}
         </div>
         <div class="post-time">
           28 December 1997, 13:00
         </div>
       </router-link>
-      <div class="post-title">{{ post.title }}</div>
+      <div class="post-title">{{ localState.post.title }}</div>
       <!--      <div class="post-tags">-->
       <!--        <router-link to="/" class="post-tag">first-post</router-link>-->
       <!--        <router-link to="/" class="post-tag">some-test-tag</router-link>-->
@@ -20,14 +20,14 @@
       <!--      </div>-->
     </header>
     <div class="post-content">
-      {{ post.content }}
+      {{ localState.post.content }}
     </div>
     <div class="post-footer">
-      <Button @click="vote(true)" :class="post.vote && post.vote.upVote ? 'liked' : ''">Like
-        {{ post.upVotes }}
+      <Button @click="vote(true)" :class="localState.post.vote && localState.post.vote.upVote ? 'liked' : ''">Like
+        {{ localState.post.upVotes }}
       </Button>
-      <Button @click="vote(false)" :class="post.vote && !post.vote.upVote ? 'disliked' : ''">Dislike
-        {{ post.downVotes }}
+      <Button @click="vote(false)" :class="localState.post.vote && !localState.post.vote.upVote ? 'disliked' : ''">Dislike
+        {{ localState.post.downVotes }}
       </Button>
       <Button>Comments</Button>
       <div class="post-button-right" v-if="localState.currentUser">
@@ -46,30 +46,37 @@ import UserService from "../../service/UserService.js";
 
 const generalStorage = generalStore()
 
-defineProps({
+const props = defineProps({
   post: {}
 })
 
 const localState = reactive({
-  currentUser: generalStorage.signedIn.username === this.post.author.username
+  currentUser: generalStorage.signedIn.username === props.post.author.username,
+  post: props.post
 })
 
-function vote(upVote) {
-  if (this.post.vote) {
-    UserService.removeVote(this.post.vote.id)
+async function vote(upVote) {
+  if (localState.post.vote && localState.post.vote.upVote === upVote) {
+    await UserService.removeVote(localState.post.vote.id)
   } else {
-    UserService.addVote({
+    await UserService.addVote({
       targetType: "post",
-      targetId: this.post.id,
+      targetId: localState.post.id,
       upVote: upVote
     })
   }
+
+  await UserService.getUserVoteForPost(localState.post.id)
+  .then((data) => {
+    localState.post.upVotes = data.data.upVotes
+    localState.post.downVotes = data.data.downVotes
+    localState.post.vote = data.data.vote
+  })
 }
 
 function removePost() {
-  UserService.removePost(this.post.id)
+  UserService.removePost(localState.post.id)
 }
-
 </script>
 
 <style scoped>

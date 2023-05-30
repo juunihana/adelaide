@@ -59,6 +59,11 @@ class UserService {
     return this.restService.delete("/posts/" + postId, this.setRequestConfig())
   }
 
+  getUserVoteForPost(postId) {
+    return this.restService.get("/posts/" + postId + "/vote",
+        this.setRequestConfig())
+  }
+
   addVote(vote) {
     return this.restService.post("/votes/new", vote, this.setRequestConfig())
   }
