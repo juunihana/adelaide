@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>User page</title>
+  <link href='https://fonts.googleapis.com/css?family=Noto Sans Display' rel="stylesheet"/>
   <style>
     * {
       margin: 0;
@@ -11,19 +12,45 @@
     }
 
     body {
+      background: #111111;
       font-size: 1rem;
+      color: #eeeeee;
+      font-family: 'Noto Sans Display', sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.15s ease-in;
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: #ff6600;
+      text-shadow: 0 0 2px #ff6600;
+    }
+
+    .upvote:hover {
+      color: #33cc33;
+      text-shadow: 0 0 2px #33cc33;
+    }
+
+    .downvote:hover {
+      color: #b3003b;
+      text-shadow: 0 0 2px #b3003b;
     }
 
     .root-header {
+      background: #222222;
+      box-shadow: 0 0 7px #222222;
       position: fixed;
       display: flex;
       gap: 1rem;
       top: 0;
-      border: solid 1px black;
       height: 50px;
-      /*height: 3rem;*/
       width: 100vw;
       align-items: center;
+      padding: 0 2rem 0 1rem;
     }
 
     .main-menu {
@@ -34,7 +61,6 @@
     .root-header-auth {
       display: flex;
       gap: 0.75rem;
-      margin-left: auto;
     }
 
     .root-container {
@@ -59,70 +85,311 @@
     }
 
     .user-page-info, .user-page-friends, .user-page-groups, .user-page-photos, .user-page-posts-control, .user-page-post {
-      border: solid 1px black;
+      /*border: solid 1px black;*/
       padding: 1rem;
+      background: #222222;
+      border-radius: 5px;
     }
 
-    .user-page-friends {
-      border: solid 1px black;
+    .user-page-info {
+      cursor: default;
     }
 
-    .user-page-groups {
-      border: solid 1px black;
+    .user-page-info-avatar {
+      text-align: center;
+    }
+
+    .user-page-friends, .user-page-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .user-page-friend, .user-page-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: normal;
+      cursor: pointer;
+    }
+
+    .user-page-friend, .user-page-group, .user-page-post-author {
+      max-height: 48px;
+      border-radius: 5px;
+      transition: background-color 0.15s ease-in;
+    }
+
+    .user-page-friend-avatar img, .user-page-group-avatar img, .user-page-post-author-avatar img {
+      border-radius: 5px;
+    }
+
+    .user-page-friend:hover, .user-page-group:hover, .user-page-post-author:hover {
+      background: #444444;
     }
 
     .user-page-photos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .user-page-photos-container {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+    }
+
+    button {
+      background: #ffffff;
       border: solid 1px black;
+      padding: 0.3rem 1.5rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #eeeeee;
+    }
+
+    .align-right {
+      margin-left: auto;
     }
 
     .user-page-posts-control {
-      border: solid 1px black;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .user-page-posts-control-label {
+      cursor: default;
     }
 
     .user-page-post {
-      border: solid 1px black;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .user-page-post-author {
+      display: flex;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .font-header {
+      font-size: 1.25rem;
+    }
+
+    .user-page-post-tags {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .user-page-post-tag {
+      color: #aaaaaa;
+    }
+
+    .user-page-post-content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      cursor: default;
+    }
+
+    .user-page-post-title {
+      /*margin-bottom: 1rem;*/
+      /*padding-bottom: 0.5rem;*/
+    }
+
+    .user-page-post-text {
+
+    }
+
+    .user-page-post-footer {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 0.5rem;
     }
 
   </style>
 </head>
 <body>
 <header class="root-header">
-  <div class="root-header-logo">Adelaide</div>
+  <a class="root-header-logo">Adelaide</a>
   <nav class="main-menu">
-    <div class="main-menu-element">My page</div>
-    <div class="main-menu-element">Feed</div>
-    <div class="main-menu-element">Friends</div>
-    <div class="main-menu-element">Groups</div>
-    <div class="main-menu-element">Photos</div>
-    <div class="main-menu-element">Music</div>
-    <div class="main-menu-element">Videos</div>
+    <a class="main-menu-element">My page</a>
+    <a class="main-menu-element">Feed</a>
+    <a class="main-menu-element">Friends</a>
+    <a class="main-menu-element">Groups</a>
+    <a class="main-menu-element">Photos</a>
+    <a class="main-menu-element">Music</a>
+    <a class="main-menu-element">Videos</a>
   </nav>
-  <div class="root-header-auth">
-    <div class="root-header-auth-element">Sign in</div>
-    <div class="root-header-auth-element">Sign up</div>
+  <div class="root-header-auth align-right">
+    <a class="align-right">Sign in</a>
+    <a class="align-right">Sign up</a>
   </div>
 </header>
 <main class="root-container">
   <div class="side-container">
     <div class="user-page-info">
-      User info
+      <div class="user-page-info-avatar">
+        <img src="avatar_200.png"/>
+      </div>
+      <div class="user-page-info-name font-header">
+        Alice Mikryukova
+      </div>
+      <div class="user-page-info-birthday">
+        28 December
+      </div>
+      <div class="user-page-info-place">
+        Moscow
+      </div>
+      <div class="user-page-info-bio">
+        Aspiring software engineer and musician
+      </div>
     </div>
     <div class="user-page-friends">
-      User friends
+      <a class="font-header">Friends</a>
+      <div class="user-page-friend">
+        <div class="user-page-friend-avatar">
+          <img src="photo_48.png"/>
+        </div>
+        <div class="user-page-friend-name">
+          Juunigatsu Hana
+        </div>
+      </div>
     </div>
     <div class="user-page-groups">
-      User groups
+      <a class="font-header">Groups</a>
+      <div class="user-page-group">
+        <div class="user-page-group-avatar">
+          <img src="photo_48.png"/>
+        </div>
+        <div class="user-page-group-name">
+          Dark Tranquillity Official
+        </div>
+      </div>
     </div>
   </div>
   <div class="main-container">
     <div class="user-page-photos">
-      User photos
+      <a class="font-header">Photos</a>
+      <div class="user-page-photos-container">
+        <div class="user-page-photo">
+          <img src="avatar_200.png"/>
+        </div>
+        <div class="user-page-photo">
+          <img src="avatar_200.png"/>
+        </div>
+        <div class="user-page-photo">
+          <img src="avatar_200.png"/>
+        </div>
+        <div class="user-page-photo">
+          <img src="avatar_200.png"/>
+        </div>
+        <div class="user-page-photo">
+          <img src="avatar_200.png"/>
+        </div>
+      </div>
     </div>
     <div class="user-page-posts-control">
-      User posts controls
+      <div class="user-page-posts-control-label">
+        Sort by
+      </div>
+      <a>
+        Time
+      </a>
+      <a>
+        Rating
+      </a>
+      <a class="align-right">
+        New post
+      </a>
     </div>
     <div class="user-page-post">
-      User post
+      <div class="user-page-post-author">
+        <div class="user-page-post-author-avatar">
+          <img src="photo_48.png"/>
+        </div>
+        <div class="user-page-post-author-name font-header">
+          Juunigatsu Hana
+        </div>
+        <div class="user-page-post-time align-right">
+          10:56am 12 December 1995
+        </div>
+      </div>
+      <div class="user-page-post-content">
+        <div class="user-page-post-title font-header">
+          Title
+        </div>
+        <div class="user-page-post-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+          est laborum.
+        </div>
+        <div class="user-page-post-tags align-right">
+          <a class="user-page-post-tag">tag</a>
+          <a class="user-page-post-tag">tag</a>
+          <a class="user-page-post-tag">tag</a>
+        </div>
+      </div>
+      <div class="user-page-post-footer">
+        <a class="upvote">Upvote 0</a>
+        <a class="downvote">Downvote 0</a>
+        <a>Comment 0</a>
+        <div class="align-right flex-row">
+          <a class="align-right">Edit</a>
+          <a class="align-right">Delete</a>
+        </div>
+      </div>
+    </div>
+    <div class="user-page-post">
+      <div class="user-page-post-author">
+        <div class="user-page-post-author-avatar">
+          <img src="photo_48.png"/>
+        </div>
+        <div class="user-page-post-author-name font-header">
+          Alice Mikryukova
+        </div>
+        <div class="user-page-post-time align-right">
+          07:56am 9 December 1995
+        </div>
+      </div>
+      <div class="user-page-post-content">
+        <div class="user-page-post-title font-header">
+          Title
+        </div>
+        <div class="user-page-post-text">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+          est laborum.
+        </div>
+        <div class="user-page-post-tags align-right">
+          <a class="user-page-post-tag">tag</a>
+          <a class="user-page-post-tag">tag</a>
+          <a class="user-page-post-tag">tag</a>
+        </div>
+      </div>
+      <div class="user-page-post-footer">
+        <a class="upvote">Upvote 0</a>
+        <a class="downvote">Downvote 0</a>
+        <a>Comment 0</a>
+        <div class="align-right flex-row">
+          <a class="align-right">Edit</a>
+          <a class="align-right">Delete</a>
+        </div>
+      </div>
     </div>
   </div>
 </main>
