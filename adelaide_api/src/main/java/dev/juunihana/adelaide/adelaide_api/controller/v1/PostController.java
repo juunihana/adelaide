@@ -5,6 +5,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,8 +28,8 @@ public class PostController implements PostApi {
   }
 
   @Override
-  public List<PostDTO> findAllByUsername(String username, boolean authored) {
-    return postService.findAllByUsername(username, authored);
+  public List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams) {
+    return postService.findAllByUsername(username, requestParams);
   }
 
   @Override

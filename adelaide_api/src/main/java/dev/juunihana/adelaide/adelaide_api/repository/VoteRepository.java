@@ -13,5 +13,5 @@ public interface VoteRepository extends JpaRepository<VoteEntity, UUID> {
 
   Optional<VoteEntity> findByUser(UserEntity user);
 
-  Optional<VoteEntity> findByUserAndPost(UserEntity user, PostEntity post);
+  Optional<VoteEntity> findByUserAndPostId(UserEntity user, UUID postId);
 }

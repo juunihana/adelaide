@@ -4,6 +4,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ public interface PostApi {
 
   @GetMapping("/profile/{username}")
   List<PostDTO> findAllByUsername(@PathVariable String username,
-      @RequestParam(required = false) boolean authored);
+      @RequestParam Map<String, String> requestParams);
 
   @PostMapping("/new")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")

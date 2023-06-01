@@ -5,6 +5,7 @@ import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.vote.CreateVoteDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
 import java.util.List;
+import java.util.Map;
 
 public interface PostService {
 
@@ -12,7 +13,7 @@ public interface PostService {
 
   PostDTO findByIdVotes(String id);
 
-  List<PostDTO> findAllByUsername(String username, boolean authored);
+  List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams);
 
   void create(CreatePostDTO dto);
 

@@ -18,9 +18,10 @@ import dev.juunihana.adelaide.adelaide_api.repository.VoteRepository;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -50,12 +51,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public PostDTO findByIdVotes(String id) {
-    PostEntity post = postRepository.findById(UUID.fromString(id))
-        .orElseThrow(() -> new PostNotFoundException(id));
-
-    if (post.getDeleted()) {
-      throw new PostNotFoundException(id);
-    }
+    PostEntity post = findByIdInternalNotDeleted(id);
 
     return PostDTO.builder()
         .vote(voteMapper.voteToDto(post.getVotes().stream()
@@ -68,44 +64,39 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public List<PostDTO> findAllByUsername(String username, boolean authored) {
-    List<PostEntity> posts = (authored ?
-        postRepository.findAllByUserUsernameAndAuthorUsername(username, username) :
-        postRepository.findAllByUserUsername(username))
-        .stream()
-        .filter(post -> !post.getDeleted())
+  public List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams) {
+    boolean authored = requestParams.containsKey("authored") && Boolean.parseBoolean(
+        requestParams.get("authored"));
+    boolean order = requestParams.containsKey("order") && Boolean.parseBoolean(
+        requestParams.get("order"));
+
+    List<PostDTO> posts = postRepository.findAllByUserUsername(username).stream()
+        .filter(post ->
+            (!authored || post.getAuthor().getUsername().equals(username)) && !post.getDeleted())
+        .map(postMapper::postEntityToDTO)
+        .sorted(
+            switch (requestParams.get("sortBy")) {
+              case "time" -> Comparator.comparing(PostDTO::getTimeCreated);
+              case "upVotes" -> Comparator.comparing(PostDTO::getUpVotes);
+            })
         .toList();
 
-    List<PostDTO> dtos = new ArrayList<>();
+    posts.forEach(post -> post.setVote(userService.isUserSigned() ? voteMapper.voteToDto(
+        voteRepository.findByUserAndPostId(userService.getSignedUserEntity(), post.getId())
+            .orElse(null)) : null));
 
-    posts.forEach(post -> {
-      PostDTO postDTO = postMapper.postEntityToDTO(post);
+    if (order) {
+      Collections.reverse(posts);
+    }
 
-      if (userService.isUserSigned()) {
-        postDTO.setVote(voteMapper.voteToDto(
-            voteRepository.findByUserAndPost(userService.getSignedUserEntity(), post)
-                .orElse(null)));
-      }
-
-      dtos.add(postDTO);
-
-    });
-
-    return dtos;
+    return posts;
   }
 
   @Override
   public void create(CreatePostDTO createPostDTO) {
-    UUID postId = UUID.randomUUID();
-
-    UserEntity user = userService.getSignedUserEntity();
-    UserEntity author = (UserEntity) userService.loadUserByUsername(
-        userService.getSignedUser().getUsername());
-
     postRepository.save(PostEntity.builder()
-        .id(postId)
-        .user(user)
-        .author(author)
+        .user(userService.getByUsername(createPostDTO.getUsername()))
+        .author(userService.getSignedUserEntity())
         .title(createPostDTO.getTitle())
         .content(createPostDTO.getContent())
         .timeCreated(LocalDateTime.now())
@@ -115,11 +106,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public void update(String postId, CreatePostDTO createPostDTO) {
-    PostEntity post = findByIdInternal(postId);
-
-    if (post.getDeleted()) {
-      throw new PostNotFoundException(postId);
-    }
+    PostEntity post = findByIdInternalNotDeleted(postId);
 
     String authorUsername = userService.getSignedUser().getUsername();
     if (!post.getUser().getUsername().equals(authorUsername)) {
@@ -135,11 +122,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public void delete(String postId) {
-    PostEntity post = findByIdInternal(postId);
-
-    if (post.getDeleted()) {
-      throw new PostNotFoundException(postId);
-    }
+    PostEntity post = findByIdInternalNotDeleted(postId);
 
     String authorUsername = userService.getSignedUserEntity().getUsername();
     if (!post.getUser().getUsername().equals(authorUsername)) {
@@ -153,44 +136,27 @@ public class PostServiceImpl implements PostService {
   }
 
   public void addVote(CreateVoteDTO dto) {
-    PostEntity post = findByIdInternal(dto.getTargetId());
-
-    if (post.getDeleted()) {
-      throw new PostNotFoundException(dto.getTargetId());
-    }
-
+    PostEntity post = findByIdInternalNotDeleted(dto.getTargetId());
     UserEntity user = userService.getSignedUserEntity();
 
-    VoteEntity vote = voteRepository.findByUserAndPost(user, post)
-        .orElse(null);
-
-    if (Objects.isNull(vote)) {
-      voteRepository.save(VoteEntity.builder()
-          .upVote(dto.isUpVote())
-          .timeVoted(LocalDateTime.now())
-          .user(user)
-          .post(post)
-          .build());
-    } else {
-      vote.setUpVote(dto.isUpVote());
-      vote.setTimeVoted(LocalDateTime.now());
-      voteRepository.save(vote);
-    }
+    voteRepository.findByUserAndPostId(user, post.getId())
+        .ifPresentOrElse(vote -> {
+          vote.setUpVote(dto.isUpVote());
+          vote.setTimeVoted(LocalDateTime.now());
+          voteRepository.save(vote);
+        }, () -> voteRepository.save(VoteEntity.builder()
+            .upVote(dto.isUpVote())
+            .timeVoted(LocalDateTime.now())
+            .user(user)
+            .post(post)
+            .build()));
   }
 
   @Override
   public void addComment(CreateCommentDTO dto) {
-    PostEntity post = findByIdInternal(dto.getTargetId());
-
-    if (post.getDeleted()) {
-      throw new PostNotFoundException(dto.getTargetId());
-    }
-
-    UserEntity user = userService.getSignedUserEntity();
-
     commentRepository.save(CommentEntity.builder()
-        .author(user)
-        .post(post)
+        .author(userService.getSignedUserEntity())
+        .post(findByIdInternalNotDeleted(dto.getTargetId()))
         .content(dto.getContent())
         .timeCreated(LocalDateTime.now())
         .build());
@@ -198,6 +164,12 @@ public class PostServiceImpl implements PostService {
 
   private PostEntity findByIdInternal(String postId) {
     return postRepository.findById(UUID.fromString(postId))
+        .orElseThrow(() -> new PostNotFoundException(postId));
+  }
+
+  private PostEntity findByIdInternalNotDeleted(String postId) {
+    return postRepository.findById(UUID.fromString(postId))
+        .filter(post -> !post.getDeleted())
         .orElseThrow(() -> new PostNotFoundException(postId));
   }
 }

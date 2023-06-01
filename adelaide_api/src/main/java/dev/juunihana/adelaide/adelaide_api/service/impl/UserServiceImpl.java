@@ -18,21 +18,16 @@ import dev.juunihana.adelaide.adelaide_api.exception.UserNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.UserMapper;
 import dev.juunihana.adelaide.adelaide_api.repository.PasswordHistoryRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
-import dev.juunihana.adelaide.adelaide_api.service.JwtService;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,17 +51,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    UserDetails userDetails = userRepository.findByUsername(username).orElse(null);
-    if (Objects.nonNull(userDetails)) {
-      return userDetails;
-    } else {
-      userDetails = userRepository.findByEmail(username).orElse(null);
-      if (Objects.nonNull(userDetails)) {
-        return userDetails;
-      }
-    }
-
-    throw new UserNotFoundException(username);
+    return userRepository.findByUsername(username)
+        .orElseGet(() -> userRepository.findByEmail(username)
+            .orElseThrow(() -> new UserNotFoundException(username)));
   }
 
   @Override
@@ -83,6 +70,24 @@ public class UserServiceImpl implements UserService {
   public UserEntity getSignedUserEntity() {
     return userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException(getCurrentUserUsername()));
+  }
+
+  @Override
+  public UserEntity getByUsername(String username) {
+    return userRepository.findByUsername(username)
+        .orElseThrow(() -> new UserNotFoundException(username));
+  }
+
+  @Override
+  public UserEntity getByEmail(String email) {
+    return userRepository.findByEmail(email)
+        .orElseThrow(() -> new UserNotFoundException(email));
+  }
+
+  @Override
+  public UserEntity getByPhone(String phone) {
+    return userRepository.findByPhone(phone)
+        .orElseThrow(() -> new UserNotFoundException(phone));
   }
 
   @Override

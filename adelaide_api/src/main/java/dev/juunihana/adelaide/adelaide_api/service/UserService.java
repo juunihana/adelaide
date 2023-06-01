@@ -19,6 +19,12 @@ public interface UserService extends UserDetailsService {
 
   UserEntity getSignedUserEntity();
 
+  UserEntity getByUsername(String username);
+
+  UserEntity getByEmail(String email);
+
+  UserEntity getByPhone(String phone);
+
   UserCompactDTO getSignedUser();
 
   @Override
