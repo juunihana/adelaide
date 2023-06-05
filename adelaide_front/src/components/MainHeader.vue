@@ -1,72 +1,37 @@
 <template>
-  <header class="main-header">
-    <MenuLink link="/">
-      Adelaide Social Network
-    </MenuLink>
-    <SearchBar/>
-    <MenuStripe v-if="localState.signedInUser">
-      <MenuLink :link="'/' + localState.signedInUser.username">
-        My profile
-      </MenuLink>
-      <MenuLink link="/messages">
-        Messages
-      </MenuLink>
-      <MenuLink link="/feed">
-        Feed
-      </MenuLink>
-      <MenuLink link="/friends">
-        Friends
-      </MenuLink>
-      <MenuLink link="/groups">
-        Groups
-      </MenuLink>
-      <MenuLink link="/photos">
-        Photos
-      </MenuLink>
-      <MenuLink link="/music">
-        Music
-      </MenuLink>
-      <MenuLink link="/videos">
-        Videos
-      </MenuLink>
-    </MenuStripe>
-    <MenuStripe class="auth-panel" v-if="!localState.signedInUser">
-      <Button @click.prevent="showSignIn">
-        Sign in
-      </Button>
-      <Button @click.prevent="showSignUp">
-        Sign up
-      </Button>
-    </MenuStripe>
-    <MenuStripe class="auth-panel" v-else
-                @click.prevent="localState.menuColumnShown = !localState.menuColumnShown">
-      <MenuLink link="/settings"
-                :class="{'user-menu-element-active': localState.menuColumnShown,
-                'user-menu-element': !localState.menuColumnShown}">
-        Settings
-      </MenuLink>
-      <Button @click.prevent="signOut"
-              :class="{'user-menu-element-active': localState.menuColumnShown,
-              'user-menu-element': !localState.menuColumnShown}">
-        Sign out
-      </Button>
-      <Button class="user-auth">
-        <div class="user-avatar">
-          <img :src="localState.signedInUser.avatar" alt="avatar"/>
-        </div>
-        <div class="user-name">
-          {{ localState.signedInUser.firstName }}
-          {{ localState.signedInUser.lastName }}
-        </div>
-      </Button>
-    </MenuStripe>
+  <header class="root-header flex-row gap-100 align-center">
+    <a class="root-header-logo">Adelaide</a>
+    <div class="search-bar">
+      <input type="text"/>
+      <button>Search</button>
+    </div>
+    <nav class="flex-row gap-75">
+      <router-link :to="'/' + this.$route.params.username" class="main-menu-element">My page</router-link>
+      <a class="main-menu-element">Feed</a>
+      <a class="main-menu-element">Messages</a>
+      <a class="main-menu-element">Friends</a>
+      <a class="main-menu-element">Groups</a>
+      <a class="main-menu-element">Photos</a>
+      <a class="main-menu-element">Music</a>
+      <a class="main-menu-element">Videos</a>
+    </nav>
+    <div class="flex-row gap-100 align-right" v-if="!localState.signedInUser">
+      <button @click="showSignIn">Sign in</button>
+      <button>Sign up</button>
+    </div>
+    <button class="flex-row gap-100 align-right bg-light bg-hover align-center" v-else @click="toggleUserMenu">
+      <img src="../assets/sample_image_48.png"/>
+      {{ localState.signedInUser.firstName }}
+      {{ localState.signedInUser.lastName }}
+    </button>
+    <div class="flex-col gap-25 block user-menu align-center" v-if="localState.userMenu" @click="toggleUserMenu">
+      <a>Settings</a>
+      <button @click="signOut">Sign out</button>
+    </div>
   </header>
 </template>
 
 <script setup>
-import SearchBar from "@/components/main-header/SearchBar.vue"
-import MenuStripe from "@/components/common/MenuStripe.vue"
-import MenuLink from "@/components/common/menu-stripe/MenuLink.vue"
 import Button from "@/components/common/form/Button.vue"
 import {reactive} from "vue"
 import {generalStore} from "@/stores/generalStore"
@@ -74,7 +39,7 @@ import {generalStore} from "@/stores/generalStore"
 const generalStorage = generalStore()
 
 let localState = reactive({
-  menuColumnShown: false,
+  userMenu: false,
   signedInUser: null
 })
 
@@ -84,6 +49,7 @@ generalStorage.$subscribe((mutation, state) => {
 
 function showSignIn() {
   generalStorage.showSignInOverlay = true
+  generalStorage.signIn("username", "password")
 }
 
 function signOut() {
@@ -93,50 +59,14 @@ function signOut() {
 function showSignUp() {
   generalStorage.showSignUpOverlay = true
 }
+
+function toggleUserMenu() {
+  localState.userMenu = !localState.userMenu
+}
 </script>
 
 <style scoped>
-.main-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  align-items: center;
-  background: var(--background-block);
-  padding: 1rem;
-  box-shadow: 0 0 10px #111111;
-}
-
-.user-menu-element {
-  display: none;
-  transition: 2s;
-}
-
-.user-menu-element-active {
-  display: block;
-  transition: 2s;
-}
-
-.auth-panel {
-  margin-left: auto;
-}
-
-.user-auth {
-  display: flex;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.user-auth > * {
-  cursor: pointer;
-}
-
-.user-avatar img {
-  max-width: 24px;
-  max-height: 24px;
-  cursor: pointer;
+button img {
+  max-height: 32px;
 }
 </style>

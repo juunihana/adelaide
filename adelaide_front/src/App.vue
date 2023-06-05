@@ -4,7 +4,9 @@
   <SignUpOverlay v-if="localState.showSignUpOverlay"/>
   <NewPostOverlay v-if="localState.showNewPostOverlay"/>
   <MediaOverlay v-if="false"/>
-  <main class="root-container">
+
+  <main-header/>
+  <main class="root-container flex-row">
     <router-view/>
   </main>
 </template>
@@ -35,10 +37,4 @@ generalStorage.$subscribe((mutation, state) => {
 </script>
 
 <style scoped>
-.root-container {
-  width: 85%;
-  max-width: 85%;
-  margin: 4rem auto;
-  overflow: hidden;
-}
 </style>

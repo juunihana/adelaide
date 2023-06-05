@@ -1,104 +1,88 @@
 <template>
-  <main class="user-page-container">
-    <div class="user-profile-container">
-      <div class="user-profile-side-container general-block">
-        <div class="user-profile-avatar" v-if="!localState.loadingProfile">
-          <img :src="localState.user.avatar" alt="avatar" v-if="!localState.loadingProfile"/>
-        </div>
-        <div class="user-profile-name" v-if="!localState.loadingProfile">
-          {{ localState.user.firstName }}
-          {{ localState.user.middleName }}
-          {{ localState.user.lastName }}
-          {{ localState.user.maidenSurname ? '(' + localState.user.maidenSurname + ')' : '' }}
-        </div>
-        <div class="user-profile-age" v-if="!localState.loadingProfile">
-          {{ localState.user.age }} years old
-        </div>
-        <div class="user-profile-place" v-if="!localState.loadingProfile">
-          From {{ localState.user.place }}
-        </div>
-        <div class="user-profile-bio" v-if="!localState.loadingProfile">
-          {{ localState.user.bio }}
-        </div>
-        <Button v-if="!localState.currentUser" @click="sendFriendRequest">
-          Send friends request
-        </Button>
+  <div class="flex-col side-container gap-100">
+    <div class="block" v-if="localState.loadingProfile">loading</div>
+    <div class="flex-col gap-25 block" v-else>
+      <div class="text-center">
+        <img class="photo-link" src="../assets/sample_image_200.png"/>
       </div>
-      <div class="user-profile-side-container general-block" v-if="localState.user.friends">
-        <router-link to="/">
-          <div class="side-block-header">Friends</div>
-        </router-link>
-        <router-link class="side-block-element" :to="'/' + friend.username"
-                     v-for="friend in localState.user.friends">
-          <div class="side-block-image"><img :src="friend.avatar" alt="avatar"/></div>
-          <div class="side-block-text">{{ friend.firstName }} {{ friend.lastName }}</div>
-        </router-link>
+      <div class="font-title text-regular">
+        {{ localState.user.firstName }}
+        {{ localState.user.lastName }}
       </div>
-      <div class="user-profile-side-container general-block">
-        <router-link to="/">
-          <div class="side-block-header">Groups</div>
-        </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Group</div>
-        </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Group</div>
-        </router-link>
-        <router-link class="side-block-element" to="/">
-          <div class="side-block-image"><img src="@/assets/photo_48.png" alt="avatar"/></div>
-          <div class="side-block-text">Group</div>
-        </router-link>
+      <div class="font-dimmed text-regular">
+        {{ localState.user.age }} years old
       </div>
-      <div class="user-profile-side-container general-block">
-        <router-link to="/">
-          <div class="side-block-header">Photo</div>
-        </router-link>
-        <div class="user-profile-side-photo-container">
-          <router-link class="side-block-photo-element-top" to="/">
-            <img src="@/assets/photo_96.png" alt="photo"/>
-          </router-link>
-          <router-link class="side-block-photo-element" to="/">
-            <img src="@/assets/photo_96.png" alt="photo"/>
-          </router-link>
-          <router-link class="side-block-photo-element" to="/">
-            <img src="@/assets/photo_96.png" alt="photo"/>
-          </router-link>
-          <router-link class="side-block-photo-element" to="/">
-            <img src="@/assets/photo_96.png" alt="photo"/>
-          </router-link>
-        </div>
+      <div class="font-dimmed text-regular" v-if="localState.user.place">
+        From {{ localState.user.place }}
+      </div>
+      <div class="text-regular bg-light" v-if="localState.user.bio">
+        {{ localState.user.bio }}
+      </div>
+      <div class="flex-row gap-25">
+        <button class="font-dimmed">Edit info</button>
+        <!--        <a class="font-dimmed">Send friends request</a> &lt;!&ndash; IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD &ndash;&gt;-->
+        <!--        <a class="font-dimmed">Accept request</a>-->
+        <!--        <a class="font-dimmed">Decline request</a>-->
+        <!--        <a class="font-dimmed">Remove friend</a>-->
       </div>
     </div>
-    <div class="user-posts-container">
-      <MenuStripe class="general-block">
-        <SearchBar class="post-search-bar"/>
-        <MenuLabel>Sort by</MenuLabel>
-        <Button>Recent</Button>
-        <Button>Top rated</Button>
-        <Button class="new-post-button" v-if="localState.currentUser" @click="showNewPost">New post</Button>
-      </MenuStripe>
-      <div class="loading-block" v-if="localState.loadingPosts">Loading</div>
-      <div class="error-block" v-else-if="localState.errorPosts">Error</div>
-      <UserPost v-else v-for="post in localState.posts" :post="post"/>
-      <footer>
-        You have reached the end of the page. Congrats!
-      </footer>
+    <div class="block" v-if="localState.loadingProfile">loading</div>
+    <div class="block flex-col gap-25" v-else>
+      <a class="bg-hover block-header font-header">Friends {{ localState.user.friends.length }}</a>
+      <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50" v-for="friend in localState.user.friends">
+        <user-profile-card :cardInfo="{name: friend.firstName + ' ' + friend.lastName}"/>
+      </router-link>
     </div>
-  </main>
+    <div class="block" v-if="localState.loadingProfile">loading</div>
+    <div class="block flex-col gap-25" v-else>
+      <a class="block-header bg-hover font-header">Groups</a>
+      <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50" v-for="group in localState.user.groups">
+        <user-profile-card :cardInfo="{name: group.name }"/>
+      </router-link>
+    </div>
+  </div>
+  <div class="block" v-if="localState.loadingProfile">loading</div>
+  <div class="flex-col main-container gap-100" v-else>
+    <div class="block flex-col gap-25">
+      <a class="block-header bg-hover font-header">Photos</a>
+      <div class="flex-row gap-50">
+        <img src="../assets/sample_image_200.png"/>
+        <img src="../assets/sample_image_200.png"/>
+        <img src="../assets/sample_image_200.png"/>
+        <img src="../assets/sample_image_200.png"/>
+      </div>
+    </div>
+    <div class="block flex-row gap-50">
+      <div class="search-bar">
+        <input type="text"/>
+        <button>Search</button>
+      </div>
+      <div class="">
+        Sort by
+      </div>
+      <a>
+        Time
+      </a>
+      <a>
+        Rating
+      </a>
+      <a class="align-right">
+        New post
+      </a>
+    </div>
+    <div class="block" v-if="localState.loadingPosts">loading</div>
+    <user-post v-else v-for="post in localState.posts" :post="post"/>
+  </div>
 </template>
 
 <script setup>
-import MenuStripe from "../components/common/MenuStripe.vue";
-import SearchBar from "../components/main-header/SearchBar.vue";
-import MenuLabel from "../components/common/menu-stripe/MenuLabel.vue";
 import UserPost from "../components/user-posts/UserPost.vue";
 import Button from "../components/common/form/Button.vue";
 import {reactive, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import UserService from "../service/UserService.js";
 import {generalStore} from "../stores/generalStore.js";
+import UserProfileCard from "../components/user-profile/UserProfileCard.vue";
 
 const route = useRoute()
 const generalStorage = generalStore()
@@ -157,140 +141,5 @@ function showNewPost() {
 </script>
 
 <style scoped>
-.user-page-container {
-  display: grid;
-  grid-column-gap: 2rem;
-  grid-template-columns: 1fr 3fr;
-}
 
-.user-profile-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.user-profile-side-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem;
-}
-
-.user-profile-side-photo-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0.25rem;
-}
-
-.user-profile-age {
-  font-size: 0.1rem;
-}
-
-.side-block-element, .side-block-header {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  border-radius: var(--border-radius);
-  font-family: var(--font-family);
-  align-items: center;
-  cursor: pointer;
-}
-
-.side-block-header {
-  height: 3vh;
-  font-size: 1.2rem;
-  color: var(--color);
-  padding: 0.25rem;
-}
-
-.side-block-element {
-  height: 5vh;
-  background: var(--background-root);
-}
-
-.side-block-header:hover {
-  background: var(--background-hover);
-}
-
-.side-block-element:hover {
-  background: var(--background-hover);
-}
-
-.side-block-photo-element-top {
-  grid-column-start: 1;
-  grid-column-end: 4;
-}
-
-.side-block-photo-element {
-
-}
-
-.side-block-image {
-  flex: 1;
-  /*cursor: pointer;*/
-}
-
-.side-block-image img {
-  object-fit: cover;
-  max-height: 40px;
-  cursor: pointer;
-}
-
-.side-block-text {
-  flex: 6;
-  color: var(--color);
-  cursor: pointer;
-}
-
-.user-posts-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.user-profile-avatar {
-  text-align: center;
-}
-
-.user-profile-avatar img {
-  max-width: 200px;
-  max-height: 200px;
-}
-
-.user-profile-name {
-  font-size: 1.6rem;
-}
-
-.user-profile-age {
-  font-size: 1rem;
-}
-
-.user-profile-place {
-  font-size: 1rem;
-}
-
-.user-profile-bio {
-  font-size: 1rem;
-}
-
-.post-search-bar {
-}
-
-.new-post-button {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.loading-block {
-  background: cornflowerblue;
-  border-radius: 3px;
-  padding: 1rem;
-}
-
-.error-block {
-  background: lightpink;
-  border-radius: 3px;
-  padding: 1rem;
-}
 </style>

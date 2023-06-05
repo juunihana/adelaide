@@ -12,6 +12,9 @@ export const generalStore = defineStore('generalStore', {
     signedIn: null
   }),
   actions: {
+    moveToUserPage(username) {
+      router.push("/" + username)
+    },
     signUp(user) {
       UserService.signUp(user)
       .then(data => {

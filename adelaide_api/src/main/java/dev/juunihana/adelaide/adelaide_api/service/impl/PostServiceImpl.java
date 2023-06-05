@@ -78,6 +78,7 @@ public class PostServiceImpl implements PostService {
             switch (requestParams.get("sortBy")) {
               case "time" -> Comparator.comparing(PostDTO::getTimeCreated);
               case "upVotes" -> Comparator.comparing(PostDTO::getUpVotes);
+              default -> Comparator.comparing(PostDTO::getTimeCreated);
             })
         .toList();
 

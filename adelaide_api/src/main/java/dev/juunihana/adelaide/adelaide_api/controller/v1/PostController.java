@@ -24,7 +24,7 @@ public class PostController implements PostApi {
 
   @GetMapping("/{postId}/vote")
   public PostDTO findByIdVotes(@PathVariable String postId) {
-    return postService.findById(postId);
+    return postService.findByIdVotes(postId);
   }
 
   @Override
