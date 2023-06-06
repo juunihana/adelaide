@@ -1,12 +1,12 @@
 <template>
   <header class="root-header flex-row gap-100 align-center">
-    <a class="root-header-logo">Adelaide</a>
+    <router-link to="/" class="root-header-logo">Adelaide</router-link>
     <div class="search-bar flex-row gap-50">
-      <TextInput placeholder="Search"/>
+      <input type="text" placeholder="Search"/>
       <button>Search</button>
     </div>
-    <nav class="flex-row gap-75">
-      <router-link :to="'/' + this.$route.params.username" class="main-menu-element">My page</router-link>
+    <nav class="flex-row gap-75" v-if="localState.signedInUser">
+      <router-link :to="'/' + localState.signedInUser.username" class="main-menu-element">My page</router-link>
       <a class="main-menu-element">Feed</a>
       <a class="main-menu-element">Messages</a>
       <a class="main-menu-element">Friends</a>

@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.adelaide_api.controller.v1;
 
 import dev.juunihana.adelaide.adelaide_api.api.v1.UserApi;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.CheckUsernameEmailDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
@@ -80,6 +81,12 @@ public class UserController implements UserApi {
   @Override
   public void create(CreateUserProfileDTO createUserProfileDTO) {
     userService.createUser(createUserProfileDTO);
+  }
+
+  @Override
+  public void checkUsernameEmail(CheckUsernameEmailDTO dto) {
+    userService.userExistsByUsername(dto.getUsername());
+    userService.userExistsByEmail(dto.getEmail());
   }
 
   public void uploadAvatar(MultipartFile image) {

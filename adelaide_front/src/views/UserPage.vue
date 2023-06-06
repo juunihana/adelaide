@@ -29,28 +29,28 @@
         <!--        <a class="font-dimmed">Remove friend</a>-->
       </div>
     </div>
-    <div class="block" v-if="localState.loadingProfile">loading</div>
+    <div class="block" v-if="localState.loading">loading</div>
     <div class="block flex-col gap-25" v-else>
-      <a class="bg-hover block-header font-header">Friends {{
-          localState.user.friends ? localState.user.friends.length : '0'
-        }}</a>
+      <a class="bg-hover block-header font-header">
+        Friends {{ localState.user.friends ? localState.user.friends.length : '0' }}
+      </a>
       <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50"
                    v-for="friend in localState.user.friends">
         <user-profile-card :cardInfo="{name: friend.firstName + ' ' + friend.lastName}"/>
       </router-link>
     </div>
-    <div class="block" v-if="localState.loadingProfile">loading</div>
+    <div class="block" v-if="localState.loading">loading</div>
     <div class="block flex-col gap-25" v-else>
-      <a class="block-header bg-hover font-header">Groups {{
-          localState.user.friends ? localState.user.friends.length : '0'
-        }}</a>
+      <a class="block-header bg-hover font-header">
+        Groups {{ localState.user.friends ? localState.user.friends.length : '0' }}
+      </a>
       <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50"
                    v-for="group in localState.user.groups">
         <user-profile-card :cardInfo="{name: group.name }"/>
       </router-link>
     </div>
   </div>
-  <div class="block" v-if="localState.loadingProfile">loading</div>
+  <div class="block" v-if="localState.loading">loading</div>
   <div class="flex-col main-container gap-100" v-else>
     <div class="block flex-col gap-25">
       <a class="block-header bg-hover font-header">Photos</a>
@@ -75,7 +75,7 @@
       <a>
         Rating
       </a>
-      <button class="align-right" @click="showNewPostOverlay">
+      <button class="align-right" @click="showNewPostOverlay" v-if="localState.signedInUser">
         New post
       </button>
     </div>
@@ -84,12 +84,12 @@
 </template>
 
 <script setup>
-import Button from "../components/common/form/Button.vue";
+import Button from "@/components/common/form/Button.vue";
 import {reactive, watch} from "vue";
-import UserService from "../service/UserService.js";
-import {generalStore} from "../stores/generalStore.js";
-import UserProfileCard from "../components/user-profile/UserProfileCard.vue";
-import PostList from "../components/PostList.vue";
+import UserService from "@/service/UserService.js";
+import {generalStore} from "@/stores/generalStore.js";
+import UserProfileCard from "@/components/user-profile/UserProfileCard.vue";
+import PostList from "@/components/PostList.vue";
 import {useRoute} from "vue-router";
 
 const generalStorage = generalStore()
@@ -100,7 +100,8 @@ const localState = reactive({
   error: false,
   errorMessage: [],
   user: {},
-  currentUser: false
+  currentUser: false,
+  signedInUser: null
 })
 
 watch(() => route.params,
@@ -121,6 +122,7 @@ watch(() => route.params,
 
 generalStorage.$subscribe((mutation, state) => {
   localState.currentUser = state.signedIn.username === route.params.username
+  localState.signedInUser = state.signedIn
 })
 
 function sendFriendsRequest() {

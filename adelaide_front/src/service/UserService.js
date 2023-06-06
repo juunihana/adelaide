@@ -8,6 +8,10 @@ class UserService {
     })
   }
 
+  checkUserByUsernameAndEmail(username, email) {
+    return this.restService.post("/users/check/username-email", {username: username, email: email})
+  }
+
   signUp(user) {
     return this.restService.post("/users/new", user)
   }

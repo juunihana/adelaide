@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,7 +63,15 @@ public class CreateUserProfileDTO {
 
   private String place;
 
-  @NotNull(message = "Date of birth cannot be empty")
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate dateOfBirth;
+  @NotNull(message = "Day of birth cannot be empty")
+  @Range(min = 1, max = 31, message = "Day must be between 1 and 31")
+  private Integer day;
+
+  @NotNull(message = "Month of birth cannot be empty")
+  @Range(min = 0, max = 11, message = "Month must be between 0 and 11")
+  private Integer month;
+
+  @NotNull(message = "Year of birth cannot be empty")
+  private Integer year;
+
 }

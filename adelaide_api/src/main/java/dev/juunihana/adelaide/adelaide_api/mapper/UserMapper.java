@@ -33,6 +33,7 @@ public abstract class UserMapper {
   })
   public abstract UserFullDTO userEntityToProfile(UserEntity userEntity);
 
+
   public abstract UserEntity createUserToEntity(CreateUserProfileDTO dto);
 
   @Mappings({

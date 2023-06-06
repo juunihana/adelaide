@@ -1,17 +1,19 @@
 <template>
   <div class="overlay" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
-    <div class="overlay-container" @click.stop>
-      <header>Sign in</header>
-      <label>Username</label>
-      <TextInput placeholder="Username" v-model="localState.username"/>
+    <div class="overlay-container flex-col gap-100" @click.stop>
+      <header class="font-header text-center">Sign in</header>
+      <div class="block error-block flex-col gap-50" v-if="localState.error">
+        <div v-for="field in localState.errorMessage">{{ field }}</div>
+      </div>
+      <div class="form">
+        <label>Username</label>
+        <input type="text" placeholder="Username" v-model="localState.username"/>
 
-      <label>Password</label>
-      <TextInput placeholder="Password" :isPassword="true" v-model="localState.password"/>
+        <label>Password</label>
+        <input type="password" placeholder="Password" v-model="localState.password"/>
+      </div>
 
-      <label></label>
-      <Button @click.prevent="signIn">
-        Sign in
-      </Button>
+      <button @click.prevent="signIn" class="align-right">Sign in</button>
     </div>
   </div>
 </template>
@@ -21,16 +23,46 @@ import TextInput from "./common/form/TextInput.vue";
 import Button from "./common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
 import {reactive} from "vue";
+import UserService from "@/service/UserService";
+import VueCookies from "vue-cookies";
+import router from "@/router/router";
 
 const generalStorage = generalStore()
 
 const localState = reactive({
   username: null,
-  password: null
+  password: null,
+  loading: false,
+  error: false,
+  errorMessage: []
 })
 
 function signIn() {
-  generalStorage.signIn(localState.username, localState.password)
+  localState.loading = true
+  localState.error = false
+  UserService.signIn(localState.username, localState.password)
+  .then(data => {
+    localState.loading = false
+    VueCookies.set('auth', data.data.token, '1d')
+
+    generalStorage.showSignInOverlay = false
+    generalStorage.checkSignIn()
+
+    this.$router.push("/" + localState.username)
+  })
+  .catch(err => {
+    console.log(err)
+    localState.loading = false
+    localState.error = true
+    switch (err.response.data.result) {
+      case "validationError":
+        err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
+        break
+      case "userNotFoundError":
+        localState.errorMessage.push(err.response.data.message)
+        break
+    }
+  })
 }
 
 function close() {
@@ -40,19 +72,14 @@ function close() {
 
 <style scoped>
 .overlay-container {
-  width: 40vw;
+  width: 25vw;
   min-height: 25vh;
-  padding: 1rem;
+}
+
+.form {
   display: grid;
   grid-template-columns: 1fr 5fr;
   gap: 1rem;
   align-items: baseline;
-}
-
-header {
-  text-align: center;
-  font-size: 1.6rem;
-  grid-column-start: 1;
-  grid-column-end: 3;
 }
 </style>

@@ -20,7 +20,9 @@ import dev.juunihana.adelaide.adelaide_api.repository.PasswordHistoryRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.UserRepository;
 import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -171,6 +173,9 @@ public class UserServiceImpl implements UserService {
     userEntity.setId(userId);
     userEntity.setTimeJoined(LocalDateTime.now());
     userEntity.setPassword(password);
+    userEntity.setDateOfBirth(
+        LocalDate.of(createUserProfileDTO.getYear(), createUserProfileDTO.getMonth(),
+            createUserProfileDTO.getDay()));
     UserEntity user = userRepository.save(userEntity);
 
     passwordHistoryRepository.save(
