@@ -25,6 +25,8 @@ public class UserFullDTO {
 
   private Integer age;
 
+  private String birthday;
+
   private String status;
 
   private String bio;

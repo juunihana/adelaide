@@ -7,6 +7,8 @@ import dev.juunihana.adelaide.adelaide_api.dto.response.user.UserFullDTO;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,7 +27,8 @@ public abstract class UserMapper {
   protected CdnProperties cdnProperties;
 
   @Mappings({
-      @Mapping(target = "age", source = "dateOfBirth", qualifiedByName = "mapUserAge"),
+      @Mapping(target = "age", source = "dateOfBirth", qualifiedByName = "mapAge"),
+      @Mapping(target = "birthday", source = "dateOfBirth", qualifiedByName = "mapBirthday"),
       @Mapping(target = "avatar", source = "avatar", qualifiedByName = "mapAvatar")
   })
   public abstract UserFullDTO userEntityToProfile(UserEntity userEntity);
@@ -37,9 +40,14 @@ public abstract class UserMapper {
   })
   public abstract UserCompactDTO userToShortProfile(UserEntity userEntity);
 
-  @Named("mapUserAge")
-  protected Integer mapUserAge(LocalDate dateOfBirth) {
+  @Named("mapAge")
+  protected Integer mapAge(LocalDate dateOfBirth) {
     return Period.between(dateOfBirth, LocalDate.now()).getYears();
+  }
+
+  @Named("mapBirthday")
+  protected String mapBirthday(LocalDate dateOfBirth) {
+    return dateOfBirth.format(DateTimeFormatter.ofPattern("dd MMMM", Locale.UK));
   }
 
   @Named("mapAvatar")

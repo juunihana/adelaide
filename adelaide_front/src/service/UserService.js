@@ -27,7 +27,7 @@ class UserService {
   }
 
   getUserPosts(username) {
-    return this.restService.get("/posts/profile/" + username + "?authored=false&sortBy=time;order=false",
+    return this.restService.get("/posts/profile/" + username + "?authored=false&sortBy=time&order=false",
         this.setRequestConfig())
   }
 

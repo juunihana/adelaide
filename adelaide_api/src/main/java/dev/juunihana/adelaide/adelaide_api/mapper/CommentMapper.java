@@ -28,7 +28,7 @@ public abstract class CommentMapper {
   @Named("mapTime")
   protected String mapTime(LocalDateTime time) {
     if (time != null) {
-      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy", Locale.ENGLISH));
+      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy", Locale.UK));
     }
     return "";
   }

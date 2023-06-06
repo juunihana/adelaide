@@ -6,11 +6,13 @@
         <img class="photo-link" src="../assets/sample_image_200.png"/>
       </div>
       <div class="font-title text-regular">
-        {{ localState.user.firstName }}
-        {{ localState.user.lastName }}
+        {{ localState.user.firstName }} {{ localState.user.lastName }}
       </div>
-      <div class="font-dimmed text-regular">
+      <div class="text-regular" v-if="localState.user.age">
         {{ localState.user.age }} years old
+      </div>
+      <div class="font-dimmed text-regular" v-if="localState.user.birthday">
+        Birthday {{ localState.user.birthday }}
       </div>
       <div class="font-dimmed text-regular" v-if="localState.user.place">
         From {{ localState.user.place }}
@@ -20,7 +22,8 @@
       </div>
       <div class="flex-row gap-25">
         <button class="font-dimmed">Edit info</button>
-        <!--        <a class="font-dimmed">Send friends request</a> &lt;!&ndash; IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD &ndash;&gt;-->
+        <button class="font-dimmed" v-if="!localState.currentUser">Send friends request</button>
+        <!-- IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD -->
         <!--        <a class="font-dimmed">Accept request</a>-->
         <!--        <a class="font-dimmed">Decline request</a>-->
         <!--        <a class="font-dimmed">Remove friend</a>-->
@@ -28,15 +31,21 @@
     </div>
     <div class="block" v-if="localState.loadingProfile">loading</div>
     <div class="block flex-col gap-25" v-else>
-      <a class="bg-hover block-header font-header">Friends {{ localState.user.friends.length }}</a>
-      <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50" v-for="friend in localState.user.friends">
+      <a class="bg-hover block-header font-header">Friends {{
+          localState.user.friends ? localState.user.friends.length : '0'
+        }}</a>
+      <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50"
+                   v-for="friend in localState.user.friends">
         <user-profile-card :cardInfo="{name: friend.firstName + ' ' + friend.lastName}"/>
       </router-link>
     </div>
     <div class="block" v-if="localState.loadingProfile">loading</div>
     <div class="block flex-col gap-25" v-else>
-      <a class="block-header bg-hover font-header">Groups</a>
-      <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50" v-for="group in localState.user.groups">
+      <a class="block-header bg-hover font-header">Groups {{
+          localState.user.friends ? localState.user.friends.length : '0'
+        }}</a>
+      <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50"
+                   v-for="group in localState.user.groups">
         <user-profile-card :cardInfo="{name: group.name }"/>
       </router-link>
     </div>
@@ -66,63 +75,46 @@
       <a>
         Rating
       </a>
-      <a class="align-right">
+      <button class="align-right" @click="showNewPostOverlay">
         New post
-      </a>
+      </button>
     </div>
-    <div class="block" v-if="localState.loadingPosts">loading</div>
-    <user-post v-else v-for="post in localState.posts" :post="post"/>
+    <post-list :username="route.params.username"/>
   </div>
 </template>
 
 <script setup>
-import UserPost from "../components/user-posts/UserPost.vue";
 import Button from "../components/common/form/Button.vue";
-import {reactive, ref, watch} from "vue";
-import {useRoute} from "vue-router";
+import {reactive, watch} from "vue";
 import UserService from "../service/UserService.js";
 import {generalStore} from "../stores/generalStore.js";
 import UserProfileCard from "../components/user-profile/UserProfileCard.vue";
+import PostList from "../components/PostList.vue";
+import {useRoute} from "vue-router";
 
-const route = useRoute()
 const generalStorage = generalStore()
 
+const route = useRoute()
 const localState = reactive({
-  loadingProfile: false,
-  errorProfile: false,
-  errorMessageProfile: [],
-  loadingPosts: false,
-  errorPosts: false,
-  errorMessagePosts: [],
+  loading: false,
+  error: false,
+  errorMessage: [],
   user: {},
-  posts: [],
   currentUser: false
 })
 
 watch(() => route.params,
     () => {
-      localState.loadingProfile = true
+      localState.loading = true
       UserService.getUserProfile(route.params.username)
-      .then((data) => {
-        localState.loadingProfile = false
+      .then(data => {
+        localState.loading = false
         localState.user = data.data
       })
-      .catch((error) => {
-        localState.loadingProfile = false;
-        localState.errorProfile = true;
-        localState.errorMessageProfile = error.data
-      })
-
-      localState.loadingPosts = true
-      UserService.getUserPosts(route.params.username)
-      .then((data) => {
-        localState.loadingPosts = false
-        localState.posts = data.data
-      })
-      .catch((error) => {
-        localState.loadingPosts = false;
-        localState.errorPosts = true;
-        localState.errorMessagePosts = error.data
+      .catch(error => {
+        localState.loading = false;
+        localState.error = true;
+        localState.errorMessage = error.data
       })
     },
     {immediate: true})
@@ -131,11 +123,11 @@ generalStorage.$subscribe((mutation, state) => {
   localState.currentUser = state.signedIn.username === route.params.username
 })
 
-function sendFriendRequest() {
+function sendFriendsRequest() {
   UserService.sendFriendRequest(route.params.username)
 }
 
-function showNewPost() {
+function showNewPostOverlay() {
   generalStorage.showNewPostOverlay = true
 }
 </script>

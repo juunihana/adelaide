@@ -12,9 +12,6 @@ export const generalStore = defineStore('generalStore', {
     signedIn: null
   }),
   actions: {
-    moveToUserPage(username) {
-      router.push("/" + username)
-    },
     signUp(user) {
       UserService.signUp(user)
       .then(data => {
@@ -32,6 +29,9 @@ export const generalStore = defineStore('generalStore', {
         VueCookies.set('auth', this.token, '1d')
         this.checkSignIn()
         router.push("/" + username)
+      })
+      .catch(err => {
+        console.log(err)
       })
     },
     signOut() {

@@ -129,13 +129,6 @@ a:hover {
   padding: 0 2rem 0 1rem;
 }
 
-.user-menu{
-  position: absolute;
-  top: 2.5rem;
-  right: 2rem;
-  width: 10vw;
-}
-
 .hidden {
   display: none;
 }
