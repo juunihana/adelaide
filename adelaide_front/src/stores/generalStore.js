@@ -1,7 +1,6 @@
 import {defineStore} from 'pinia'
 import VueCookies from "vue-cookies";
 import UserService from "../service/UserService.js";
-import router from "../router/router.js";
 
 export const generalStore = defineStore('generalStore', {
   state: () => ({

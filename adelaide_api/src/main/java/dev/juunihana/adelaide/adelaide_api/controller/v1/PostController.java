@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,11 @@ public class PostController implements PostApi {
   @Override
   public List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams) {
     return postService.findAllByUsername(username, requestParams);
+  }
+
+  @GetMapping("/search")
+  public List<PostDTO> search(@RequestParam Map<String, String> searchParams) {
+    return postService.search(searchParams);
   }
 
   @Override

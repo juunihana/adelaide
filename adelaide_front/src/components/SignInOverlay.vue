@@ -19,13 +19,10 @@
 </template>
 
 <script setup>
-import TextInput from "./common/form/TextInput.vue";
-import Button from "./common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
 import {reactive} from "vue";
 import UserService from "@/service/UserService";
 import VueCookies from "vue-cookies";
-import router from "@/router/router";
 
 const generalStorage = generalStore()
 
@@ -43,7 +40,7 @@ function signIn() {
   UserService.signIn(localState.username, localState.password)
   .then(data => {
     localState.loading = false
-    VueCookies.set('auth', data.data.token, '1d')
+    VueCookies.set('auth', 'Bearer ' + data.data.token, '1d')
 
     generalStorage.showSignInOverlay = false
     generalStorage.checkSignIn()

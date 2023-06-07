@@ -50,6 +50,7 @@ import Button from "@/components/common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
 import {computed, reactive} from "vue";
 import UserService from "@/service/UserService";
+import VueCookies from "vue-cookies";
 
 const generalStorage = generalStore()
 
@@ -96,7 +97,24 @@ const days = computed(() => {
 const years = Array.from({length: 101}, (_, i) => new Date().getFullYear() - 100 + i)
 
 function signUp() {
-  generalStorage.signUp(localState.user)
+  UserService.signUp(localState.user)
+  .then(() => {
+    localState.loading = false
+    UserService.signIn(localState.user.username, localState.user.password)
+    .then(data => {
+      VueCookies.set('auth', 'Bearer ' + data.data.token, '1d')
+
+      generalStorage.checkSignIn()
+      generalStorage.showSignUpOverlay = false
+
+      this.$router.push("/" + localState.user.username)
+    })
+  })
+  .catch(err => {
+    localState.loading = false
+    localState.error = true
+    localState.errorMessage = err.response.data
+  })
 }
 
 function close() {
@@ -121,18 +139,6 @@ function stepForward() {
       break
     case 1:
       localState.step++
-      break
-    case 2:
-      UserService.signUp(localState.user)
-      .then(() => {
-        localState.loading = false
-        generalStorage.showSignUpOverlay = false
-      })
-      .catch(err => {
-        localState.loading = false
-        localState.error = true
-        localState.errorMessage = err.response.data
-      })
       break
   }
 }

@@ -12,24 +12,44 @@ const router = createRouter({
     },
     {
       path: "/:username",
-      name: "user-page",
+      name: "my-page",
+      component: UserPage
+    },
+    {
+      path: "/feed",
+      name: "my-feed",
+      component: UserPage
+    },
+    {
+      path: "/messages",
+      name: "my-messages",
+      component: UserPage
+    },
+    {
+      path: "/friends",
+      name: "my-friends",
+      component: UserPage
+    },
+    {
+      path: "/groups",
+      name: "my-groups",
+      component: UserPage
+    },
+    {
+      path: "/photos",
+      name: "my-photos",
+      component: UserPage
+    },
+    {
+      path: "/music",
+      name: "my-music",
+      component: UserPage
+    },
+    {
+      path: "/videos",
+      name: "my-videos",
       component: UserPage
     }
-    // {
-    //   path: "/sign-in",
-    //   name: "sign-in",
-    //   component: SignIn
-    // },
-    // {
-    //   path: "/sign-up",
-    //   name: "sign-up",
-    //   component: SignUp
-    // },
-    // {
-    //   path: "/user/:username",
-    //   name: "user-profile",
-    //   component: UserProfile
-    // }
   ]
 })
 

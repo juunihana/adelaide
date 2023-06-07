@@ -6,25 +6,30 @@
       <button>Search</button>
     </div>
     <nav class="flex-row gap-75" v-if="localState.signedInUser">
-      <router-link :to="'/' + localState.signedInUser.username" class="main-menu-element">My page</router-link>
-      <a class="main-menu-element">Feed</a>
-      <a class="main-menu-element">Messages</a>
-      <a class="main-menu-element">Friends</a>
-      <a class="main-menu-element">Groups</a>
-      <a class="main-menu-element">Photos</a>
-      <a class="main-menu-element">Music</a>
-      <a class="main-menu-element">Videos</a>
+      <router-link :to="'/' + localState.signedInUser.username" class="main-menu-element">My page
+      </router-link>
+      <router-link to="/feed">Feed</router-link>
+      <router-link to="/messages">Messages</router-link>
+      <router-link to="/friends">Friends</router-link>
+      <router-link to="/groups">Groups</router-link>
+      <router-link to="/photos">Photos</router-link>
+      <router-link to="/music">Music</router-link>
+      <router-link to="/videos">Videos</router-link>
     </nav>
     <div class="flex-row gap-100 align-right" v-if="!localState.signedInUser">
       <button @click="showSignIn">Sign in</button>
       <button @click="showSignUp">Sign up</button>
     </div>
-    <button class="flex-row gap-25 align-right bg-hover align-center user-menu-button" v-else @click="toggleUserMenu">
-      <img src="../assets/sample_image_48.png"/>
+    <button class="flex-row gap-25 align-right bg-hover align-center user-menu-button" v-else
+            @click="toggleUserMenu">
+      <img
+          :src="localState.signedInUser.avatar ? localState.signedInUser.avatar : '../assets/sample_image_48.png'"
+          alt="avatar"/>
       {{ localState.signedInUser.firstName }}
       {{ localState.signedInUser.lastName }}
     </button>
-    <div class="flex-col gap-25 align-center user-menu" v-if="localState.userMenu" @click="toggleUserMenu">
+    <div class="flex-col gap-25 align-center user-menu" v-if="localState.userMenu"
+         @click="toggleUserMenu">
       <a>Settings</a>
       <button @click="signOut">Sign out</button>
     </div>
@@ -32,11 +37,8 @@
 </template>
 
 <script setup>
-import Button from "@/components/common/form/Button.vue"
 import {reactive} from "vue"
 import {generalStore} from "@/stores/generalStore"
-import SearchBar from "./main-header/SearchBar.vue";
-import TextInput from "./common/form/TextInput.vue";
 
 const generalStorage = generalStore()
 
@@ -67,7 +69,7 @@ generalStorage.$subscribe((mutation, state) => {
 </script>
 
 <style scoped>
-.user-menu{
+.user-menu {
   position: absolute;
   top: 2.5rem;
   right: 2rem;

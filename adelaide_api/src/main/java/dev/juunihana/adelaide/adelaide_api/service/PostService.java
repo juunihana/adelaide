@@ -15,6 +15,8 @@ public interface PostService {
 
   List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams);
 
+  List<PostDTO> search(Map<String, String> searchParams);
+
   void create(CreatePostDTO dto);
 
   void update(String postId, CreatePostDTO dto);

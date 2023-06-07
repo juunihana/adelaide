@@ -22,9 +22,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -91,6 +94,39 @@ public class PostServiceImpl implements PostService {
     }
 
     return posts;
+  }
+
+  @Override
+  public List<PostDTO> search(Map<String, String> searchParams) {
+    String username = Optional.ofNullable(searchParams.get("username")).orElse("");
+    String tags = Optional.ofNullable(searchParams.get("tags")).orElse("");
+    String query = Optional.ofNullable(searchParams.get("query")).orElse("");
+    String sortBy = Optional.ofNullable(searchParams.get("sortBy")).orElse("time");
+    String order = Optional.ofNullable(searchParams.get("order")).orElse("desc");
+
+    List<PostEntity> poststmp = StringUtils.hasLength(username) ?
+        postRepository.findAllByUserUsername(username) :
+        postRepository.findAll();
+
+    List<PostEntity> posts = postRepository.findAll().stream()
+        .filter(post -> !StringUtils.hasLength(username) || post.getUser().getUsername()
+            .equals(username))
+        .filter(post -> !StringUtils.hasLength(tags) || post.getTags().stream()
+            .anyMatch(tag -> List.of(tags.split(",")).contains(tag.getName())))
+        .filter(post -> !StringUtils.hasLength(query)
+            || post.getTitle().toLowerCase().contains(query.toLowerCase())
+            || post.getContent().toLowerCase().contains(query.toLowerCase()))
+        .sorted(switch (sortBy) {
+          case "time" -> Comparator.comparing(PostEntity::getTimeCreated);
+          case "rating" -> Comparator.comparing(post -> post.getVotes().stream().filter(VoteEntity::isUpVote).count());
+        })
+        .collect(Collectors.toList());
+
+    if ("desc".equals(order)) {
+      Collections.reverse(posts);
+    }
+
+    return null;
   }
 
   @Override
