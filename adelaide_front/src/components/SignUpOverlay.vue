@@ -4,7 +4,7 @@
     <div class="overlay-container flex-col gap-100" @click.stop>
       <header class="text-center font-header">Sign up</header>
       <div class="block error-block flex-col gap-50" v-if="localState.error">
-        <div v-for="field in localState.errorMessage.errorFields">{{ field }}</div>
+        <div v-for="field in localState.errorMessage">{{ field }}</div>
       </div>
       <div class="step-form" v-if="localState.step === 0">
         <label>Email</label>
@@ -38,8 +38,8 @@
       </div>
       <div class="align-right flex-row gap-50">
         <button @click="localState.step--" v-if="localState.step > 0">Back</button>
-        <button @click="stepForward" v-if="localState.step < 2">Next</button>
-        <button @click="signUp" v-if="localState.step === 2">Sign up</button>
+        <Button @click.prevent="stepForward" v-if="localState.step < 2" caption="Next" :loading="localState.loading"/>
+        <Button @click.prevent="signUp" v-if="localState.step === 2" caption="Sign up" :loading="localState.loading"/>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ const localState = reactive({
   step: 0,
   loading: false,
   error: false,
-  errorMessage: null
+  errorMessage: []
 })
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August",
@@ -97,6 +97,7 @@ const days = computed(() => {
 const years = Array.from({length: 101}, (_, i) => new Date().getFullYear() - 100 + i)
 
 function signUp() {
+  localState.loading = true
   UserService.signUp(localState.user)
   .then(() => {
     localState.loading = false
@@ -111,9 +112,18 @@ function signUp() {
     })
   })
   .catch(err => {
+    localState.errorMessage = []
     localState.loading = false
     localState.error = true
-    localState.errorMessage = err.response.data
+    if (err.response) {
+      switch (err.response.data.result) {
+        case "validationError":
+          err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
+          break
+      }
+    } else {
+      localState.errorMessage.push(err.message)
+    }
   })
 }
 
@@ -123,18 +133,27 @@ function close() {
 
 function stepForward() {
   localState.loading = true
-  localState.error = false
   switch (localState.step) {
     case 0:
       UserService.checkUserByUsernameAndEmail(localState.user.username, localState.user.email)
       .then(() => {
         localState.loading = false
+        localState.error = false
         localState.step++
       })
       .catch(err => {
+        localState.errorMessage = []
         localState.loading = false
         localState.error = true
-        localState.errorMessage = err.response.data
+        if (err.response) {
+          switch (err.response.data.result) {
+            case "validationError":
+              err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
+              break
+          }
+        } else {
+          localState.errorMessage.push(err.message)
+        }
       })
       break
     case 1:

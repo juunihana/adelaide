@@ -41,12 +41,12 @@ class UserService {
   }
 
   acceptFriendRequest(username) {
-    return this.restService.put("/users/friends/" + username + "/accept",
+    return this.restService.put("/users/friends/" + username + "?accept=true",
         this.setRequestConfig())
   }
 
   declineFriendRequest(username) {
-    return this.restService.put("/users/friends/" + username + "/decline",
+    return this.restService.put("/users/friends/" + username + "?accept=false",
         this.setRequestConfig())
   }
 

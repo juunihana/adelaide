@@ -1,5 +1,5 @@
 <template>
-  <header class="root-header flex-row gap-100 align-center">
+  <header class="root-header flex-row gap-50 align-center">
     <router-link to="/" class="root-header-logo">Adelaide</router-link>
     <div class="search-bar flex-row gap-50">
       <input type="text" placeholder="Search"/>
@@ -16,7 +16,7 @@
       <router-link to="/music">Music</router-link>
       <router-link to="/videos">Videos</router-link>
     </nav>
-    <div class="flex-row gap-100 align-right" v-if="!localState.signedInUser">
+    <div class="flex-row gap-50 align-right" v-if="!localState.signedInUser">
       <button @click="showSignIn">Sign in</button>
       <button @click="showSignUp">Sign up</button>
     </div>
@@ -94,11 +94,14 @@ button img {
   max-height: 32px;
 }
 
-.search-bar input[type=text] {
-  border-radius: 0;
+.root-header {
+  background: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(50px);
+  position: fixed;
+  top: 0;
   height: 40px;
-}
-
-.search-bar button {
+  width: 100vw;
+  padding: 0 2rem 0 1rem;
+  z-index: 999;
 }
 </style>

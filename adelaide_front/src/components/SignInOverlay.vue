@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
+  <div class="overlay flex-row" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
     <div class="overlay-container flex-col gap-100" @click.stop>
       <header class="font-header text-center">Sign in</header>
       <div class="block error-block flex-col gap-50" v-if="localState.error">
@@ -13,7 +13,7 @@
         <input type="password" placeholder="Password" v-model="localState.password"/>
       </div>
 
-      <button @click.prevent="signIn" class="align-right">Sign in</button>
+      <Button @click.prevent="signIn" class="align-right" caption="Sign in" :loading="localState.loading"/>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@ import {generalStore} from "@/stores/generalStore";
 import {reactive} from "vue";
 import UserService from "@/service/UserService";
 import VueCookies from "vue-cookies";
+import Button from "./common/form/Button.vue";
 
 const generalStorage = generalStore()
 
@@ -36,7 +37,6 @@ const localState = reactive({
 
 function signIn() {
   localState.loading = true
-  localState.error = false
   UserService.signIn(localState.username, localState.password)
   .then(data => {
     localState.loading = false
@@ -48,16 +48,20 @@ function signIn() {
     this.$router.push("/" + localState.username)
   })
   .catch(err => {
-    console.log(err)
+    localState.errorMessage = []
     localState.loading = false
     localState.error = true
-    switch (err.response.data.result) {
-      case "validationError":
-        err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
-        break
-      case "userNotFoundError":
-        localState.errorMessage.push(err.response.data.message)
-        break
+    if (err.response) {
+      switch (err.response.data.result) {
+        case "validationError":
+          err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
+          break
+        case "userNotFoundError":
+          localState.errorMessage.push(err.response.data.message)
+          break
+      }
+    } else {
+      localState.errorMessage.push(err.message)
     }
   })
 }
@@ -69,8 +73,8 @@ function close() {
 
 <style scoped>
 .overlay-container {
-  width: 25vw;
-  min-height: 25vh;
+  width: 40vw;
+  max-height: 40vh;
 }
 
 .form {
