@@ -14,7 +14,7 @@ public interface PostRepository extends JpaRepository<PostEntity, UUID> {
   List<PostEntity> findAllByOrderByTimeCreatedAsc();
   List<PostEntity> findAllByOrderByTimeCreatedDesc();
 
-  @Query("SELECT p from PostEntity p ORDER BY (SELECT COUNT(v) FROM VoteEntity v WHERE v.upVote IS TRUE) DESC")
+  @Query("SELECT p from PostEntity p ORDER BY (SELECT COUNT(v) FROM VoteEntity v WHERE v.upVote = true) DESC")
   List<PostEntity> findAllByOrderByCountVotesDesc();
 
   List<PostEntity> findDistinctByTagsIn(Set<TagEntity> tags);

@@ -117,8 +117,9 @@ public class PostServiceImpl implements PostService {
             || post.getTitle().toLowerCase().contains(query.toLowerCase())
             || post.getContent().toLowerCase().contains(query.toLowerCase()))
         .sorted(switch (sortBy) {
-          case "time" -> Comparator.comparing(PostEntity::getTimeCreated);
+//          case "time" -> Comparator.comparing(PostEntity::getTimeCreated);
           case "rating" -> Comparator.comparing(post -> post.getVotes().stream().filter(VoteEntity::isUpVote).count());
+          default -> Comparator.comparing(PostEntity::getTimeCreated);
         })
         .collect(Collectors.toList());
 

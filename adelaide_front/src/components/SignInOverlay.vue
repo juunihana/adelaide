@@ -24,8 +24,11 @@ import {reactive} from "vue";
 import UserService from "@/service/UserService";
 import VueCookies from "vue-cookies";
 import Button from "./common/form/Button.vue";
+import {useRoute, useRouter} from "vue-router";
 
 const generalStorage = generalStore()
+const route = useRoute()
+const router = useRouter()
 
 const localState = reactive({
   username: null,
@@ -45,7 +48,7 @@ function signIn() {
     generalStorage.showSignInOverlay = false
     generalStorage.checkSignIn()
 
-    this.$router.push("/" + localState.username)
+    router.push("/" + localState.username)
   })
   .catch(err => {
     localState.errorMessage = []

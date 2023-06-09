@@ -51,8 +51,11 @@ import {generalStore} from "@/stores/generalStore";
 import {computed, reactive} from "vue";
 import UserService from "@/service/UserService";
 import VueCookies from "vue-cookies";
+import {useRoute, useRouter} from "vue-router";
 
 const generalStorage = generalStore()
+const route = useRoute()
+const router = useRouter()
 
 const localState = reactive({
   user: {
@@ -108,7 +111,7 @@ function signUp() {
       generalStorage.checkSignIn()
       generalStorage.showSignUpOverlay = false
 
-      this.$router.push("/" + localState.user.username)
+      router.push("/" + localState.user.username)
     })
   })
   .catch(err => {

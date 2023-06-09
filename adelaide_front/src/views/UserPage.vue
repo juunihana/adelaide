@@ -21,8 +21,8 @@
         {{ localState.user.bio }}
       </div>
       <div class="flex-row gap-25">
-        <button class="font-dimmed">Edit info</button>
-        <button class="font-dimmed" v-if="!localState.currentUser">Send friends request</button>
+        <button class="font-dimmed" v-if="localState.currentUser">Edit info</button>
+        <button class="font-dimmed" v-if="localState.signedInUser && !localState.currentUser">Send friends request</button>
         <!-- IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD -->
         <!--        <a class="font-dimmed">Accept request</a>-->
         <!--        <a class="font-dimmed">Decline request</a>-->
