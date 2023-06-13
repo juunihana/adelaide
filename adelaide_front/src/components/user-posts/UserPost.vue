@@ -22,8 +22,10 @@
       </div>
     </div>
     <div class="flex-row gap-50">
-      <button class="upvote" @click="vote(true)">Upvote {{ localState.post.upVotes }}</button>
-      <button class="downvote" @click="vote(false)">Downvote {{ localState.post.downVotes }}</button>
+      <div class="flex-row">
+        <button class="upvote" @click="vote(true)">Upvote {{ localState.post.upVotes }}</button>
+        <button class="downvote" @click="vote(false)">Downvote {{ localState.post.downVotes }}</button>
+      </div>
       <button>Comment 0</button>
       <div class="align-right flex-row gap-50">
         <button class="font-dimmed">Edit</button>

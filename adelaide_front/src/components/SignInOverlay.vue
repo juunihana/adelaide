@@ -41,14 +41,14 @@ const localState = reactive({
 function signIn() {
   localState.loading = true
   UserService.signIn(localState.username, localState.password)
-  .then(data => {
+  .then(async data => {
     localState.loading = false
     VueCookies.set('auth', 'Bearer ' + data.data.token, '1d')
 
     generalStorage.showSignInOverlay = false
-    generalStorage.checkSignIn()
+    await generalStorage.checkSignIn()
 
-    router.push("/" + localState.username)
+    await router.push("/" + localState.username)
   })
   .catch(err => {
     localState.errorMessage = []

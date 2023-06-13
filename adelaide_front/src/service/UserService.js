@@ -21,8 +21,8 @@ class UserService {
         {username: username, password: password})
   }
 
-  getCurrentLoggedUser() {
-    return this.restService.get("/users/auth/signed", this.setRequestConfig())
+  async getCurrentLoggedUser() {
+    return await this.restService.get("/users/auth/signed", this.setRequestConfig())
   }
 
   getUserProfile(username) {

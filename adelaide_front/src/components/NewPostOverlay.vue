@@ -1,12 +1,12 @@
 <template>
-  <div class="overlay" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
+  <div class="overlay flex-row" @click="close" @wheel.prevent @touchmove.prevent @scroll.prevent>
     <div class="overlay-container flex-col gap-50" @click.stop>
       <header>What's on your mind?</header>
       <div class="block error-block flex-col gap-50" v-if="localState.error">
         <div v-for="field in  localState.errorMessage">{{ field }}</div>
       </div>
-      <TextInput placeholder="Title" v-model="localState.newPost.title"/>
-      <MultilineTextInput placeholder="Content" v-model="localState.newPost.content"/>
+      <input type="text" placeholder="Title (not required)" v-model="localState.newPost.title"/>
+      <textarea v-model="localState.newPost.content"></textarea>
       <div class="align-right flex-row gap-100">
         <button @click.prevent="close">Close</button>
         <button @click.prevent="addPost">Create</button>
@@ -16,16 +16,15 @@
 </template>
 
 <script setup>
-import TextInput from "./common/form/TextInput.vue";
 import Button from "./common/form/Button.vue";
 import {generalStore} from "@/stores/generalStore";
 import {reactive} from "vue";
 import UserService from "../service/UserService.js";
-import {useRoute} from "vue-router";
-import MultilineTextInput from "./common/form/MultilineTextInput.vue";
+import {useRoute, useRouter} from "vue-router";
 
 const generalStorage = generalStore()
 const route = useRoute()
+const router = useRouter()
 
 const localState = reactive({
   newPost: {
@@ -45,6 +44,8 @@ function addPost() {
   .then(data => {
     localState.loading = false
     generalStorage.showNewPostOverlay = false;
+
+    router.push("/" + localState.username)
   })
   .catch(err => {
     console.log(err)

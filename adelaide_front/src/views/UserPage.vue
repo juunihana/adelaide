@@ -5,7 +5,7 @@
       <div class="text-center">
         <img class="photo-link" src="../assets/sample_image_200.png"/>
       </div>
-      <div class="font-title text-regular">
+      <div class="font-header text-regular">
         {{ localState.user.firstName }} {{ localState.user.lastName }}
       </div>
       <div class="text-regular" v-if="localState.user.age">
@@ -17,7 +17,7 @@
       <div class="font-dimmed text-regular" v-if="localState.user.place">
         From {{ localState.user.place }}
       </div>
-      <div class="text-regular bg-light" v-if="localState.user.bio">
+      <div class="text-regular bg-button" v-if="localState.user.bio">
         {{ localState.user.bio }}
       </div>
       <div class="flex-row gap-25">
@@ -62,7 +62,7 @@
       </div>
     </div>
     <div class="block flex-row gap-50">
-      <div class="search-bar">
+      <div class="search-bar flex-row gap-50">
         <input type="text"/>
         <button>Search</button>
       </div>

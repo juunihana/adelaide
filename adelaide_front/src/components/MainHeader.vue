@@ -17,8 +17,8 @@
       <router-link to="/videos">Videos</router-link>
     </nav>
     <div class="flex-row gap-50 align-right" v-if="!localState.signedInUser">
-      <button @click="showSignIn">Sign in</button>
-      <button @click="showSignUp">Sign up</button>
+      <button class="bg-hover" @click="showSignIn">Sign in</button>
+      <button class="bg-hover" @click="showSignUp">Sign up</button>
     </div>
     <button class="flex-row gap-25 align-right bg-hover align-center user-menu-button" v-else
             @click="toggleUserMenu">
@@ -31,7 +31,7 @@
     <div class="flex-col gap-25 align-center user-menu" v-if="localState.userMenu"
          @click="toggleUserMenu">
       <a>Settings</a>
-      <button @click="signOut">Sign out</button>
+      <button class="bg-button bg-hover" @click="signOut">Sign out</button>
     </div>
   </header>
 </template>
@@ -95,8 +95,8 @@ button img {
 }
 
 .root-header {
-  background: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(50px);
+  background: var(--bg-block);
+  backdrop-filter: var(--blur);
   position: fixed;
   top: 0;
   height: 40px;

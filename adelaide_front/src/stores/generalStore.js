@@ -10,6 +10,9 @@ export const generalStore = defineStore('generalStore', {
     signedIn: null
   }),
   actions: {
+    setSignedInUser(user) {
+      this.signedIn = user
+    },
     signUp(user) {
       UserService.signUp(user)
       .then(data => {
@@ -24,17 +27,15 @@ export const generalStore = defineStore('generalStore', {
       this.signedIn = null
       VueCookies.remove('auth')
     },
-    checkSignIn() {
+    async checkSignIn() {
       if (VueCookies.get('auth')) {
-        UserService.getCurrentLoggedUser()
-        .then((data) => {
-          this.signedIn = {
-            username: data.data.username,
-            firstName: data.data.firstName,
-            lastName: data.data.lastName,
-            avatar: data.data.avatar
-          }
-        })
+        const signedInUser = await UserService.getCurrentLoggedUser()
+        this.signedIn = {
+          username: signedInUser.data.username,
+          firstName: signedInUser.data.firstName,
+          lastName: signedInUser.data.lastName,
+          avatar: signedInUser.data.avatar
+        }
       }
     },
   }
