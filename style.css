@@ -195,7 +195,7 @@ button:hover {
   cursor: default;
 }
 
-.grid {
+.grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }

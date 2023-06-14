@@ -11,14 +11,12 @@
         <input type="text" v-model="localState.user.email"/>
         <label>Username</label>
         <input type="text" v-model="localState.user.username"/>
-      </div>
-      <div class="step-form" v-else-if="localState.step === 1">
         <label>Password</label>
         <input type="password" v-model="localState.user.password"/>
         <label>Repeat password</label>
         <input type="password" v-model="localState.user.repeatPassword"/>
       </div>
-      <div class="step-form" v-else-if="localState.step === 2">
+      <div class="step-form" v-else-if="localState.step === 1">
         <label>First name</label>
         <input type="text" v-model="localState.user.firstName"/>
         <label>Last name</label>
@@ -37,9 +35,11 @@
         </div>
       </div>
       <div class="align-right flex-row gap-50">
-        <button @click="localState.step--" v-if="localState.step > 0">Back</button>
-        <Button @click.prevent="stepForward" v-if="localState.step < 2" caption="Next" :loading="localState.loading"/>
-        <Button @click.prevent="signUp" v-if="localState.step === 2" caption="Sign up" :loading="localState.loading"/>
+        <Button caption="Back" @click="localState.step--" v-if="localState.step > 0"/>
+        <Button @click.prevent="stepForward" v-if="localState.step < 1" caption="Next"
+                :loading="localState.loading"/>
+        <Button @click.prevent="signUp" v-if="localState.step === 1" caption="Sign up"
+                :loading="localState.loading"/>
       </div>
     </div>
   </div>
@@ -51,10 +51,10 @@ import {generalStore} from "@/stores/generalStore";
 import {computed, reactive} from "vue";
 import UserService from "@/service/UserService";
 import VueCookies from "vue-cookies";
-import {useRoute, useRouter} from "vue-router";
+import {useRouter} from "vue-router";
+import ValidationService from "../service/ValidationService.js";
 
 const generalStorage = generalStore()
-const route = useRoute()
 const router = useRouter()
 
 const localState = reactive({
@@ -135,33 +135,38 @@ function close() {
 }
 
 function stepForward() {
-  localState.loading = true
-  switch (localState.step) {
-    case 0:
-      UserService.checkUserByUsernameAndEmail(localState.user.username, localState.user.email)
-      .then(() => {
-        localState.loading = false
-        localState.error = false
-        localState.step++
-      })
-      .catch(err => {
-        localState.errorMessage = []
-        localState.loading = false
-        localState.error = true
-        if (err.response) {
-          switch (err.response.data.result) {
-            case "validationError":
-              err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
-              break
-          }
-        } else {
-          localState.errorMessage.push(err.message)
-        }
-      })
-      break
-    case 1:
+  console.log(localState.user.password)
+  const errors = ValidationService.validateUsernameEmailPassword(
+      localState.user.email,
+      localState.user.username,
+      localState.user.password,
+      localState.user.repeatPassword)
+
+  if (errors.length > 0) {
+    localState.error = true
+    localState.errorMessage = errors
+  } else {
+    localState.loading = true
+    UserService.checkUserByUsernameAndEmail(localState.user.username, localState.user.email, localState.user.password)
+    .then(() => {
+      localState.loading = false
+      localState.error = false
       localState.step++
-      break
+    })
+    .catch(err => {
+      localState.errorMessage = []
+      localState.loading = false
+      localState.error = true
+      if (err.response) {
+        switch (err.response.data.result) {
+          case "validationError":
+            err.response.data.errorFields.forEach(field => localState.errorMessage.push(field))
+            break
+        }
+      } else {
+        localState.errorMessage.push(err.message)
+      }
+    })
   }
 }
 </script>
@@ -169,7 +174,7 @@ function stepForward() {
 <style scoped>
 .overlay-container {
   width: 40vw;
-  max-height: 30vh;
+  min-height: 30vh;
   padding: 1rem;
 }
 
@@ -179,30 +184,4 @@ function stepForward() {
   gap: 1.5rem;
   align-items: baseline;
 }
-
-select {
-  padding: 0.2rem;
-  border-radius: 5px;
-  background: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(10px);
-  border: none;
-  cursor: pointer;
-  outline: none;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.1rem;
-  color: #eeeeee;
-}
-
-select > option {
-  padding: 0.2rem;
-  background-color: rgb(44 33 33);
-  backdrop-filter: blur(10px);
-}
-
-/*header {*/
-/*  grid-column-start: 1;*/
-/*  grid-column-end: 3;*/
-/*  font-size: 1.6rem;*/
-/*  text-align: center;*/
-/*}*/
 </style>

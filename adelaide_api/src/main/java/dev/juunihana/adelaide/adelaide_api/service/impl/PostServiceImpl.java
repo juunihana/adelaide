@@ -83,13 +83,13 @@ public class PostServiceImpl implements PostService {
               case "upVotes" -> Comparator.comparing(PostDTO::getUpVotes);
               default -> Comparator.comparing(PostDTO::getTimeCreated);
             })
-        .toList();
+        .collect(Collectors.toList());
 
     posts.forEach(post -> post.setVote(userService.isUserSigned() ? voteMapper.voteToDto(
         voteRepository.findByUserAndPostId(userService.getSignedUserEntity(), post.getId())
             .orElse(null)) : null));
 
-    if (order) {
+    if (!order) {
       Collections.reverse(posts);
     }
 

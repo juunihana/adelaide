@@ -23,19 +23,17 @@ export const generalStore = defineStore('generalStore', {
       })
     },
     signOut() {
-      this.token = null
       this.signedIn = null
       VueCookies.remove('auth')
     },
-    async checkSignIn() {
+    checkSignIn() {
       if (VueCookies.get('auth')) {
-        const signedInUser = await UserService.getCurrentLoggedUser()
-        this.signedIn = {
-          username: signedInUser.data.username,
-          firstName: signedInUser.data.firstName,
-          lastName: signedInUser.data.lastName,
-          avatar: signedInUser.data.avatar
-        }
+        UserService.getCurrentLoggedUser().then(data => {
+          this.signedIn = data.data
+        })
+        .catch(err => {
+          console.err(err)
+        })
       }
     },
   }

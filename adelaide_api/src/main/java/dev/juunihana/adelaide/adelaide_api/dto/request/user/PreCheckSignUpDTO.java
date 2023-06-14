@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class CheckUsernameEmailDTO {
+public class PreCheckSignUpDTO {
 
   @NotBlank(message = "Email cannot be empty")
   @Pattern(regexp = "^[A-Za-z0-9_\\-.]+@[A-Za-z0-9.\\-_]+.[A-Za-z]{2,}$",
@@ -27,4 +27,9 @@ public class CheckUsernameEmailDTO {
   @Pattern(regexp = "[A-Za-z0-9]+", message = "Username can only contain letters and numbers")
   @Pattern(regexp = "^[A-Za-z]+[A-Za-z0-9]+", message = "Username cannot begin with number")
   private String username;
+
+  @NotBlank(message = "Password cannot be empty")
+  @Size(min = 8, max = 24, message = "Password length must be between 8 and 24 characters")
+  @Pattern(regexp = "[A-Za-z0-9_\\-.,!@#$%^&*(){}\\[\\]`~<>]+")
+  private String password;
 }

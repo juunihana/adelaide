@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.adelaide_api.api.v1;
 
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.ChangePasswordDTO;
-import dev.juunihana.adelaide.adelaide_api.dto.request.user.CheckUsernameEmailDTO;
+import dev.juunihana.adelaide.adelaide_api.dto.request.user.PreCheckSignUpDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.UpdateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.CreateUserProfileDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.user.SignInDTO;
@@ -43,7 +43,7 @@ public interface UserApi {
   void create(@RequestBody @Valid CreateUserProfileDTO dto);
 
   @PostMapping("/check/username-email")
-  void checkUsernameEmail(@RequestBody @Valid CheckUsernameEmailDTO dto);
+  void preCheckSignUp(@RequestBody @Valid PreCheckSignUpDTO dto);
 
   @PutMapping("/profile/{username}")
   @PreAuthorize("hasRole('ROLE_USER_NOT_ANON')")

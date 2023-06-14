@@ -21,18 +21,16 @@ import {reactive} from "vue";
 import NewPostOverlay from "./components/NewPostOverlay.vue";
 
 const generalStorage = generalStore()
-generalStorage.checkSignIn();
+generalStorage.checkSignIn()
 
 const localState = reactive({
   showSignUpOverlay: false,
-  showSignInOverlay: false,
-  showNewPostOverlay: false
+  showSignInOverlay: false
 })
 
 generalStorage.$subscribe((mutation, state) => {
   localState.showSignUpOverlay = state.showSignUpOverlay
   localState.showSignInOverlay = state.showSignInOverlay
-  localState.showNewPostOverlay = state.showNewPostOverlay
 })
 </script>
 

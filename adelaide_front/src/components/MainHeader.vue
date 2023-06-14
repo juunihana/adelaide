@@ -3,10 +3,10 @@
     <router-link to="/" class="root-header-logo">Adelaide</router-link>
     <div class="search-bar flex-row gap-50">
       <input type="text" placeholder="Search"/>
-      <button>Search</button>
+      <Button caption="Search"/>
     </div>
-    <nav class="flex-row gap-75" v-if="localState.signedInUser">
-      <router-link :to="'/' + localState.signedInUser.username" class="main-menu-element">My page
+    <nav class="flex-row gap-75" v-if="localState.signedIn">
+      <router-link :to="'/' + localState.signedIn.username" class="main-menu-element">My page
       </router-link>
       <router-link to="/feed">Feed</router-link>
       <router-link to="/messages">Messages</router-link>
@@ -15,37 +15,38 @@
       <router-link to="/photos">Photos</router-link>
       <router-link to="/music">Music</router-link>
       <router-link to="/videos">Videos</router-link>
+      <router-link to="/settings">Settings</router-link>
     </nav>
-    <div class="flex-row gap-50 align-right" v-if="!localState.signedInUser">
+    <div class="flex-row gap-50 align-right" v-if="!localState.signedIn">
       <button class="bg-hover" @click="showSignIn">Sign in</button>
       <button class="bg-hover" @click="showSignUp">Sign up</button>
     </div>
-    <button class="flex-row gap-25 align-right bg-hover align-center user-menu-button" v-else
-            @click="toggleUserMenu">
-      <img
-          :src="localState.signedInUser.avatar ? localState.signedInUser.avatar : '../assets/sample_image_48.png'"
-          alt="avatar"/>
-      {{ localState.signedInUser.firstName }}
-      {{ localState.signedInUser.lastName }}
-    </button>
-    <div class="flex-col gap-25 align-center user-menu" v-if="localState.userMenu"
-         @click="toggleUserMenu">
-      <a>Settings</a>
-      <button class="bg-button bg-hover" @click="signOut">Sign out</button>
+    <div class="flex-row gap-50 align-right" v-else>
+      <router-link :to="'/' + localState.signedIn.username" id="userLink" class="flex-row gap-25 align-center bg-hover">
+        <img :src="avatar" alt="avatar" width="32" height="32"/>
+        <div>{{
+            localState.signedIn.firstName + ' ' + localState.signedIn.lastName
+          }}
+        </div>
+      </router-link>
+      <button class="bg-hover" @click="signOut">Sign out</button>
     </div>
   </header>
 </template>
 
 <script setup>
-import {reactive} from "vue"
+import {computed, reactive} from "vue"
 import {generalStore} from "@/stores/generalStore"
+import Button from "./common/form/Button.vue";
 
 const generalStorage = generalStore()
 
 let localState = reactive({
   userMenu: false,
-  signedInUser: null
+  signedIn: null
 })
+
+const avatar = computed(() => localState.signedIn.avatar || "src/assets/sample_image_48.png")
 
 function showSignIn() {
   generalStorage.showSignInOverlay = true
@@ -64,32 +65,11 @@ function signOut() {
 }
 
 generalStorage.$subscribe((mutation, state) => {
-  localState.signedInUser = state.signedIn
+  localState.signedIn = state.signedIn
 })
 </script>
 
 <style scoped>
-.user-menu {
-  position: absolute;
-  top: 2.5rem;
-  right: 2rem;
-  width: 10vw;
-  border-radius: 0 0 5px 5px;
-  background: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(50px);
-  padding: 1rem;
-}
-
-.user-menu-button {
-  border-radius: 0;
-  width: 10vw;
-  height: 40px;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  font-family: Ysabeau, Arial, sans-serif;
-  font-size: 1.2rem;
-}
-
 button img {
   max-height: 32px;
 }
@@ -103,5 +83,9 @@ button img {
   width: 100vw;
   padding: 0 2rem 0 1rem;
   z-index: 999;
+}
+
+#userLink {
+  padding: 0.2rem 0.7rem;
 }
 </style>

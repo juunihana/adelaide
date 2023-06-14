@@ -61,24 +61,6 @@
         <img src="../assets/sample_image_200.png"/>
       </div>
     </div>
-    <div class="block flex-row gap-50">
-      <div class="search-bar flex-row gap-50">
-        <input type="text"/>
-        <button>Search</button>
-      </div>
-      <div class="">
-        Sort by
-      </div>
-      <a>
-        Time
-      </a>
-      <a>
-        Rating
-      </a>
-      <button class="align-right" @click="showNewPostOverlay" v-if="localState.signedInUser">
-        New post
-      </button>
-    </div>
     <post-list :username="route.params.username"/>
   </div>
 </template>
@@ -121,7 +103,10 @@ watch(() => route.params,
     {immediate: true})
 
 generalStorage.$subscribe((mutation, state) => {
-  localState.currentUser = state.signedIn.username === route.params.username
+  if (state.signedIn) {
+    localState.currentUser = state.signedIn.username === route.params.username
+  }
+
   localState.signedInUser = state.signedIn
 })
 

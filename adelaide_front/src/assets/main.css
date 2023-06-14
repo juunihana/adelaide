@@ -2,8 +2,8 @@
   --blur: blur(10px);
   --color-hover: #ff9155;
   --bg-hover: #999999;
-  --bg-main: #ffffff;
-  --bg-block: #000000;
+  --bg-main: #f6f6f6;
+  --bg-block: #333333;
   --border-radius: 5px;
   --text-color-main: #ffffff;
   --text-color-inverse: #000000;
@@ -216,12 +216,6 @@ img {
   box-shadow: 0 0 4px var(--color-hover);
 }
 
-/*button:hover {*/
-/*  text-decoration: none;*/
-/*  color: #ffa1e0;*/
-/*  filter: blur(1px);*/
-/*}*/
-
 .font-header {
   font-size: 1.5rem;
   font-family: Ysabeau, Arial, sans-serif;
@@ -241,7 +235,12 @@ img {
   cursor: default;
 }
 
-.grid {
+.grid-single {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 }
@@ -269,8 +268,6 @@ img {
 }
 
 button {
-  /*background: var(--bg-main);*/
-  /*backdrop-filter: var(--blur);*/
   background: none;
   border-radius: var(--border-radius);
   padding: 0.2rem 0.7rem;
@@ -283,10 +280,9 @@ button {
   color: var(--text-color-main);
 }
 
-button:hover {
-  background: var(--bg-hover);
-  /*background: rgb(224 161 255 / 0.2);*/
-}
+/*button:hover {*/
+/*  background: var(--bg-hover);*/
+/*}*/
 
 input[type=text], input[type=password], textarea {
   background: var(--bg-main);
@@ -301,4 +297,21 @@ input[type=text], input[type=password], textarea {
   border: none;
   resize: none;
   letter-spacing: 0.06rem;
+}
+
+select {
+  padding: 0.2rem;
+  border-radius: 5px;
+  background: var(--bg-main);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-family: Ysabeau, Arial, sans-serif;
+  font-size: 1.1rem;
+  color: var(--text-color-inverse);
+}
+
+select > option {
+  padding: 0.2rem;
+  background-color: var(--bg-main);
 }

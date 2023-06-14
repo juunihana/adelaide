@@ -8,8 +8,9 @@ class UserService {
     })
   }
 
-  checkUserByUsernameAndEmail(username, email) {
-    return this.restService.post("/users/check/username-email", {username: username, email: email})
+  checkUserByUsernameAndEmail(username, email, password) {
+    return this.restService.post("/users/check/username-email",
+        {username: username, email: email, password: password})
   }
 
   signUp(user) {
@@ -22,7 +23,7 @@ class UserService {
   }
 
   async getCurrentLoggedUser() {
-    return await this.restService.get("/users/auth/signed", this.setRequestConfig())
+    return this.restService.get("/users/auth/signed", this.setRequestConfig())
   }
 
   getUserProfile(username) {
@@ -31,7 +32,8 @@ class UserService {
   }
 
   getUserPosts(username) {
-    return this.restService.get("/posts/profile/" + username + "?authored=false&sortBy=time&order=false",
+    return this.restService.get("/posts/profile/" + username
+        + "?authored=false&sortBy=time&order=false",
         this.setRequestConfig())
   }
 
