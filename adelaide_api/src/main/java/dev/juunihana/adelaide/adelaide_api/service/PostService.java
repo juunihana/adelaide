@@ -11,6 +11,8 @@ public interface PostService {
 
   PostDTO findById(String id);
 
+  List<PostDTO> findAll();
+
   PostDTO findByIdVotes(String id);
 
   List<PostDTO> findAllByUsername(String username, Map<String, String> requestParams);

@@ -1,12 +1,14 @@
 :root {
   --blur: blur(10px);
-  --color-hover: #ff9155;
-  --bg-hover: #999999;
-  --bg-main: #f6f6f6;
-  --bg-block: #333333;
-  --border-radius: 5px;
-  --text-color-main: #ffffff;
+  --color-hover: #5E81AC;
+  --bg-hover: #E5E9F0;
+  --bg-main: #D8DEE9;
+  --bg-block: #ECEFF4;
+  --border-radius: 3px;
+  --text-color-main: #2E3440;
   --text-color-inverse: #000000;
+  --padding-block: 20px;
+  --border: solid 1px #D8DEE9;
 }
 
 * {
@@ -17,8 +19,6 @@
 
 body {
   background: var(--bg-main);
-  /*background: linear-gradient(0.15turn, #261a1a 30%, #2a4659) no-repeat fixed;*/
-  /*background: linear-gradient(0.15turn, #8e61ff 50%, #ffc2b0) no-repeat fixed;*/
   font-size: 1.1rem;
   color: var(--text-color-main);
   font-family: Ysabeau, sans-serif;
@@ -31,17 +31,13 @@ body {
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background: rgb(0 0 0 / 0.1);
-  backdrop-filter: var(--blur);
+  background: rgba(0, 0, 0, 0.8);
   cursor: pointer;
 }
 
 .overlay-container {
   margin: auto;
-  padding: 1rem;
-  background: var(--bg-block);
-  /*background: linear-gradient(0.15turn, #5b435a 30%, #3d0a21);*/
-  border-radius: var(--border-radius);
+  border: solid 1px var(--color-hover);
   cursor: default;
 }
 
@@ -53,12 +49,21 @@ body {
 
 .bg-hover {
   cursor: pointer;
-  border-radius: var(--border-radius);
+  transition: all 0.05s ease-in 0s;
+  border: solid 1px rgba(0, 0, 0, 0);
 }
 
 .bg-hover:hover {
   background: var(--bg-hover);
-  backdrop-filter: var(--blur);
+  /*border: solid 1px var(--bg-hover);*/
+}
+
+.post-hover {
+  cursor: pointer;
+}
+
+.post-hover:hover {
+  border: solid 1px var(--color-hover);
 }
 
 .flex-row {
@@ -87,10 +92,10 @@ body {
 }
 
 .block {
-  padding: 1rem;
+  padding: var(--padding-block);
   border-radius: var(--border-radius);
   background: var(--bg-block);
-  backdrop-filter: var(--blur);
+  /*border: var(--border);*/
 }
 
 .error-block {
@@ -100,7 +105,6 @@ body {
 }
 
 .block-header {
-  /*padding-left: 0.15rem;*/
   padding-right: 0.15rem;
   height: 32px;
   max-height: 32px;
@@ -174,16 +178,6 @@ a:visited {
 a:hover {
   text-decoration: none;
   color: var(--color-hover);
-  /*color: #e0a1ff;*/
-  filter: blur(1px);
-}
-
-.upvote:hover {
-  color: #3ea800;
-}
-
-.downvote:hover {
-  color: #ff4677;
 }
 
 .hidden {
@@ -192,8 +186,7 @@ a:hover {
 
 .root-container {
   max-width: 70vw;
-  margin: 80px auto;
-  gap: 2rem;
+  margin: 20px auto;
 }
 
 .side-container {
@@ -226,6 +219,10 @@ img {
   font-family: Ysabeau, Arial, sans-serif;
 }
 
+.font-larger {
+  font-size: 1.2rem;
+}
+
 .font-label {
   font-size: 0.95rem;
   font-family: Ysabeau, Arial, sans-serif;
@@ -252,7 +249,15 @@ img {
 }
 
 .font-dimmed {
-  color: #aaaaaa;
+  color: #4C566A;
+}
+
+.font-success {
+  color: #A3BE8C;
+}
+
+.font-danger {
+  color: #BF616A;
 }
 
 .font-smaller {
@@ -268,10 +273,11 @@ img {
 }
 
 button {
-  background: none;
+  background: var(--bg-block);
+  /*border-radius: var(--border-radius);*/
   border-radius: var(--border-radius);
   padding: 0.2rem 0.7rem;
-  border: none;
+  border: var(--border);
   text-decoration: none;
   cursor: pointer;
   transition: 0.1s ease-in;
@@ -280,9 +286,9 @@ button {
   color: var(--text-color-main);
 }
 
-/*button:hover {*/
-/*  background: var(--bg-hover);*/
-/*}*/
+button:hover {
+  background: var(--bg-hover);
+}
 
 input[type=text], input[type=password], textarea {
   background: var(--bg-main);

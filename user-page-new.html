@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User page</title>
+  <link href='https://fonts.googleapis.com/css?family=Noto Sans Display' rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ysabeau">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="root-container flex-col">
+  <header class="root-header flex-row gap-100 align-center">
+    <a class="root-header-logo">Adelaide</a>
+    <div class="search-bar">
+      <input type="text"/>
+      <button>Search</button>
+    </div>
+    <nav class="flex-row gap-75">
+      <a class="main-menu-element">My page</a>
+      <a class="main-menu-element">Feed</a>
+      <a class="main-menu-element">Messages</a>
+      <a class="main-menu-element">Friends</a>
+      <a class="main-menu-element">Groups</a>
+      <a class="main-menu-element">Photos</a>
+      <a class="main-menu-element">Music</a>
+      <a class="main-menu-element">Videos</a>
+    </nav>
+    <div class="flex-row gap-100 align-right">
+      <a>Sign in</a>
+      <a>Sign up</a>
+    </div>
+    <button class="flex-row gap-100 align-right bg-light bg-hover align-center hidden">
+      <img src="avatar_48.png"/>
+      User Name
+    </button>
+    <div class="flex-col gap-25 block user-menu align-center hidden">
+      <a>Settings</a>
+      <button>Sign out</button>
+    </div>
+  </header>
+  <div class="flex-row">
+    <div class="flex-col main-container gap-100">
+      <div class="block flex-col gap-25">
+        <a class="block-header bg-hover font-header">Photos</a>
+        <div class="flex-row gap-50">
+          <img src="avatar_200.png"/>
+          <img src="avatar_200.png"/>
+          <img src="avatar_200.png"/>
+          <img src="avatar_200.png"/>
+        </div>
+      </div>
+      <div class="block flex-row gap-50">
+        <div class="search-bar">
+          <input type="text"/>
+          <button>Search</button>
+        </div>
+        <div class="">
+          Sort by
+        </div>
+        <a>
+          Time
+        </a>
+        <a>
+          Rating
+        </a>
+        <a class="align-right">
+          New post
+        </a>
+      </div>
+      <div class="block flex-col gap-50">
+        <div class="block-header bg-hover flex-row gap-50 align-center">
+          <img src="photo_48.png"/>
+          <div class="font-title">
+            Juunigatsu Hana
+          </div>
+          <div class="align-right">
+            10:56am 12 December 1995
+          </div>
+        </div>
+        <div class="flex-col gap-25">
+          <div class="font-title text-regular">
+            Title
+          </div>
+          <div class="text-regular text-justify post-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+            ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+            sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+            est laborum.
+          </div>
+          <div class="flex-row gap-50">
+            <a class="font-dimmed font-smaller">tag</a>
+            <a class="font-dimmed font-smaller">tag</a>
+            <a class="font-dimmed font-smaller">tag</a>
+          </div>
+        </div>
+        <div class="flex-row gap-50">
+          <button class="upvote">Upvote 0</button>
+          <button class="downvote">Downvote 0</button>
+          <button>Comment 0</button>
+          <div class="align-right flex-row gap-50">
+            <button class="font-dimmed">Edit</button>
+            <button class="font-dimmed">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-col side-container gap-100">
+      <div class="flex-col gap-25 block">
+        <div class="text-center">
+          <img class="photo-link" src="sample_image_200.png"/>
+        </div>
+        <div class="font-title text-regular">
+          User Name
+        </div>
+        <div class="font-dimmed text-regular">
+          1 January
+        </div>
+        <div class="font-dimmed text-regular">
+          Moscow
+        </div>
+        <div class="text-regular bg-light">
+          Aspiring software engineer and musician
+        </div>
+        <div class="flex-row gap-25">
+          <button class="font-dimmed">Edit info</button>
+          <!--        <a class="font-dimmed">Send friends request</a> &lt;!&ndash; IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD &ndash;&gt;-->
+          <!--        <a class="font-dimmed">Accept request</a>-->
+          <!--        <a class="font-dimmed">Decline request</a>-->
+          <!--        <a class="font-dimmed">Remove friend</a>-->
+        </div>
+      </div>
+      <div class="block flex-col gap-25">
+        <a class="bg-hover block-header font-header">Friends</a>
+        <div class="card bg-hover flex-row align-center">
+          <img src="photo_48.png"/>
+          <div class="user-page-friend-name">
+            Juunigatsu Hana
+          </div>
+        </div>
+      </div>
+      <div class="block flex-col gap-25">
+        <a class="block-header bg-hover font-header">Groups</a>
+        <div class="card bg-hover flex-row align-center">
+          <img src="photo_48.png"/>
+          <div class="user-page-group-name">
+            Dark Tranquillity Official
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,12 +1,11 @@
 <template>
-  <MainHeader/>
   <SignInOverlay v-if="localState.showSignInOverlay"/>
   <SignUpOverlay v-if="localState.showSignUpOverlay"/>
   <NewPostOverlay v-if="localState.showNewPostOverlay"/>
   <MediaOverlay v-if="false"/>
 
-  <main-header/>
-  <main class="root-container flex-row">
+  <main class="root-container flex-col gap-100">
+    <main-header/>
     <router-view/>
   </main>
 </template>

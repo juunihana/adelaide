@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router"
-import UserPage from "../views/UserPage.vue";
-import MainPage from "../views/MainPage.vue";
+import UserPage from "@/views/UserPage.vue"
+import MainPage from "@/views/MainPage.vue"
+import PostFeed from "@/views/PostFeed.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,7 @@ const router = createRouter({
     {
       path: "/feed",
       name: "my-feed",
-      component: UserPage
+      component: PostFeed
     },
     {
       path: "/messages",

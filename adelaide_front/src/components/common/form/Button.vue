@@ -1,5 +1,5 @@
 <template>
-  <button class="bg-hover">{{loading ? 'Loading...' : caption}}</button>
+  <button>{{loading ? 'Loading...' : caption}}</button>
 </template>
 
 <script setup>

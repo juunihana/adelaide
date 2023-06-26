@@ -111,21 +111,9 @@ a:hover {
   filter: blur(1px);
 }
 
-.upvote:hover {
-  color: #3ea800;
-}
-
-.downvote:hover {
-  color: #ff4677;
-}
-
 .root-header {
   background: rgb(255 255 255 / 0.1);
   backdrop-filter: blur(10px);
-  position: fixed;
-  top: 0;
-  height: 40px;
-  width: 100vw;
   padding: 0 2rem 0 1rem;
 }
 

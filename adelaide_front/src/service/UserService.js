@@ -37,6 +37,11 @@ class UserService {
         this.setRequestConfig())
   }
 
+  getAllPosts() {
+    return this.restService.get("/posts",
+        this.setRequestConfig())
+  }
+
   sendFriendRequest(username) {
     return this.restService.post("/users/friends/" + username,
         this.setRequestConfig())

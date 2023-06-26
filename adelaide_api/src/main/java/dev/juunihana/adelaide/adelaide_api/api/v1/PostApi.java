@@ -25,6 +25,9 @@ public interface PostApi {
   @GetMapping("/{postId}")
   PostDTO findById(@PathVariable String postId);
 
+  @GetMapping
+  List<PostDTO> findAll();
+
   @GetMapping("/profile/{username}")
   List<PostDTO> findAllByUsername(@PathVariable String username,
       @RequestParam Map<String, String> requestParams);

@@ -53,6 +53,14 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
+  public List<PostDTO> findAll() {
+    return postRepository.findAll().stream()
+        .filter(post -> !post.getDeleted())
+        .map(postMapper::postEntityToDTO)
+        .collect(Collectors.toList());
+  }
+
+  @Override
   public PostDTO findByIdVotes(String id) {
     PostEntity post = findByIdInternalNotDeleted(id);
 

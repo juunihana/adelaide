@@ -31,7 +31,6 @@ public class UserController implements UserApi {
   /**
    * todo (next week)
    * messages api
-   * post feed
    * posts search
    * user page posts filter
    * <p>

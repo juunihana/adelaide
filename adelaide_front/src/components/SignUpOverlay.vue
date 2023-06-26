@@ -1,7 +1,7 @@
 <template>
   <div class="overlay align-center flex-row" @click="close" @wheel.prevent @touchmove.prevent
        @scroll.prevent>
-    <div class="overlay-container flex-col gap-100" @click.stop>
+    <div class="overlay-container block flex-col gap-100" @click.stop>
       <header class="text-center font-header">Sign up</header>
       <div class="block error-block flex-col gap-50" v-if="localState.error">
         <div v-for="field in localState.errorMessage">{{ field }}</div>

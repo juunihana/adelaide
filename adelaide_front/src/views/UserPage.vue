@@ -1,67 +1,71 @@
 <template>
-  <div class="flex-col side-container gap-100">
-    <div class="block" v-if="localState.loadingProfile">loading</div>
-    <div class="flex-col gap-25 block" v-else>
-      <div class="text-center">
-        <img class="photo-link" src="../assets/sample_image_200.png"/>
+  <div class="flex-row gap-100">
+    <div class="flex-col side-container gap-100">
+      <div class="block" v-if="localState.loadingProfile">loading</div>
+      <div class="flex-col gap-25 block" v-else>
+        <div class="text-center">
+          <img class="photo-link" src="../assets/sample_image_200.png"/>
+        </div>
+        <div class="font-header text-regular">
+          {{ localState.user.firstName }} {{ localState.user.lastName }}
+        </div>
+        <div class="text-regular" v-if="localState.user.age">
+          {{ localState.user.age }} years old
+        </div>
+        <div class="font-dimmed text-regular" v-if="localState.user.birthday">
+          Birthday {{ localState.user.birthday }}
+        </div>
+        <div class="font-dimmed text-regular" v-if="localState.user.place">
+          From {{ localState.user.place }}
+        </div>
+        <div class="text-regular bg-button" v-if="localState.user.bio">
+          {{ localState.user.bio }}
+        </div>
+        <div class="flex-row gap-25">
+          <button class="font-dimmed" v-if="localState.currentUser">Edit info</button>
+          <button class="font-dimmed" v-if="localState.signedInUser && !localState.currentUser" @click="sendFriendsRequest">Send
+            friends request
+          </button>
+          <!-- IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD -->
+          <!--        <a class="font-dimmed">Accept request</a>-->
+          <!--        <a class="font-dimmed">Decline request</a>-->
+          <!--        <a class="font-dimmed">Remove friend</a>-->
+        </div>
       </div>
-      <div class="font-header text-regular">
-        {{ localState.user.firstName }} {{ localState.user.lastName }}
+      <div class="block" v-if="localState.loading">loading</div>
+      <div class="block flex-col gap-25" v-else>
+        <a class="bg-hover block-header font-header">
+          Friends {{ localState.user.friends ? localState.user.friends.length : '0' }}
+        </a>
+        <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50"
+                     v-for="friend in localState.user.friends">
+          <user-profile-card :cardInfo="{name: friend.firstName + ' ' + friend.lastName}"/>
+        </router-link>
       </div>
-      <div class="text-regular" v-if="localState.user.age">
-        {{ localState.user.age }} years old
-      </div>
-      <div class="font-dimmed text-regular" v-if="localState.user.birthday">
-        Birthday {{ localState.user.birthday }}
-      </div>
-      <div class="font-dimmed text-regular" v-if="localState.user.place">
-        From {{ localState.user.place }}
-      </div>
-      <div class="text-regular bg-button" v-if="localState.user.bio">
-        {{ localState.user.bio }}
-      </div>
-      <div class="flex-row gap-25">
-        <button class="font-dimmed" v-if="localState.currentUser">Edit info</button>
-        <button class="font-dimmed" v-if="localState.signedInUser && !localState.currentUser">Send friends request</button>
-        <!-- IF USER IS CURRENT SHOW EDIT INFO BUTTON INSTEAD -->
-        <!--        <a class="font-dimmed">Accept request</a>-->
-        <!--        <a class="font-dimmed">Decline request</a>-->
-        <!--        <a class="font-dimmed">Remove friend</a>-->
-      </div>
-    </div>
-    <div class="block" v-if="localState.loading">loading</div>
-    <div class="block flex-col gap-25" v-else>
-      <a class="bg-hover block-header font-header">
-        Friends {{ localState.user.friends ? localState.user.friends.length : '0' }}
-      </a>
-      <router-link :to="'/' + friend.username" class="card bg-hover flex-row align-center gap-50"
-                   v-for="friend in localState.user.friends">
-        <user-profile-card :cardInfo="{name: friend.firstName + ' ' + friend.lastName}"/>
-      </router-link>
-    </div>
-    <div class="block" v-if="localState.loading">loading</div>
-    <div class="block flex-col gap-25" v-else>
-      <a class="block-header bg-hover font-header">
-        Groups {{ localState.user.friends ? localState.user.friends.length : '0' }}
-      </a>
-      <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50"
-                   v-for="group in localState.user.groups">
-        <user-profile-card :cardInfo="{name: group.name }"/>
-      </router-link>
-    </div>
-  </div>
-  <div class="block" v-if="localState.loading">loading</div>
-  <div class="flex-col main-container gap-100" v-else>
-    <div class="block flex-col gap-25">
-      <a class="block-header bg-hover font-header">Photos</a>
-      <div class="flex-row gap-50">
-        <img src="../assets/sample_image_200.png"/>
-        <img src="../assets/sample_image_200.png"/>
-        <img src="../assets/sample_image_200.png"/>
-        <img src="../assets/sample_image_200.png"/>
+      <div class="block" v-if="localState.loading">loading</div>
+      <div class="block flex-col gap-25" v-else>
+        <a class="block-header bg-hover font-header">
+          Groups {{ localState.user.friends ? localState.user.friends.length : '0' }}
+        </a>
+        <router-link :to="'/' + group.username" class="card bg-hover flex-row align-center gap-50"
+                     v-for="group in localState.user.groups">
+          <user-profile-card :cardInfo="{name: group.name }"/>
+        </router-link>
       </div>
     </div>
-    <post-list :username="route.params.username"/>
+    <!--    <div class="block" v-if="localState.loading">loading</div>-->
+    <div class="flex-col main-container gap-100">
+      <!--      <div class="block flex-col gap-25">-->
+      <!--        <a class="block-header bg-hover font-header">Photos</a>-->
+      <!--        <div class="flex-row gap-50">-->
+      <!--          <img src="../assets/sample_image_200.png"/>-->
+      <!--          <img src="../assets/sample_image_200.png"/>-->
+      <!--          <img src="../assets/sample_image_200.png"/>-->
+      <!--          <img src="../assets/sample_image_200.png"/>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <post-list :username="route.params.username"/>
+    </div>
   </div>
 </template>
 

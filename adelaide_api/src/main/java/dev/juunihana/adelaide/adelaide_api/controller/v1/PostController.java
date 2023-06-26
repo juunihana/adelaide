@@ -23,6 +23,11 @@ public class PostController implements PostApi {
     return postService.findById(postId);
   }
 
+  @Override
+  public List<PostDTO> findAll() {
+    return postService.findAll();
+  }
+
   @GetMapping("/{postId}/vote")
   public PostDTO findByIdVotes(@PathVariable String postId) {
     return postService.findByIdVotes(postId);

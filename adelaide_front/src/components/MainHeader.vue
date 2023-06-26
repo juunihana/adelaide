@@ -1,35 +1,33 @@
 <template>
-  <header class="root-header flex-row gap-50 align-center">
+  <header class="root-header block flex-row gap-50 align-center">
     <router-link to="/" class="root-header-logo">Adelaide</router-link>
     <div class="search-bar flex-row gap-50">
       <input type="text" placeholder="Search"/>
       <Button caption="Search"/>
     </div>
-    <nav class="flex-row gap-75" v-if="localState.signedIn">
-      <router-link :to="'/' + localState.signedIn.username" class="main-menu-element">My page
+    <nav class="flex-row gap-75">
+      <router-link v-if="localState.signedIn" :to="'/' + localState.signedIn.username">
+        My page
       </router-link>
       <router-link to="/feed">Feed</router-link>
-      <router-link to="/messages">Messages</router-link>
-      <router-link to="/friends">Friends</router-link>
-      <router-link to="/groups">Groups</router-link>
-      <router-link to="/photos">Photos</router-link>
-      <router-link to="/music">Music</router-link>
-      <router-link to="/videos">Videos</router-link>
-      <router-link to="/settings">Settings</router-link>
+      <router-link v-if="localState.signedIn" to="/messages">Messages</router-link>
+      <router-link v-if="localState.signedIn" to="/friends">Friends</router-link>
+      <router-link v-if="localState.signedIn" to="/groups">Groups</router-link>
+      <router-link v-if="localState.signedIn" to="/photos">Photos</router-link>
+      <router-link v-if="localState.signedIn" to="/music">Music</router-link>
+      <router-link v-if="localState.signedIn" to="/videos">Videos</router-link>
+      <router-link v-if="localState.signedIn" to="/settings">Settings</router-link>
     </nav>
     <div class="flex-row gap-50 align-right" v-if="!localState.signedIn">
-      <button class="bg-hover" @click="showSignIn">Sign in</button>
-      <button class="bg-hover" @click="showSignUp">Sign up</button>
+      <Button caption="Sign in" @click="showSignIn"/>
+      <Button caption="Sign up" @click="showSignUp"/>
     </div>
     <div class="flex-row gap-50 align-right" v-else>
       <router-link :to="'/' + localState.signedIn.username" id="userLink" class="flex-row gap-25 align-center bg-hover">
         <img :src="avatar" alt="avatar" width="32" height="32"/>
-        <div>{{
-            localState.signedIn.firstName + ' ' + localState.signedIn.lastName
-          }}
-        </div>
+        <div>{{ localState.signedIn.firstName + ' ' + localState.signedIn.lastName }}</div>
       </router-link>
-      <button class="bg-hover" @click="signOut">Sign out</button>
+      <Button @click="signOut" caption="Sign out"/>
     </div>
   </header>
 </template>
@@ -75,14 +73,15 @@ button img {
 }
 
 .root-header {
-  background: var(--bg-block);
-  backdrop-filter: var(--blur);
-  position: fixed;
-  top: 0;
-  height: 40px;
-  width: 100vw;
-  padding: 0 2rem 0 1rem;
-  z-index: 999;
+  /*background: var(--bg-block);*/
+  /*backdrop-filter: var(--blur);*/
+  /*border-radius: var(--border-radius);*/
+  /*position: fixed;*/
+  /*top: 0;*/
+  /*height: 40px;*/
+  /*width: 100vw;*/
+  /*padding: 20px;*/
+  /*z-index: 999;*/
 }
 
 #userLink {
