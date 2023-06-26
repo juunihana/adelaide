@@ -20,6 +20,7 @@
   <description>Adelaide Social Network</description>
 
   <modules>
+    <module>adelaide_posts</module>
     <module>adelaide_api</module>
     <module>adelaide_cdn</module>
   </modules>
