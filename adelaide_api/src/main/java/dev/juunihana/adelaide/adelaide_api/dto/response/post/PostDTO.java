@@ -35,7 +35,5 @@ public class PostDTO {
 
   private List<CommentDTO> comments;
 
-  private Integer upVotes;
-
-  private Integer downVotes;
+  private Long rating;
 }

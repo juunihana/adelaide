@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,21 +41,11 @@ public class UserEntity implements UserDetails {
   @Column(name = "password_hash")
   private String password;
 
-  private String phone;
-
-  private String firstName;
-
-  private String middleName;
-
-  private String lastName;
-
-  private String maidenSurname;
+  private String displayName;
 
   private String avatar;
 
   private String bio;
-
-  private String status;
 
   private LocalDate dateOfBirth;
 
@@ -63,6 +54,12 @@ public class UserEntity implements UserDetails {
   private LocalDateTime timeJoined;
 
   private Boolean deleted;
+
+  @ManyToMany
+  @JoinTable(name = "users_friends",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "friend_id"))
+  private List<UserEntity> friends;
 
   @ManyToMany
   @JoinTable(name = "users_friends_requests",
@@ -77,21 +74,12 @@ public class UserEntity implements UserDetails {
   private List<UserEntity> outgoingFriendsRequests;
 
   @ManyToMany
-  @JoinTable(name = "users_friends",
+  @JoinTable(name = "users_communities",
       joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "friend_id"))
-  private List<UserEntity> friends;
+      inverseJoinColumns = @JoinColumn(name = "community_id"))
+  private List<CommunityEntity> communities;
 
-  @ManyToMany
-  @JoinTable(name = "users_groups",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "group_id"))
-  private List<GroupEntity> groups;
-
-  @ManyToMany
-  @JoinTable(name = "users_posts",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "post_id"))
+  @OneToMany
   private List<PostEntity> posts;
 
   @Override

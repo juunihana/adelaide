@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "communities")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupEntity {
+public class CommunityEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +34,6 @@ public class GroupEntity {
 
   private LocalDateTime timeCreated;
 
-  @ManyToMany(mappedBy = "groups")
+  @ManyToMany(mappedBy = "communities")
   private List<UserEntity> users;
 }

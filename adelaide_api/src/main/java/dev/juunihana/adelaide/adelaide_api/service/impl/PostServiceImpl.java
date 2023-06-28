@@ -69,8 +69,8 @@ public class PostServiceImpl implements PostService {
             .filter(vote -> vote.getUser().getUsername()
                 .equals(userService.getSignedUser().getUsername()))
             .findFirst().orElse(null)))
-        .upVotes((int) post.getVotes().stream().filter(VoteEntity::isUpVote).count())
-        .downVotes((int) post.getVotes().stream().filter(vote -> !vote.isUpVote()).count())
+        .rating(post.getVotes().stream().filter(VoteEntity::isUpVote).count() -
+            post.getVotes().stream().filter(vote -> !vote.isUpVote()).count())
         .build();
   }
 
@@ -88,7 +88,7 @@ public class PostServiceImpl implements PostService {
         .sorted(
             switch (requestParams.get("sortBy")) {
               case "time" -> Comparator.comparing(PostDTO::getTimeCreated);
-              case "upVotes" -> Comparator.comparing(PostDTO::getUpVotes);
+              case "rating" -> Comparator.comparing(PostDTO::getRating);
               default -> Comparator.comparing(PostDTO::getTimeCreated);
             })
         .collect(Collectors.toList());
@@ -106,27 +106,25 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public List<PostDTO> search(Map<String, String> searchParams) {
-    String username = Optional.ofNullable(searchParams.get("username")).orElse("");
+    String author = Optional.ofNullable(searchParams.get("author")).orElse("");
     String tags = Optional.ofNullable(searchParams.get("tags")).orElse("");
     String query = Optional.ofNullable(searchParams.get("query")).orElse("");
     String sortBy = Optional.ofNullable(searchParams.get("sortBy")).orElse("time");
     String order = Optional.ofNullable(searchParams.get("order")).orElse("desc");
 
-    List<PostEntity> poststmp = StringUtils.hasLength(username) ?
-        postRepository.findAllByUserUsername(username) :
-        postRepository.findAll();
-
-    List<PostEntity> posts = postRepository.findAll().stream()
-        .filter(post -> !StringUtils.hasLength(username) || post.getUser().getUsername()
-            .equals(username))
+    List<PostEntity> posts = postRepository.streamAll().parallel()
+        .filter(post -> !post.getDeleted())
+        .filter(post -> !StringUtils.hasLength(author) || post.getAuthor().getUsername()
+            .equals(author))
         .filter(post -> !StringUtils.hasLength(tags) || post.getTags().stream()
             .anyMatch(tag -> List.of(tags.split(",")).contains(tag.getName())))
         .filter(post -> !StringUtils.hasLength(query)
             || post.getTitle().toLowerCase().contains(query.toLowerCase())
             || post.getContent().toLowerCase().contains(query.toLowerCase()))
         .sorted(switch (sortBy) {
-//          case "time" -> Comparator.comparing(PostEntity::getTimeCreated);
-          case "rating" -> Comparator.comparing(post -> post.getVotes().stream().filter(VoteEntity::isUpVote).count());
+          case "rating" -> Comparator.comparing(post ->
+              post.getVotes().stream().filter(VoteEntity::isUpVote).count() -
+                  post.getVotes().stream().filter(vote -> !vote.isUpVote()).count());
           default -> Comparator.comparing(PostEntity::getTimeCreated);
         })
         .collect(Collectors.toList());
@@ -135,7 +133,7 @@ public class PostServiceImpl implements PostService {
       Collections.reverse(posts);
     }
 
-    return null;
+    return Collections.emptyList();
   }
 
   @Override

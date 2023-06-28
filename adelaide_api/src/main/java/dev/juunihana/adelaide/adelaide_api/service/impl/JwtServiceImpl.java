@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-  private String SECRET_KEY = "secret";
+  private String SECRET_KEY = "4d3l41d3_1337";
 
   @Override
   public String getUsername(String token) {
@@ -42,7 +42,7 @@ public class JwtServiceImpl implements JwtService {
         .setClaims(claims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
         .compact();
   }

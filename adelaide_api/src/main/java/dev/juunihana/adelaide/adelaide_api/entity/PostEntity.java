@@ -47,12 +47,6 @@ public class PostEntity {
 
   private Boolean deleted;
 
-  @ManyToOne
-  @JoinTable(name = "users_posts",
-      joinColumns = @JoinColumn(name = "post_id"),
-      inverseJoinColumns = @JoinColumn(name = "user_id"))
-  private UserEntity user;
-
   @ManyToMany
   @JoinTable(name = "posts_tags",
       joinColumns = @JoinColumn(name = "post_id"),
@@ -60,14 +54,10 @@ public class PostEntity {
   private List<TagEntity> tags;
 
   @OneToMany
-  @JoinTable(name = "posts_comments",
-      joinColumns = @JoinColumn(name = "post_id"),
-      inverseJoinColumns = @JoinColumn(name = "comment_id"))
-  private List<CommentEntity> comments;
+  @JoinColumn(name = "replyTo")
+  private List<PostEntity> comments;
 
   @OneToMany
-  @JoinTable(name = "posts_votes",
-      joinColumns = @JoinColumn(name = "post_id"),
-      inverseJoinColumns = @JoinColumn(name = "vote_id"))
+  @JoinColumn(name = "post_id")
   private Set<VoteEntity> votes;
 }

@@ -5,11 +5,14 @@ import dev.juunihana.adelaide.adelaide_api.entity.TagEntity;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PostRepository extends JpaRepository<PostEntity, UUID> {
+
+  Stream<PostEntity> streamAll();
 
   List<PostEntity> findAllByOrderByTimeCreatedAsc();
   List<PostEntity> findAllByOrderByTimeCreatedDesc();

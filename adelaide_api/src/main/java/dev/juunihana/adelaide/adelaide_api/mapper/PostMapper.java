@@ -28,30 +28,13 @@ public abstract class PostMapper {
   @Mappings({
       @Mapping(source = "timeCreated", target = "timeCreated", qualifiedByName = "mapTime"),
       @Mapping(source = "timeEdited", target = "timeEdited", qualifiedByName = "mapTime"),
-      @Mapping(source = "votes", target = "upVotes", qualifiedByName = "mapUpVotes"),
-      @Mapping(source = "votes", target = "downVotes", qualifiedByName = "mapDownVotes"),
+      @Mapping(source = "votes", target = "rating", qualifiedByName = "mapRating")
   })
   public abstract PostDTO postEntityToDTO(PostEntity post);
 
-//  @Named("mapTime")
-//  protected String mapTime(LocalDateTime time) {
-//    if (time != null) {
-//      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy", Locale.US));
-//    }
-//    return "";
-//  }
-
-  @Named("mapUpVotes")
-  protected Integer mapUpVotes(Set<VoteEntity> votes) {
-    return Math.toIntExact(votes.stream()
-        .filter(VoteEntity::isUpVote)
-        .count());
-  }
-
-  @Named("mapDownVotes")
-  protected Integer mapDownVotes(Set<VoteEntity> votes) {
-    return Math.toIntExact(votes.stream()
-        .filter(vote -> !vote.isUpVote())
-        .count());
+  @Named("mapRating")
+  protected Long mapRating(Set<VoteEntity> votes) {
+    return votes.stream().filter(VoteEntity::isUpVote).count() -
+        votes.stream().filter(vote -> !vote.isUpVote()).count();
   }
 }
