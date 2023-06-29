@@ -19,8 +19,7 @@ import org.mapstruct.Named;
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
     uses = {
         UserMapper.class,
-        CommentMapper.class,
-        VoteEntity.class
+        VoteMapper.class
     }
 )
 public abstract class PostMapper {
@@ -36,5 +35,13 @@ public abstract class PostMapper {
   protected Long mapRating(Set<VoteEntity> votes) {
     return votes.stream().filter(VoteEntity::isUpVote).count() -
         votes.stream().filter(vote -> !vote.isUpVote()).count();
+  }
+
+  @Named("mapTime")
+  protected String mapTime(LocalDateTime time) {
+    if (time != null) {
+      return time.format(DateTimeFormatter.ofPattern("hh:mm dd MMM, yyyy", Locale.UK));
+    }
+    return "";
   }
 }

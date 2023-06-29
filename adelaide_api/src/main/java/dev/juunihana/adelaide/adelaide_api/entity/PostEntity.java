@@ -9,6 +9,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +38,14 @@ public class PostEntity {
   @JoinColumn(name = "author_id")
   private UserEntity author;
 
+  @ManyToOne
+  @JoinColumn(name = "community_id")
+  private CommunityEntity community;
+
+  @OneToOne
+  @JoinColumn(name = "reply_to_id")
+  private PostEntity parent;
+
   private String title;
 
   private String content;
@@ -51,13 +60,12 @@ public class PostEntity {
   @JoinTable(name = "posts_tags",
       joinColumns = @JoinColumn(name = "post_id"),
       inverseJoinColumns = @JoinColumn(name = "tag_id"))
-  private List<TagEntity> tags;
+  private Set<TagEntity> tags;
 
   @OneToMany
-  @JoinColumn(name = "replyTo")
+  @JoinColumn(name = "reply_to_id")
   private List<PostEntity> comments;
 
   @OneToMany
-  @JoinColumn(name = "post_id")
   private Set<VoteEntity> votes;
 }

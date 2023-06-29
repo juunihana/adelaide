@@ -31,23 +31,9 @@ public class UpdateUserProfileDTO {
   @Pattern(regexp = "^[A-Za-z]+[A-Za-z0-9]+", message = "Username cannot begin with number")
   private String username;
 
-  @NotBlank(message = "First name cannot be empty")
   @Pattern(regexp = "[A-Za-z]+", message =
-      "First name cannot contain other characters than letters")
-  private String firstName;
-
-  @Pattern(regexp = "[A-Za-z]*", message =
-      "Middle name cannot contain other characters than letters")
-  private String middleName;
-
-  @NotBlank(message = "Last name cannot be empty")
-  @Pattern(regexp = "[A-Za-z]+", message =
-      "Last name cannot contain other characters than letters")
-  private String lastName;
-
-  @Pattern(regexp = "[A-Za-z]*", message =
-      "Maiden surname cannot contain other characters than letters")
-  private String maidenSurname;
+      "Display name cannot contain other characters than letters")
+  private String displayName;
 
   private String bio;
 

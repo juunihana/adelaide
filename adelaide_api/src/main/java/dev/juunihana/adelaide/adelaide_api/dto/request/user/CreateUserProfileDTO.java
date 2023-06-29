@@ -2,19 +2,15 @@ package dev.juunihana.adelaide.adelaide_api.dto.request.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -39,23 +35,9 @@ public class CreateUserProfileDTO {
   @Pattern(regexp = "[A-Za-z0-9_\\-.,!@#$%^&*(){}\\[\\]`~<>]+")
   private String password;
 
-  @NotBlank(message = "First name cannot be empty")
   @Pattern(regexp = "[A-Za-z]+", message =
-      "First name cannot contain other characters than letters")
-  private String firstName;
-
-  @Pattern(regexp = "[A-Za-z]*", message =
-      "Middle name cannot contain other characters than letters")
-  private String middleName;
-
-  @NotBlank(message = "Last name cannot be empty")
-  @Pattern(regexp = "[A-Za-z]+", message =
-      "Last name cannot contain other characters than letters")
-  private String lastName;
-
-  @Pattern(regexp = "[A-Za-z]*", message =
-      "Maiden surname cannot contain other characters than letters")
-  private String maidenSurname;
+      "Display name cannot contain other characters than letters")
+  private String displayName;
 
   private String bio;
 

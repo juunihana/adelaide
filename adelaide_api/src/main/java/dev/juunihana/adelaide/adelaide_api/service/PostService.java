@@ -1,6 +1,5 @@
 package dev.juunihana.adelaide.adelaide_api.service;
 
-import dev.juunihana.adelaide.adelaide_api.dto.request.comment.CreateCommentDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.vote.CreateVoteDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
@@ -26,6 +25,4 @@ public interface PostService {
   void delete(String postId);
 
   void addVote(CreateVoteDTO upVote);
-
-  void addComment(CreateCommentDTO dto);
 }

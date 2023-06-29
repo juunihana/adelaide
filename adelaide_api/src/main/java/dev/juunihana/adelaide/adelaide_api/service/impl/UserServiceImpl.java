@@ -22,7 +22,6 @@ import dev.juunihana.adelaide.adelaide_api.service.UserService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -191,23 +190,14 @@ public class UserServiceImpl implements UserService {
     System.out.println(
         "Update user {" + getCurrentUserUsername() + "}: " + updateUserProfileDTO.toString());
 
-    if (StringUtils.hasLength(updateUserProfileDTO.getPhone()) &&
-        userExistsByPhone(updateUserProfileDTO.getPhone())) {
-      throw new UserAlreadyExistsException("phone " + updateUserProfileDTO.getPhone());
-    }
-
     UserEntity user = userRepository.findByUsername(getCurrentUserUsername())
         .orElseThrow(() -> new UserNotFoundException("username " + getCurrentUserUsername()));
 
     user.setEmail(updateUserProfileDTO.getEmail());
     user.setUsername(updateUserProfileDTO.getUsername());
-    user.setFirstName(updateUserProfileDTO.getFirstName());
-    user.setLastName(updateUserProfileDTO.getLastName());
-    user.setMiddleName(updateUserProfileDTO.getMiddleName());
-    user.setMaidenSurname(updateUserProfileDTO.getMaidenSurname());
+    user.setDisplayName(updateUserProfileDTO.getDisplayName());
     user.setBio(updateUserProfileDTO.getBio());
     user.setPlace(updateUserProfileDTO.getPlace());
-    user.setPhone(updateUserProfileDTO.getPhone());
     user.setDateOfBirth(updateUserProfileDTO.getDateOfBirth());
 
     userRepository.save(user);

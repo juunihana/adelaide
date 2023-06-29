@@ -1,10 +1,8 @@
 package dev.juunihana.adelaide.adelaide_api.service.impl;
 
-import dev.juunihana.adelaide.adelaide_api.dto.request.comment.CreateCommentDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.post.CreatePostDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.request.vote.CreateVoteDTO;
 import dev.juunihana.adelaide.adelaide_api.dto.response.post.PostDTO;
-import dev.juunihana.adelaide.adelaide_api.entity.CommentEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.PostEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.UserEntity;
 import dev.juunihana.adelaide.adelaide_api.entity.VoteEntity;
@@ -12,7 +10,6 @@ import dev.juunihana.adelaide.adelaide_api.exception.AccessDeniedException;
 import dev.juunihana.adelaide.adelaide_api.exception.PostNotFoundException;
 import dev.juunihana.adelaide.adelaide_api.mapper.PostMapper;
 import dev.juunihana.adelaide.adelaide_api.mapper.VoteMapper;
-import dev.juunihana.adelaide.adelaide_api.repository.CommentRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.PostRepository;
 import dev.juunihana.adelaide.adelaide_api.repository.VoteRepository;
 import dev.juunihana.adelaide.adelaide_api.service.PostService;
@@ -37,7 +34,6 @@ public class PostServiceImpl implements PostService {
   private final PostMapper postMapper;
   private final UserService userService;
   private final VoteRepository voteRepository;
-  private final CommentRepository commentRepository;
   private final VoteMapper voteMapper;
 
   @Override
@@ -139,7 +135,6 @@ public class PostServiceImpl implements PostService {
   @Override
   public void create(CreatePostDTO createPostDTO) {
     postRepository.save(PostEntity.builder()
-        .user(userService.getByUsername(createPostDTO.getUsername()))
         .author(userService.getSignedUserEntity())
         .title(createPostDTO.getTitle())
         .content(createPostDTO.getContent())
@@ -153,7 +148,7 @@ public class PostServiceImpl implements PostService {
     PostEntity post = findByIdInternalNotDeleted(postId);
 
     String authorUsername = userService.getSignedUser().getUsername();
-    if (!post.getUser().getUsername().equals(authorUsername)) {
+    if (!post.getAuthor().getUsername().equals(authorUsername)) {
       throw new AccessDeniedException("You cannot edit this user posts");
     }
 
@@ -169,7 +164,7 @@ public class PostServiceImpl implements PostService {
     PostEntity post = findByIdInternalNotDeleted(postId);
 
     String authorUsername = userService.getSignedUserEntity().getUsername();
-    if (!post.getUser().getUsername().equals(authorUsername)) {
+    if (!post.getAuthor().getUsername().equals(authorUsername)) {
       throw new AccessDeniedException("You cannot delete this user posts");
     }
 
@@ -194,16 +189,6 @@ public class PostServiceImpl implements PostService {
             .user(user)
             .post(post)
             .build()));
-  }
-
-  @Override
-  public void addComment(CreateCommentDTO dto) {
-    commentRepository.save(CommentEntity.builder()
-        .author(userService.getSignedUserEntity())
-        .post(findByIdInternalNotDeleted(dto.getTargetId()))
-        .content(dto.getContent())
-        .timeCreated(LocalDateTime.now())
-        .build());
   }
 
   private PostEntity findByIdInternal(String postId) {
