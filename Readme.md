@@ -1,1 +1,1 @@
-# Adelaide Clothing EShop
+# Adelaide Fashion EShop
