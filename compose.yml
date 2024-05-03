@@ -10,9 +10,7 @@ services:
       - mongodb
       - redis
     ports:
-      - "80:80"
-    links:
-      - "postgres:postgres"
+      - "8081:8081"
 
   rabbitmq:
     restart: always
@@ -27,12 +25,11 @@ services:
 
   mongodb:
     image: 'mongo:latest'
+    hostname: mongodb
     environment:
       - 'MONGO_INITDB_DATABASE=mydatabase'
       - 'MONGO_INITDB_ROOT_PASSWORD=secret'
       - 'MONGO_INITDB_ROOT_USERNAME=root'
-    volumes:
-      - /var/lib/rabbitmq
     ports:
       - '27017'
 
@@ -52,6 +49,7 @@ services:
   redis:
     restart: always
     image: 'redis:latest'
+    hostname: redis
     volumes:
       - "/var/lib/redis"
     environment:
