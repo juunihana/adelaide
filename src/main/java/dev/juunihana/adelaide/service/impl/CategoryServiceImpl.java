@@ -1,6 +1,8 @@
 package dev.juunihana.adelaide.service.impl;
 
 import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.category.CreateCategory;
+import dev.juunihana.adelaide.dto.category.UpdateCategory;
 import dev.juunihana.adelaide.dto.item.ItemFull;
 import dev.juunihana.adelaide.entity.CategoryEntity;
 import dev.juunihana.adelaide.exception.CategoryNotFoundException;
@@ -45,14 +47,16 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Set<ItemFull> findItemsFromCategory(String categoryId, Integer pageNumber) {
+  public Set<ItemFull> findItemsFromCategory(String categoryId, Integer pageNumber,
+      Integer pageSize) {
     CategoryEntity parent = categoryRepository.findById(UUID.fromString(categoryId))
         .orElseThrow(() -> new CategoryNotFoundException(categoryId));
 
     Set<UUID> ids = new HashSet<>();
     ids.add(UUID.fromString(categoryId));
     traverseCategoriesIds(ids, parent);
-    return itemRepository.findByCategoryIdIn(ids, PageRequest.of(pageNumber - 1, 10)).stream()
+    return itemRepository.findByCategoryIdIn(ids,
+            PageRequest.of(pageNumber - 1, pageSize == null ? 10 : pageSize)).stream()
         .map(itemMapper::itemEntityToItemFull)
         .collect(Collectors.toSet());
   }
@@ -70,8 +74,8 @@ public class CategoryServiceImpl implements CategoryService {
 
 
   @Override
-  public Category create(Category dto) {
-    CategoryEntity entity = categoryMapper.categoryToCategoryEntity(dto);
+  public Category create(CreateCategory dto) {
+    CategoryEntity entity = categoryMapper.createCategoryToCategoryEntity(dto);
     if (StringUtils.hasLength(dto.getParentId())) {
       categoryRepository.findById(UUID.fromString(dto.getParentId()))
           .ifPresent(entity::setParent);
@@ -81,8 +85,18 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Category update(String id, Category dto) {
-    return null;
+  public Category update(String id, UpdateCategory dto) {
+    CategoryEntity entity = categoryRepository.findById(UUID.fromString(id))
+        .orElseThrow(() -> new CategoryNotFoundException(id));
+
+    categoryMapper.update(entity, dto);
+
+    if (StringUtils.hasLength(dto.getParentId())) {
+      entity.setParent(categoryRepository.findById(UUID.fromString(dto.getParentId()))
+          .orElseThrow(() -> new CategoryNotFoundException(id)));
+    }
+
+    return categoryMapper.categoryEntityToCategory(categoryRepository.save(entity));
   }
 
   @Override

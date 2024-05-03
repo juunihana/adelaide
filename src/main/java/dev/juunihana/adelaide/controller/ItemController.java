@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.controller;
 
 import dev.juunihana.adelaide.dto.item.CreateItem;
 import dev.juunihana.adelaide.dto.item.ItemFull;
+import dev.juunihana.adelaide.dto.item.UpdateItem;
 import dev.juunihana.adelaide.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,6 +32,11 @@ public class ItemController {
   @ResponseStatus(HttpStatus.CREATED)
   public ItemFull create(@RequestBody CreateItem dto) {
     return itemService.create(dto);
+  }
+
+  @PutMapping("/{id}")
+  public ItemFull create(@PathVariable String id, @RequestBody UpdateItem dto) {
+    return itemService.update(id, dto);
   }
 
   @DeleteMapping("/{id}")

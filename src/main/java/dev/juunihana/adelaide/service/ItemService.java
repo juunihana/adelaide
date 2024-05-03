@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.service;
 
 import dev.juunihana.adelaide.dto.item.CreateItem;
 import dev.juunihana.adelaide.dto.item.ItemFull;
+import dev.juunihana.adelaide.dto.item.UpdateItem;
 import java.util.List;
 
 public interface ItemService {
@@ -12,7 +13,7 @@ public interface ItemService {
 
   ItemFull create(CreateItem dto);
 
-  ItemFull update(String id, ItemFull dto);
+  ItemFull update(String id, UpdateItem dto);
 
   void delete(String id);
 }
