@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class Category {
+public class CategoryFull {
 
   private String id;
 
@@ -21,5 +21,5 @@ public class Category {
 
   private String parentId;
 
-  private Set<Category> subCategories;
+  private Set<CategoryFull> subCategories;
 }

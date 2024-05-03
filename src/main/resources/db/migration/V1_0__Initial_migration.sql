@@ -58,8 +58,8 @@ insert into item(id, name, description, price, category_id)
 values ('78347640-7197-4d65-9ba3-d3df4f3af5c5', 'Maxidress', 'Cotton dress', 169.99,
         '41d210e4-afe9-4ce3-8732-464170d1589c');
 insert into item(id, name, description, price, category_id)
-values ('7008e21f-e811-4b7b-8f42-c8c034adad29', 'Skirt', 'Polyester skirt', 39.99,
-        '93aeedc8-4fe8-42b9-bd24-6000a1947b77');
+values ('1f243ada-9c6b-4407-b7c0-04b20b6497ba', 'Skirt', 'Polyester skirt', 39.99,
+        '7008e21f-e811-4b7b-8f42-c8c034adad29');
 insert into item(id, name, description, price, category_id)
 values ('d1004f07-c6d6-428d-9c80-547c871b4d50', 'T-Shirt', 'Cotton T-shirt', 29.99,
         '93aeedc8-4fe8-42b9-bd24-6000a1947b77');

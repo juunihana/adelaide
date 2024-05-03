@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.service.impl;
 
-import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
 import dev.juunihana.adelaide.dto.item.ItemFull;
@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
   private final ItemRepository itemRepository;
 
   @Override
-  public List<Category> findAll() {
+  public List<CategoryFull> findAll() {
     return categoryRepository.findAll().stream()
         .filter(categoryEntity -> categoryEntity.getParent() == null)
         .map(categoryMapper::categoryEntityToCategory)
@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Category findById(String id) {
+  public CategoryFull findById(String id) {
     return categoryMapper.categoryEntityToCategory(categoryRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new CategoryNotFoundException(id)));
   }
@@ -74,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
   @Override
-  public Category create(CreateCategory dto) {
+  public CategoryFull create(CreateCategory dto) {
     CategoryEntity entity = categoryMapper.createCategoryToCategoryEntity(dto);
     if (StringUtils.hasLength(dto.getParentId())) {
       categoryRepository.findById(UUID.fromString(dto.getParentId()))
@@ -85,7 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Category update(String id, UpdateCategory dto) {
+  public CategoryFull update(String id, UpdateCategory dto) {
     CategoryEntity entity = categoryRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new CategoryNotFoundException(id));
 

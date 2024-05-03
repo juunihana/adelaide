@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.mapper;
 
-import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CategoryCompact;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
@@ -11,11 +11,11 @@ import org.mapstruct.MappingTarget;
 @Mapper(uses = CategoryMapper.class)
 public interface CategoryMapper {
 
-  Category categoryEntityToCategory(CategoryEntity category);
+  CategoryFull categoryEntityToCategory(CategoryEntity category);
 
   CategoryCompact categoryEntityToCategoryCompact(CategoryEntity category);
 
-  CategoryEntity categoryToCategoryEntity(Category category);
+  CategoryEntity categoryToCategoryEntity(CategoryFull categoryFull);
 
   CategoryEntity createCategoryToCategoryEntity(CreateCategory category);
 

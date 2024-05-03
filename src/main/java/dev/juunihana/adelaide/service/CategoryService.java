@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.service;
 
-import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
 import dev.juunihana.adelaide.dto.item.ItemFull;
@@ -9,15 +9,15 @@ import java.util.Set;
 
 public interface CategoryService {
 
-  List<Category> findAll();
+  List<CategoryFull> findAll();
 
-  Category findById(String id);
+  CategoryFull findById(String id);
 
   Set<ItemFull> findItemsFromCategory(String categoryId, Integer pageNumber, Integer pageSize);
 
-  Category create(CreateCategory dto);
+  CategoryFull create(CreateCategory dto);
 
-  Category update(String id, UpdateCategory dto);
+  CategoryFull update(String id, UpdateCategory dto);
 
   void delete(String id);
 }

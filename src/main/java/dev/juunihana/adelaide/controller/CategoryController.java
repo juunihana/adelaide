@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.controller;
 
-import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
 import dev.juunihana.adelaide.dto.item.ItemFull;
@@ -28,12 +28,12 @@ public class CategoryController {
   private final CategoryService categoryService;
 
   @GetMapping("/{id}")
-  public Category findById(@PathVariable String id) {
+  public CategoryFull findById(@PathVariable String id) {
     return categoryService.findById(id);
   }
 
   @GetMapping("/all")
-  public List<Category> findById() {
+  public List<CategoryFull> findById() {
     return categoryService.findAll();
   }
 
@@ -47,13 +47,13 @@ public class CategoryController {
 
   @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
-  public Category create(@RequestBody CreateCategory category) {
+  public CategoryFull create(@RequestBody CreateCategory category) {
     return categoryService.create(category);
   }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.CREATED)
-  public Category create(
+  public CategoryFull create(
       @PathVariable String id,
       @RequestBody UpdateCategory category) {
     return categoryService.update(id, category);
