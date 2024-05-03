@@ -11,11 +11,11 @@ import org.mapstruct.MappingTarget;
 @Mapper(uses = CategoryMapper.class)
 public interface CategoryMapper {
 
-  CategoryFull categoryEntityToCategory(CategoryEntity category);
+  CategoryFull categoryEntityToCategoryFull(CategoryEntity category);
 
   CategoryCompact categoryEntityToCategoryCompact(CategoryEntity category);
 
-  CategoryEntity categoryToCategoryEntity(CategoryFull categoryFull);
+  CategoryEntity categoryFullToCategoryEntity(CategoryFull categoryFull);
 
   CategoryEntity createCategoryToCategoryEntity(CreateCategory category);
 

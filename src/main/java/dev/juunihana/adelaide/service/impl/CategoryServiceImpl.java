@@ -36,13 +36,13 @@ public class CategoryServiceImpl implements CategoryService {
   public List<CategoryFull> findAll() {
     return categoryRepository.findAll().stream()
         .filter(categoryEntity -> categoryEntity.getParent() == null)
-        .map(categoryMapper::categoryEntityToCategory)
+        .map(categoryMapper::categoryEntityToCategoryFull)
         .collect(Collectors.toList());
   }
 
   @Override
   public CategoryFull findById(String id) {
-    return categoryMapper.categoryEntityToCategory(categoryRepository.findById(UUID.fromString(id))
+    return categoryMapper.categoryEntityToCategoryFull(categoryRepository.findById(UUID.fromString(id))
         .orElseThrow(() -> new CategoryNotFoundException(id)));
   }
 
@@ -81,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
           .ifPresent(entity::setParent);
     }
 
-    return categoryMapper.categoryEntityToCategory(categoryRepository.save(entity));
+    return categoryMapper.categoryEntityToCategoryFull(categoryRepository.save(entity));
   }
 
   @Override
@@ -96,7 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
           .orElseThrow(() -> new CategoryNotFoundException(id)));
     }
 
-    return categoryMapper.categoryEntityToCategory(categoryRepository.save(entity));
+    return categoryMapper.categoryEntityToCategoryFull(categoryRepository.save(entity));
   }
 
   @Override
