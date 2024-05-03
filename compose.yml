@@ -1,3 +1,4 @@
+# FOR DEVELOPMENT AND TEST PURPOSE ONLY
 version: "3"
 services:
   app:
