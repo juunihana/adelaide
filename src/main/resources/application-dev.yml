@@ -1,8 +1,14 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application.name: adelaide
+
+  rabbitmq:
+    host: localhost
+    username: rmuser
+    password: rmpassword
+    port: 5672
 
   mvc:
     log-resolved-exception: false
@@ -25,3 +31,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://adelaide:adelaide@localhost/adelaide?authSource=adelaide
+    redis:
+      host: localhost
+      password: adelaide
+
+rabbitmq-default-queue: "adelaideQueue"
