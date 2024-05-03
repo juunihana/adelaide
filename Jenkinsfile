@@ -6,14 +6,12 @@ pipeline {
       dockerImageName = 'adelaide-api'
   }
 
-  tools {
-    maven 'Maven_3.9.6'
-  }
-
   stages {
     stage ('build') {
       steps {
+        withMaven (maven: "MAVEN_ENV") {
           sh "mvn clean package"
+        }
       }
     }
 
