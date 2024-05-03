@@ -1,21 +1,19 @@
 package dev.juunihana.adelaide.service;
 
+import dev.juunihana.adelaide.dto.CreateItem;
 import dev.juunihana.adelaide.dto.ItemFull;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public interface ItemService {
 
   List<ItemFull> findAll();
 
-  ItemFull findById(UUID id);
+  ItemFull findById(String id);
 
-  Set<ItemFull> findAllByCategory(UUID categoryId, Integer page);
+  ItemFull create(CreateItem dto);
 
-  ItemFull create(ItemFull dto);
+  ItemFull update(String id, ItemFull dto);
 
-  ItemFull update(UUID id, ItemFull dto);
-
-  void delete(UUID id);
+  void delete(String id);
 }

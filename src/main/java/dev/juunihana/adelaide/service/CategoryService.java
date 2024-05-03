@@ -1,14 +1,17 @@
 package dev.juunihana.adelaide.service;
 
 import dev.juunihana.adelaide.dto.Category;
+import dev.juunihana.adelaide.dto.ItemFull;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 public interface CategoryService {
 
   List<Category> findAll();
 
   Category findById(String id);
+
+  Set<ItemFull> findItemsFromCategory(String categoryId, Integer pageNumber);
 
   Category create(Category dto);
 

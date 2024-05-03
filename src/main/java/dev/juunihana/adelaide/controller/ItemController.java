@@ -1,10 +1,8 @@
 package dev.juunihana.adelaide.controller;
 
+import dev.juunihana.adelaide.dto.CreateItem;
 import dev.juunihana.adelaide.dto.ItemFull;
 import dev.juunihana.adelaide.service.ItemService;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,23 +23,18 @@ public class ItemController {
 
   @GetMapping("/{id}")
   public ItemFull findById(@PathVariable String id) {
-    return itemService.findById(UUID.fromString(id));
-  }
-
-  @GetMapping("/category/{id}/{page}")
-  public Set<ItemFull> findByCategory(@PathVariable String id, @PathVariable Integer page) {
-    return itemService.findAllByCategory(UUID.fromString(id), page);
+    return itemService.findById(id);
   }
 
   @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
-  public ItemFull create(@RequestBody ItemFull dto) {
+  public ItemFull create(@RequestBody CreateItem dto) {
     return itemService.create(dto);
   }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void create(@PathVariable String id) {
-    itemService.delete(UUID.fromString(id));
+    itemService.delete(id);
   }
 }

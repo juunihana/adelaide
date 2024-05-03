@@ -1,8 +1,10 @@
 package dev.juunihana.adelaide.controller;
 
 import dev.juunihana.adelaide.dto.Category;
+import dev.juunihana.adelaide.dto.ItemFull;
 import dev.juunihana.adelaide.service.CategoryService;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,13 @@ public class CategoryController {
   @GetMapping("/all")
   public List<Category> findById() {
     return categoryService.findAll();
+  }
+
+  @GetMapping("/{id}/items/{page}")
+  public Set<ItemFull> findItemsFromCategory(
+      @PathVariable String categoryId,
+      @PathVariable Integer pageNumber) {
+    return categoryService.findItemsFromCategory(categoryId, pageNumber);
   }
 
   @PostMapping("/new")

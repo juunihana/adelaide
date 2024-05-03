@@ -32,9 +32,12 @@ public class CategoryEntity {
 
   private String name;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   private CategoryEntity parent;
 
   @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
   private Set<CategoryEntity> subCategories;
+
+  @OneToMany
+  private Set<ItemEntity> items;
 }
