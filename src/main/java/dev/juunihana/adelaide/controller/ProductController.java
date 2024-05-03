@@ -3,8 +3,10 @@ package dev.juunihana.adelaide.controller;
 import dev.juunihana.adelaide.dto.product.CreateProduct;
 import dev.juunihana.adelaide.dto.product.ProductFull;
 import dev.juunihana.adelaide.dto.product.UpdateProduct;
+import dev.juunihana.adelaide.messaging.RabbitProducer;
 import dev.juunihana.adelaide.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
   private final ProductService productService;
+  private final RabbitProducer rabbitProducer;
 
   @GetMapping("/{id}")
   public ProductFull findById(@PathVariable String id) {
+    rabbitProducer.send("GET_PRODUCT ID=" + id);
     return productService.findById(id);
   }
 
