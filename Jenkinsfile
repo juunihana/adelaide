@@ -6,6 +6,10 @@ pipeline {
       dockerImageName = 'adelaide-api'
   }
 
+  tools {
+    jdk "JDK22"
+  }
+
   stages {
     stage ('build') {
       steps {
