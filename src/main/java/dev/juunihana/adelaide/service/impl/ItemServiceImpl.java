@@ -1,8 +1,7 @@
 package dev.juunihana.adelaide.service.impl;
 
-import dev.juunihana.adelaide.dto.CreateItem;
-import dev.juunihana.adelaide.dto.ItemFull;
-import dev.juunihana.adelaide.entity.CategoryEntity;
+import dev.juunihana.adelaide.dto.item.CreateItem;
+import dev.juunihana.adelaide.dto.item.ItemFull;
 import dev.juunihana.adelaide.entity.ItemEntity;
 import dev.juunihana.adelaide.exception.CategoryNotFoundException;
 import dev.juunihana.adelaide.exception.ItemNotFoundException;

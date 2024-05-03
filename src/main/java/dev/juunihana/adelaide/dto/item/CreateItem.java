@@ -1,4 +1,4 @@
-package dev.juunihana.adelaide.dto;
+package dev.juunihana.adelaide.dto.item;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

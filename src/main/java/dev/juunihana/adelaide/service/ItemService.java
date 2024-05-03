@@ -1,9 +1,8 @@
 package dev.juunihana.adelaide.service;
 
-import dev.juunihana.adelaide.dto.CreateItem;
-import dev.juunihana.adelaide.dto.ItemFull;
+import dev.juunihana.adelaide.dto.item.CreateItem;
+import dev.juunihana.adelaide.dto.item.ItemFull;
 import java.util.List;
-import java.util.UUID;
 
 public interface ItemService {
 

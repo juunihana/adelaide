@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.service;
 
-import dev.juunihana.adelaide.dto.Category;
-import dev.juunihana.adelaide.dto.ItemFull;
+import dev.juunihana.adelaide.dto.category.Category;
+import dev.juunihana.adelaide.dto.item.ItemFull;
 import java.util.List;
 import java.util.Set;
 

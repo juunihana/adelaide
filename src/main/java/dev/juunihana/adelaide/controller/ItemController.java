@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.controller;
 
-import dev.juunihana.adelaide.dto.CreateItem;
-import dev.juunihana.adelaide.dto.ItemFull;
+import dev.juunihana.adelaide.dto.item.CreateItem;
+import dev.juunihana.adelaide.dto.item.ItemFull;
 import dev.juunihana.adelaide.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

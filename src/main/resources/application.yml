@@ -4,6 +4,9 @@ server:
 spring:
   application.name: adelaide
 
+  mvc:
+    log-resolved-exception: false
+
   datasource:
     url: jdbc:postgresql://localhost:5432/adelaide_db
     username: adelaide
