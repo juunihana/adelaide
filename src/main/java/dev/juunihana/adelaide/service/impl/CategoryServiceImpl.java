@@ -3,13 +3,13 @@ package dev.juunihana.adelaide.service.impl;
 import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
-import dev.juunihana.adelaide.dto.item.ItemFull;
+import dev.juunihana.adelaide.dto.product.ProductFull;
 import dev.juunihana.adelaide.entity.CategoryEntity;
 import dev.juunihana.adelaide.exception.CategoryNotFoundException;
 import dev.juunihana.adelaide.mapper.CategoryMapper;
-import dev.juunihana.adelaide.mapper.ItemMapper;
+import dev.juunihana.adelaide.mapper.ProductMapper;
 import dev.juunihana.adelaide.repository.CategoryRepository;
-import dev.juunihana.adelaide.repository.ItemRepository;
+import dev.juunihana.adelaide.repository.ProductRepository;
 import dev.juunihana.adelaide.service.CategoryService;
 import java.util.HashSet;
 import java.util.List;
@@ -27,10 +27,10 @@ import org.springframework.util.StringUtils;
 public class CategoryServiceImpl implements CategoryService {
 
   private final CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
-  private final ItemMapper itemMapper = Mappers.getMapper(ItemMapper.class);
+  private final ProductMapper productMapper = Mappers.getMapper(ProductMapper.class);
 
   private final CategoryRepository categoryRepository;
-  private final ItemRepository itemRepository;
+  private final ProductRepository productRepository;
 
   @Override
   public List<CategoryFull> findAll() {
@@ -47,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Set<ItemFull> findItemsFromCategory(String categoryId, Integer pageNumber,
+  public Set<ProductFull> findProductsFromCategory(String categoryId, Integer pageNumber,
       Integer pageSize) {
     CategoryEntity parent = categoryRepository.findById(UUID.fromString(categoryId))
         .orElseThrow(() -> new CategoryNotFoundException(categoryId));
@@ -55,9 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
     Set<UUID> ids = new HashSet<>();
     ids.add(UUID.fromString(categoryId));
     traverseCategoriesIds(ids, parent);
-    return itemRepository.findByCategoryIdIn(ids,
+    return productRepository.findByCategoryIdIn(ids,
             PageRequest.of(pageNumber - 1, pageSize == null ? 10 : pageSize)).stream()
-        .map(itemMapper::itemEntityToItemFull)
+        .map(productMapper::productEntityToProductFull)
         .collect(Collectors.toSet());
   }
 

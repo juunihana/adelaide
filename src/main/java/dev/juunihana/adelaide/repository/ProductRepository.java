@@ -1,6 +1,6 @@
 package dev.juunihana.adelaide.repository;
 
-import dev.juunihana.adelaide.entity.ItemEntity;
+import dev.juunihana.adelaide.entity.ProductEntity;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,13 +10,13 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ItemRepository extends PagingAndSortingRepository<ItemEntity, UUID> {
+public interface ProductRepository extends PagingAndSortingRepository<ProductEntity, UUID> {
 
-  Optional<ItemEntity> findById(UUID id);
+  Optional<ProductEntity> findById(UUID id);
 
-  List<ItemEntity> findByCategoryIdIn(Set<UUID> ids, Pageable pageRequest);
+  List<ProductEntity> findByCategoryIdIn(Set<UUID> ids, Pageable pageRequest);
 
-  ItemEntity save(ItemEntity entity);
+  ProductEntity save(ProductEntity entity);
 
   void deleteById(UUID id);
 }

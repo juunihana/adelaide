@@ -3,7 +3,7 @@ package dev.juunihana.adelaide.controller;
 import dev.juunihana.adelaide.dto.category.CategoryFull;
 import dev.juunihana.adelaide.dto.category.CreateCategory;
 import dev.juunihana.adelaide.dto.category.UpdateCategory;
-import dev.juunihana.adelaide.dto.item.ItemFull;
+import dev.juunihana.adelaide.dto.product.ProductFull;
 import dev.juunihana.adelaide.service.CategoryService;
 import java.util.List;
 import java.util.Set;
@@ -37,12 +37,12 @@ public class CategoryController {
     return categoryService.findAll();
   }
 
-  @GetMapping("/{categoryId}/items/{pageNumber}")
-  public Set<ItemFull> findItemsFromCategory(
+  @GetMapping("/{categoryId}/products")
+  public Set<ProductFull> findProductsFromCategory(
       @PathVariable String categoryId,
-      @PathVariable Integer pageNumber,
+      @RequestParam Integer pageNumber,
       @RequestParam(required = false) Integer pageSize) {
-    return categoryService.findItemsFromCategory(categoryId, pageNumber, pageSize);
+    return categoryService.findProductsFromCategory(categoryId, pageNumber, pageSize);
   }
 
   @PostMapping("/new")

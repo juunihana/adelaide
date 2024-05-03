@@ -39,5 +39,5 @@ public class CategoryEntity {
   private Set<CategoryEntity> subCategories;
 
   @OneToMany
-  private Set<ItemEntity> items;
+  private Set<ProductEntity> products;
 }

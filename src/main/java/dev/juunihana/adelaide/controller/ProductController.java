@@ -1,9 +1,9 @@
 package dev.juunihana.adelaide.controller;
 
-import dev.juunihana.adelaide.dto.item.CreateItem;
-import dev.juunihana.adelaide.dto.item.ItemFull;
-import dev.juunihana.adelaide.dto.item.UpdateItem;
-import dev.juunihana.adelaide.service.ItemService;
+import dev.juunihana.adelaide.dto.product.CreateProduct;
+import dev.juunihana.adelaide.dto.product.ProductFull;
+import dev.juunihana.adelaide.dto.product.UpdateProduct;
+import dev.juunihana.adelaide.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,31 +17,31 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/product")
 @RequiredArgsConstructor
-public class ItemController {
+public class ProductController {
 
-  private final ItemService itemService;
+  private final ProductService productService;
 
   @GetMapping("/{id}")
-  public ItemFull findById(@PathVariable String id) {
-    return itemService.findById(id);
+  public ProductFull findById(@PathVariable String id) {
+    return productService.findById(id);
   }
 
   @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
-  public ItemFull create(@RequestBody CreateItem dto) {
-    return itemService.create(dto);
+  public ProductFull create(@RequestBody CreateProduct dto) {
+    return productService.create(dto);
   }
 
   @PutMapping("/{id}")
-  public ItemFull create(@PathVariable String id, @RequestBody UpdateItem dto) {
-    return itemService.update(id, dto);
+  public ProductFull create(@PathVariable String id, @RequestBody UpdateProduct dto) {
+    return productService.update(id, dto);
   }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void create(@PathVariable String id) {
-    itemService.delete(id);
+    productService.delete(id);
   }
 }
