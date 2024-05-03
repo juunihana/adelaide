@@ -1,17 +1,19 @@
 pipeline {
   agent any
   environment {
-      MAVEN_ARGS=" -e clean install"
       registry = ""
       dockerContainerName = 'adelaide'
       dockerImageName = 'adelaide-api'
-    }
+  }
+
+  tools {
+    maven 'Maven_3.9.6'
+  }
+
   stages {
-    stage ('Build') {
+    stage ('build') {
       steps {
-        withMaven(maven: 'MAVEN_ENV') {
-          sh "mvn ${MAVEN_ARGS}"
-        }
+          sh "mvn clean package"
       }
     }
 
@@ -22,6 +24,7 @@ pipeline {
         sh 'docker images -q --filter=reference=${dockerImageName} | xargs --no-run-if-empty docker rmi -f'
       }
     }
+
     stage('docker-compose start') {
       steps {
         sh 'docker compose up -d'
