@@ -8,8 +8,9 @@ services:
       - postgres
       - mongodb
       - redis
+      - nexus
     ports:
-      - "8081:8081"
+      - '9001:9001'
 
   rabbitmq:
     restart: always
@@ -19,8 +20,8 @@ services:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
 
   mongodb:
     image: 'mongo:latest'
@@ -50,10 +51,19 @@ services:
     image: 'redis:latest'
     hostname: redis
     volumes:
-      - "/var/lib/redis"
+      - '/var/lib/redis'
     environment:
       - REDIS_PASSWORD=adelaide
       - REDIS_PORT=6379
       - REDIS_DATABASES=16
     ports:
-      - "6379:6379"
+      - '6379:6379'
+
+  nexus:
+    restart: always
+    image: 'sonatype/nexus3'
+    hostname: nexus
+    volumes:
+      - '/var/lib/nexus'
+    ports:
+      - '8081:8081'
