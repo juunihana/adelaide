@@ -1,0 +1,13 @@
+services:
+  app:
+    image: adelaide_api
+    container_name: adelaide-api
+    networks:
+      - adelaide-network
+    ports:
+      - 9001:9001
+
+networks:
+  adelaide-network:
+    external:
+      name: adelaide_network
