@@ -1,13 +1,18 @@
 services:
   app:
-    image: localhost:8082/repository/docker-hosted/adelaide_api:0.0.1
+    image: adelaide-api
     container_name: adelaide-api
     networks:
       - adelaide-network
     ports:
       - 9001:9001
+    extra_hosts:
+      - 'postgres:192.168.1.142'
+      - 'mongo:192.168.1.142'
+      - 'rabbitmq:192.168.1.142'
+      - 'redis:192.168.1.142'
 
 networks:
   adelaide-network:
-    external: true
+    external: false
     name: adelaide_network
