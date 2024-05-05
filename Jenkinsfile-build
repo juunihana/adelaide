@@ -22,7 +22,7 @@ pipeline {
     stage('push') {
       steps {
         sh 'docker login -u admin -p slowdive1993 http://localhost:8082'
-        sh 'docker build localhost:8082/repository/docker-hosted/adelaide_api:0.0.1'
+        sh 'docker build localhost:8082/repository/docker-hosted/adelaide_api:0.0.1 .'
         sh 'docker push localhost:8082/repository/docker-hosted/adelaide_api:0.0.1'
         sh 'docker logout'
       }
