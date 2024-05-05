@@ -1,6 +1,6 @@
 services:
   app:
-    image: adelaide_api
+    image: localhost:8082/repository/docker-hosted/adelaide_api:0.0.1
     container_name: adelaide-api
     networks:
       - adelaide-network
@@ -9,5 +9,5 @@ services:
 
 networks:
   adelaide-network:
-    external:
-      name: adelaide_network
+    external: true
+    name: adelaide_network
