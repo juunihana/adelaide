@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('deploy') {
             steps {
-                sh 'docker login -u admin -p slowdive1993 http://localhost:8082'
+                sh 'docker login -u admin -p admin http://localhost:8082'
                 sh 'docker pull localhost:8082/repository/docker-hosted/adelaide_api:0.0.1'
                 sh 'docker-compose up -d'
                 sh 'docker logout'
