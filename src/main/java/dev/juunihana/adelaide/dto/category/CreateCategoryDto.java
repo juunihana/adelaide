@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_EMPTY)
 public class CreateCategoryDto {
 
-  private String name;
+  private String title;
 
   private String parentId;
 }

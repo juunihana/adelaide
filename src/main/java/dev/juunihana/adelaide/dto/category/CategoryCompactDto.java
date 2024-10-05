@@ -16,5 +16,5 @@ public class CategoryCompactDto {
 
   private String id;
 
-  private String name;
+  private String title;
 }

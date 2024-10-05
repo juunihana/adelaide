@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public UserEntity getCurrentUserEntity() {
+    return userRepository.findByEmail(getCurrentUserEmail()).orElseThrow(
+        () -> new NotFoundException(MessageFormat.format(Errors.USER_NOT_FOUND_EMAIL, getCurrentUserEmail())));
+  }
+
+  @Override
   public UserFullDto getFull() {
     return null;
   }
@@ -89,12 +95,14 @@ public class UserServiceImpl implements UserService {
         () -> new NotFoundException(
             MessageFormat.format(Errors.USER_NOT_FOUND_EMAIL, getCurrentUserEmail())));
 
-    if (!updateUserDto.getEmail().equals(entity.getEmail()) && existsByEmail(updateUserDto.getEmail())) {
+    if (!updateUserDto.getEmail().equals(entity.getEmail()) && existsByEmail(
+        updateUserDto.getEmail())) {
       throw new BadRequestException(
           MessageFormat.format(Errors.USER_EXISTS_EMAIL, updateUserDto.getEmail()));
     }
 
-    if (!updateUserDto.getPhone().equals(entity.getPhone()) && existsByPhone(updateUserDto.getPhone())) {
+    if (!updateUserDto.getPhone().equals(entity.getPhone()) && existsByPhone(
+        updateUserDto.getPhone())) {
       throw new BadRequestException(
           MessageFormat.format(Errors.USER_EXISTS_PHONE, updateUserDto.getPhone()));
     }
@@ -122,7 +130,8 @@ public class UserServiceImpl implements UserService {
     userRepository.delete(entity);
   }
 
-  private String getCurrentUserEmail() {
+  @Override
+  public String getCurrentUserEmail() {
     if (isUserNotAuthorized()) {
       return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
@@ -130,7 +139,8 @@ public class UserServiceImpl implements UserService {
         .getUsername();
   }
 
-  private boolean isUserNotAuthorized() {
+  @Override
+  public boolean isUserNotAuthorized() {
     return SecurityContextHolder.getContext().getAuthentication()
         .getPrincipal().equals("anonymousUser");
   }

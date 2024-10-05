@@ -1,5 +1,7 @@
 package dev.juunihana.adelaide.config.security;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import dev.juunihana.adelaide.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +26,7 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
+    return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
@@ -33,8 +35,8 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .userDetailsService(userService)
-        .httpBasic();
-    return httpSecurity.build();
+        .httpBasic(withDefaults())
+        .build();
   }
 
   @Bean

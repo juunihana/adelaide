@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CartRepository extends JpaRepository<CartEntity, UUID> {
 
   Optional<CartEntity> findByUserId(UUID userId);
+
+  Optional<CartEntity> findByUserEmail(String email);
 }

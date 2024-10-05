@@ -16,7 +16,7 @@ public class ProductCompactDto {
 
   private String id;
 
-  private String name;
+  private String title;
 
   private Double price;
 }

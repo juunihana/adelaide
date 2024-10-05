@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.controller;
 
 import dev.juunihana.adelaide.dto.product.CreateProductDto;
-import dev.juunihana.adelaide.dto.product.ProductFull;
+import dev.juunihana.adelaide.dto.product.ProductFullDto;
 import dev.juunihana.adelaide.dto.product.UpdateProductDto;
 import dev.juunihana.adelaide.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +24,18 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping("/{id}")
-  public ProductFull findById(@PathVariable String id) {
+  public ProductFullDto findById(@PathVariable String id) {
     return productService.findById(id);
   }
 
   @PostMapping("/new")
   @ResponseStatus(HttpStatus.CREATED)
-  public ProductFull create(@RequestBody CreateProductDto dto) {
+  public ProductFullDto create(@RequestBody CreateProductDto dto) {
     return productService.create(dto);
   }
 
   @PutMapping("/{id}")
-  public ProductFull create(@PathVariable String id, @RequestBody UpdateProductDto dto) {
+  public ProductFullDto create(@PathVariable String id, @RequestBody UpdateProductDto dto) {
     return productService.update(id, dto);
   }
 

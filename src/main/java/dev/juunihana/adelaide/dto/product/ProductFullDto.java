@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class ProductFull {
+public class ProductFullDto {
 
   private String id;
 
-  private String name;
+  private String title;
 
   private String description;
 

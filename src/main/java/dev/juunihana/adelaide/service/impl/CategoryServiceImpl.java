@@ -3,7 +3,7 @@ package dev.juunihana.adelaide.service.impl;
 import dev.juunihana.adelaide.dto.category.CategoryFullDto;
 import dev.juunihana.adelaide.dto.category.CreateCategoryDto;
 import dev.juunihana.adelaide.dto.category.UpdateCategoryDto;
-import dev.juunihana.adelaide.dto.product.ProductFull;
+import dev.juunihana.adelaide.dto.product.ProductFullDto;
 import dev.juunihana.adelaide.entity.CategoryEntity;
 import dev.juunihana.adelaide.exception.NotFoundException;
 import dev.juunihana.adelaide.mapper.CategoryMapper;
@@ -51,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public Set<ProductFull> findProductsFromCategory(String categoryId, Integer pageNumber,
+  public Set<ProductFullDto> findProductsFromCategory(String categoryId, Integer pageNumber,
       Integer pageSize) {
     CategoryEntity parent = categoryRepository.findById(UUID.fromString(categoryId))
         .orElseThrow(() -> new NotFoundException(

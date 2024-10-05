@@ -1,7 +1,7 @@
 package dev.juunihana.adelaide.service.impl;
 
 import dev.juunihana.adelaide.dto.product.CreateProductDto;
-import dev.juunihana.adelaide.dto.product.ProductFull;
+import dev.juunihana.adelaide.dto.product.ProductFullDto;
 import dev.juunihana.adelaide.dto.product.UpdateProductDto;
 import dev.juunihana.adelaide.entity.ProductEntity;
 import dev.juunihana.adelaide.exception.NotFoundException;
@@ -30,22 +30,29 @@ public class ProductServiceImpl implements ProductService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public List<ProductFull> findAll() {
+  public List<ProductFullDto> findAll() {
     return productRepository.findAll(PageRequest.of(1, 10)).stream()
         .map(productMapper::productEntityToProductFull)
         .toList();
   }
 
   @Override
-  public ProductFull findById(String id) {
+  public ProductFullDto findById(String id) {
     return productMapper.productEntityToProductFull(productRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new NotFoundException(MessageFormat.format(Errors.PRODUCT_NOT_FOUND, id))));
   }
 
   @Override
+  public ProductEntity findEntityById(String id) {
+    return productRepository.findById(UUID.fromString(id))
+        .orElseThrow(
+            () -> new NotFoundException(MessageFormat.format(Errors.PRODUCT_NOT_FOUND, id)));
+  }
+
+  @Override
   @Transactional
-  public ProductFull create(CreateProductDto dto) {
+  public ProductFullDto create(CreateProductDto dto) {
     ProductEntity entity = productMapper.productCreateToProductEntity(dto);
 
     entity.setCategory(categoryRepository.findById(UUID.fromString(dto.getCategoryId()))
@@ -57,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public ProductFull update(String id, UpdateProductDto dto) {
+  public ProductFullDto update(String id, UpdateProductDto dto) {
     ProductEntity entity = productRepository.findById(UUID.fromString(id))
         .orElseThrow(
             () -> new NotFoundException(MessageFormat.format(Errors.PRODUCT_NOT_FOUND, id)));

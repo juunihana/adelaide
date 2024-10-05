@@ -3,7 +3,7 @@ package dev.juunihana.adelaide.service;
 import dev.juunihana.adelaide.dto.category.CategoryFullDto;
 import dev.juunihana.adelaide.dto.category.CreateCategoryDto;
 import dev.juunihana.adelaide.dto.category.UpdateCategoryDto;
-import dev.juunihana.adelaide.dto.product.ProductFull;
+import dev.juunihana.adelaide.dto.product.ProductFullDto;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public interface CategoryService {
 
   CategoryFullDto findById(String id);
 
-  Set<ProductFull> findProductsFromCategory(String categoryId, Integer pageNumber, Integer pageSize);
+  Set<ProductFullDto> findProductsFromCategory(String categoryId, Integer pageNumber, Integer pageSize);
 
   CategoryFullDto create(CreateCategoryDto dto);
 
