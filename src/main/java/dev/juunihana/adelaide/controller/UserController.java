@@ -1,20 +1,25 @@
 package dev.juunihana.adelaide.controller;
 
 import dev.juunihana.adelaide.dto.user.CreateUserDto;
+import dev.juunihana.adelaide.dto.user.UpdateUserDto;
 import dev.juunihana.adelaide.dto.user.UserAuthTokenDto;
 import dev.juunihana.adelaide.dto.user.UserFullDto;
 import dev.juunihana.adelaide.dto.user.UserSignInDto;
 import dev.juunihana.adelaide.service.JwtService;
 import dev.juunihana.adelaide.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,7 +62,7 @@ public class UserController {
    * @param createUserDto User creation DTO
    * @return JWT for authorization
    */
-  @PostMapping("/new")
+  @PostMapping
   public UserAuthTokenDto create(
       @RequestBody CreateUserDto createUserDto
   ) {
@@ -68,4 +73,29 @@ public class UserController {
         .build();
   }
 
+  /**
+   * Change user's data
+   *
+   * @param updateUserDto User update DTO
+   * @return JWT for authorization
+   */
+  @PutMapping
+  public UserAuthTokenDto update(
+      @RequestBody UpdateUserDto updateUserDto
+  ) {
+    userService.update(updateUserDto);
+
+    return UserAuthTokenDto.builder()
+        .token(jwtService.createToken(updateUserDto.getEmail()))
+        .build();
+  }
+
+  /**
+   * Delete current user
+   */
+  @DeleteMapping
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete() {
+    userService.delete();
+  }
 }

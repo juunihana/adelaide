@@ -2,6 +2,7 @@ package dev.juunihana.adelaide.handler;
 
 import dev.juunihana.adelaide.dto.error.ErrorDto;
 import dev.juunihana.adelaide.exception.BadRequestException;
+import dev.juunihana.adelaide.exception.NotAuthorizedException;
 import dev.juunihana.adelaide.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -29,7 +30,17 @@ public class HttpExceptionHandler {
 
   @ExceptionHandler(BadRequestException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorDto handleBadRequestExceptionException(BadRequestException e) {
+  public ErrorDto handleBadRequestException(BadRequestException e) {
+    logger.error(e.getMessage());
+
+    return ErrorDto.builder()
+        .message(e.getMessage())
+        .build();
+  }
+
+  @ExceptionHandler(NotAuthorizedException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public ErrorDto handleNotAuthorizedException(NotAuthorizedException e) {
     logger.error(e.getMessage());
 
     return ErrorDto.builder()
