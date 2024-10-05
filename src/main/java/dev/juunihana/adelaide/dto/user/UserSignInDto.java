@@ -1,4 +1,4 @@
-package dev.juunihana.adelaide.dto.category;
+package dev.juunihana.adelaide.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class UpdateCategory {
+public class UserSignInDto {
 
-  private String name;
+  private String email;
 
-  private String parentId;
+  private String password;
 }

@@ -1,8 +1,7 @@
-package dev.juunihana.adelaide.dto.category;
+package dev.juunihana.adelaide.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,13 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class CategoryFull {
+public class CreateUserDto {
 
-  private String id;
+  private String email;
 
-  private String name;
+  private String phone;
 
-  private String parentId;
+  private String password;
 
-  private Set<CategoryFull> subCategories;
+  private String firstName;
+
+  private String lastName;
+
+  private Integer age;
 }

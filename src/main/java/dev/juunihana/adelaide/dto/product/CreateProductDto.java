@@ -2,7 +2,6 @@ package dev.juunihana.adelaide.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import dev.juunihana.adelaide.dto.category.CategoryCompactDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class ProductFull {
-
-  private String id;
+public class CreateProductDto {
 
   private String name;
 
@@ -23,5 +20,5 @@ public class ProductFull {
 
   private Double price;
 
-  private CategoryCompactDto category;
+  private String categoryId;
 }

@@ -1,4 +1,4 @@
-package dev.juunihana.adelaide.dto.product;
+package dev.juunihana.adelaide.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -12,13 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class CreateProduct {
+public class UserCompactDto {
 
-  private String name;
+  private String firstName;
 
-  private String description;
-
-  private Double price;
-
-  private String categoryId;
+  private String lastName;
 }

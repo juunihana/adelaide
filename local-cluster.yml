@@ -27,7 +27,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=adelaide
       - MONGO_INITDB_ROOT_USERNAME=adelaide
     ports:
-      - 27017
+      - 27017:27017
 
   postgres:
     restart: always

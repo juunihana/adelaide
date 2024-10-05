@@ -1,16 +1,18 @@
 package dev.juunihana.adelaide.service.impl;
 
-import dev.juunihana.adelaide.dto.category.CategoryFull;
-import dev.juunihana.adelaide.dto.category.CreateCategory;
-import dev.juunihana.adelaide.dto.category.UpdateCategory;
+import dev.juunihana.adelaide.dto.category.CategoryFullDto;
+import dev.juunihana.adelaide.dto.category.CreateCategoryDto;
+import dev.juunihana.adelaide.dto.category.UpdateCategoryDto;
 import dev.juunihana.adelaide.dto.product.ProductFull;
 import dev.juunihana.adelaide.entity.CategoryEntity;
-import dev.juunihana.adelaide.exception.CategoryNotFoundException;
+import dev.juunihana.adelaide.exception.NotFoundException;
 import dev.juunihana.adelaide.mapper.CategoryMapper;
 import dev.juunihana.adelaide.mapper.ProductMapper;
 import dev.juunihana.adelaide.repository.CategoryRepository;
 import dev.juunihana.adelaide.repository.ProductRepository;
 import dev.juunihana.adelaide.service.CategoryService;
+import dev.juunihana.adelaide.util.Errors;
+import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
   private final ProductRepository productRepository;
 
   @Override
-  public List<CategoryFull> findAll() {
+  public List<CategoryFullDto> findAll() {
     return categoryRepository.findAll().stream()
         .filter(categoryEntity -> categoryEntity.getParent() == null)
         .map(categoryMapper::categoryEntityToCategoryFull)
@@ -41,16 +43,19 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public CategoryFull findById(String id) {
-    return categoryMapper.categoryEntityToCategoryFull(categoryRepository.findById(UUID.fromString(id))
-        .orElseThrow(() -> new CategoryNotFoundException(id)));
+  public CategoryFullDto findById(String id) {
+    return categoryMapper.categoryEntityToCategoryFull(
+        categoryRepository.findById(UUID.fromString(id))
+            .orElseThrow(
+                () -> new NotFoundException(MessageFormat.format(Errors.CATEGORY_NOT_FOUND, id))));
   }
 
   @Override
   public Set<ProductFull> findProductsFromCategory(String categoryId, Integer pageNumber,
       Integer pageSize) {
     CategoryEntity parent = categoryRepository.findById(UUID.fromString(categoryId))
-        .orElseThrow(() -> new CategoryNotFoundException(categoryId));
+        .orElseThrow(() -> new NotFoundException(
+            MessageFormat.format(Errors.CATEGORY_NOT_FOUND, categoryId)));
 
     Set<UUID> ids = new HashSet<>();
     ids.add(UUID.fromString(categoryId));
@@ -74,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
   @Override
-  public CategoryFull create(CreateCategory dto) {
+  public CategoryFullDto create(CreateCategoryDto dto) {
     CategoryEntity entity = categoryMapper.createCategoryToCategoryEntity(dto);
     if (StringUtils.hasLength(dto.getParentId())) {
       categoryRepository.findById(UUID.fromString(dto.getParentId()))
@@ -85,15 +90,17 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
-  public CategoryFull update(String id, UpdateCategory dto) {
+  public CategoryFullDto update(String id, UpdateCategoryDto dto) {
     CategoryEntity entity = categoryRepository.findById(UUID.fromString(id))
-        .orElseThrow(() -> new CategoryNotFoundException(id));
+        .orElseThrow(
+            () -> new NotFoundException(MessageFormat.format(Errors.CATEGORY_NOT_FOUND, id)));
 
     categoryMapper.update(entity, dto);
 
     if (StringUtils.hasLength(dto.getParentId())) {
       entity.setParent(categoryRepository.findById(UUID.fromString(dto.getParentId()))
-          .orElseThrow(() -> new CategoryNotFoundException(id)));
+          .orElseThrow(
+              () -> new NotFoundException(MessageFormat.format(Errors.CATEGORY_NOT_FOUND, id))));
     }
 
     return categoryMapper.categoryEntityToCategoryFull(categoryRepository.save(entity));
@@ -104,7 +111,7 @@ public class CategoryServiceImpl implements CategoryService {
     if (categoryRepository.existsById(UUID.fromString(id))) {
       categoryRepository.deleteById(UUID.fromString(id));
     } else {
-      throw new CategoryNotFoundException(id);
+      throw new NotFoundException(MessageFormat.format(Errors.CATEGORY_NOT_FOUND, id));
     }
   }
 }

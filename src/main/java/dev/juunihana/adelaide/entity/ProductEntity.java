@@ -26,7 +26,7 @@ public class ProductEntity {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
 
-  private String name;
+  private String title;
 
   private String description;
 
