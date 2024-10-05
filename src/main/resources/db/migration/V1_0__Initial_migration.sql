@@ -35,7 +35,7 @@ create table if not exists product
     foreign key (category_id) references category (id)
 );
 
-create table if not exists cartDto
+create table if not exists cart
 (
     id          uuid primary key,
     user_id     uuid          not null unique,
@@ -51,7 +51,7 @@ create table if not exists cart_product
     cart_id    uuid not null,
     product_id uuid not null,
 
-    foreign key (cart_id) references cartDto (id),
+    foreign key (cart_id) references cart (id),
     foreign key (product_id) references product (id)
 );
 
