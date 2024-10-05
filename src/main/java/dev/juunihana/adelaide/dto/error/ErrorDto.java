@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(Include.NON_EMPTY)
-public class ServerErrorDto {
+public class ErrorDto {
 
   private String message;
 }

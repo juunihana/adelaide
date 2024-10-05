@@ -1,5 +1,7 @@
 package dev.juunihana.adelaide.handler;
 
+import dev.juunihana.adelaide.dto.error.ErrorDto;
+import dev.juunihana.adelaide.exception.BadRequestException;
 import dev.juunihana.adelaide.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -17,8 +19,22 @@ public class HttpExceptionHandler {
 
   @ExceptionHandler(NotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public void handleNotFoundException(NotFoundException e) {
+  public ErrorDto handle(NotFoundException e) {
     logger.error(e.getMessage());
+
+    return ErrorDto.builder()
+        .message(e.getMessage())
+        .build();
+  }
+
+  @ExceptionHandler(BadRequestException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorDto handleBadRequestExceptionException(BadRequestException e) {
+    logger.error(e.getMessage());
+
+    return ErrorDto.builder()
+        .message(e.getMessage())
+        .build();
   }
 
   @ExceptionHandler(IllegalArgumentException.class)

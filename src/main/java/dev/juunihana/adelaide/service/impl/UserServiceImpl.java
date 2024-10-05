@@ -3,9 +3,8 @@ package dev.juunihana.adelaide.service.impl;
 import dev.juunihana.adelaide.dto.user.CreateUserDto;
 import dev.juunihana.adelaide.dto.user.UserFullDto;
 import dev.juunihana.adelaide.entity.UserEntity;
+import dev.juunihana.adelaide.exception.BadRequestException;
 import dev.juunihana.adelaide.exception.NotFoundException;
-import dev.juunihana.adelaide.exception.UserAlreadyExistsByEmailException;
-import dev.juunihana.adelaide.exception.UserAlreadyExistsByPhoneException;
 import dev.juunihana.adelaide.mapper.UserMapper;
 import dev.juunihana.adelaide.repository.UserRepository;
 import dev.juunihana.adelaide.service.UserService;
@@ -58,12 +57,12 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public void create(CreateUserDto createUserDto) {
     if (existsByEmail(createUserDto.getEmail())) {
-      throw new UserAlreadyExistsByEmailException(
+      throw new BadRequestException(
           "User with email " + createUserDto.getEmail() + " already exists");
     }
 
     if (existsByPhone(createUserDto.getPhone())) {
-      throw new UserAlreadyExistsByPhoneException(
+      throw new BadRequestException(
           "User with phone " + createUserDto.getPhone() + " already exists");
     }
 
