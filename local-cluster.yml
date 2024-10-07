@@ -12,6 +12,7 @@ services:
       - RABBITMQ_DEFAULT_USER=adelaide
       - RABBITMQ_DEFAULT_PASS=adelaide
     ports:
+      - 15672:15672
       - 5672:5672
 
   mongodb:

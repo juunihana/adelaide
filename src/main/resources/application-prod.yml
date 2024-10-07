@@ -6,8 +6,8 @@ spring:
 
   rabbitmq:
     host: host.minikube.internal
-    username: rmuser
-    password: rmpassword
+    username: adelaide
+    password: adelaide
     port: 5672
 
   mvc:
