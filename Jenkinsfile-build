@@ -21,9 +21,9 @@ pipeline {
 
     stage('push') {
       steps {
-        sh 'docker login -u admin -p admin http://host.minikube.internal:9201'
-        sh 'docker build -t host.minikube.internal:9201/repository/docker/adelaide_api:0.0.1 .'
-        sh 'docker push host.minikube.internal:9201/repository/docker/adelaide_api:0.0.1'
+        sh 'docker login -u admin -p admin http://0.0.0.0:9201'
+        sh 'docker build -t 0.0.0.0:9201/repository/docker/adelaide_api:0.0.1 .'
+        sh 'docker push 0.0.0.0:9201/repository/docker/adelaide_api:0.0.1'
         sh 'docker logout'
       }
     }
