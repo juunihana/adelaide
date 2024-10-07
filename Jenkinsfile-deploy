@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('deploy') {
             steps {
-                sh 'kubectl apply -f kubernetes/deployment.yaml'
+                sh 'kubectl apply -f kubernetes/deployment.yaml --validate-false'
             }
         }
     }
