@@ -30,7 +30,12 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://adelaide:adelaide@mongo/adelaide?authSource=adelaide
+      authentication-database: admin
+      port: 27017
+      host: mongodb
+      username: adelaide
+      password: adelaide
+      database: adelaide
     redis:
       host: redis
       password: adelaide
