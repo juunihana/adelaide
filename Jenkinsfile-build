@@ -21,9 +21,9 @@ pipeline {
 
     stage('push') {
       steps {
-        sh 'docker login -u admin -p admin http://localhost:8082'
-        sh 'docker build -t localhost:8082/repository/docker-hosted/adelaide_api:0.0.1 .'
-        sh 'docker push localhost:8082/repository/docker-hosted/adelaide_api:0.0.1'
+        sh 'docker login -u admin -p admin http://localhost:9101'
+        sh 'docker build -t localhost:9101/repository/docker/adelaide_api:0.0.1 .'
+        sh 'docker push localhost:9101/repository/docker/adelaide_api:0.0.1'
         sh 'docker logout'
       }
     }

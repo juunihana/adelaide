@@ -71,7 +71,10 @@ services:
     networks:
       - adelaide-network
     ports:
-      - 8082:8081
+      - 9100:8081
+      - 9101:8082
+      - 9102:8083
+      - 9103:8084
 
 volumes:
   postgres-data:
