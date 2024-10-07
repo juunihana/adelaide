@@ -3,10 +3,7 @@ pipeline {
     stages {
         stage ('deploy') {
             steps {
-                sh 'docker login -u admin -p admin http://0.0.0.0:9201'
-                sh 'docker pull 0.0.0.0:9201/repository/docker/adelaide_api:0.0.1'
-                sh 'docker-compose up -d'
-                sh 'docker logout'
+                sh 'kubectl apply -f kubernetes/deployment.yaml'
             }
         }
     }
