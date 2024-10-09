@@ -22,7 +22,7 @@ pipeline {
     stage('push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-          sh 'docker login -u {DOCKER_USERNAME} -p ${DOCKER_PASSWORD} http://127.0.0.1:9201'
+          sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} http://127.0.0.1:9201'
           sh 'docker build -t 127.0.0.1:9201/repository/docker/adelaide_api:0.0.1 .'
           sh 'docker push 127.0.0.1:9201/repository/docker/adelaide_api:0.0.1'
           sh 'docker logout'

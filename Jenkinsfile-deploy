@@ -4,7 +4,7 @@ pipeline {
         stage ('deploy') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'docker login -u {DOCKER_USERNAME} -p ${DOCKER_PASSWORD} http://127.0.0.1:9201'
+                    sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} http://127.0.0.1:9201'
                     sh 'docker-compose up -d'
                 }
             }
