@@ -5,7 +5,7 @@ spring:
   application.name: adelaide
 
   rabbitmq:
-    host: host.minikube.internal
+    host: host.docker.internal
     username: adelaide
     password: adelaide
     port: 5672
@@ -14,12 +14,12 @@ spring:
     log-resolved-exception: false
 
   datasource:
-    url: jdbc:postgresql://host.minikube.internal:5432/adelaide
+    url: jdbc:postgresql://host.docker.internal:5432/adelaide
     username: adelaide
     password: adelaide
 
   flyway:
-    url: jdbc:postgresql://host.minikube.internal:5432/adelaide
+    url: jdbc:postgresql://host.docker.internal:5432/adelaide
     user: adelaide
     password: adelaide
 
@@ -32,12 +32,12 @@ spring:
     mongodb:
       authentication-database: admin
       port: 27017
-      host: host.minikube.internal
+      host: host.docker.internal
       username: adelaide
       password: adelaide
       database: adelaide
     redis:
-      host: host.minikube.internal
+      host: host.docker.internal
       password: adelaide
 
 rabbitmq-default-queue: "adelaideQueue"
