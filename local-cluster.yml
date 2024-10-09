@@ -30,21 +30,21 @@ services:
     ports:
       - 27017:27017
 
-#  postgres:
-#    restart: always
-#    image: postgres:latest
-#    container_name: postgres
-#    hostname: postgresql
-#    volumes:
-#      - postgres-data:/var/lib/postgres/data
-#    networks:
-#      - adelaide-network
-#    environment:
-#      - POSTGRES_DB=adelaide
-#      - POSTGRES_PASSWORD=adelaide
-#      - POSTGRES_USER=adelaide
-#    ports:
-#      - 5432:5432
+  postgres:
+    restart: always
+    image: postgres:latest
+    container_name: postgres
+    hostname: postgresql
+    volumes:
+      - postgres-data:/var/lib/postgres/data
+    networks:
+      - adelaide-network
+    environment:
+      - POSTGRES_DB=adelaide
+      - POSTGRES_PASSWORD=adelaide
+      - POSTGRES_USER=adelaide
+    ports:
+      - 5432:5432
 
   redis:
     restart: always
@@ -62,32 +62,15 @@ services:
     ports:
       - 6379:6379
 
-#  nexus:
-#    restart: always
-#    image: sonatype/nexus3
-#    container_name: nexus
-#    hostname: nexus
-#    volumes:
-#      - nexus-data:/nexus-data
-#    networks:
-#      - adelaide-network
-#    ports:
-#      - 9100:8081
-#      - 9101:8082
-#      - 9102:8083
-#      - 9103:8084
-
 volumes:
-#  postgres-data:
-#    external: false
+  postgres-data:
+    external: false
   mongodb-data:
     external: false
   redis-data:
     external: false
   rabbitmq-data:
     external: false
-#  nexus-data:
-#    external: false
 
 networks:
   adelaide-network:
